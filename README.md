@@ -17,7 +17,7 @@ CameraScan for Android 是一个简化扫描识别流程的通用基础库。
 
 > 以后[ZXingLite](https://github.com/jenly1314/ZXingLite)、[MLKit](https://github.com/jenly1314/MLKit)、[WeChatQRCode](https://github.com/jenly1314/WeChatQRCode) 发布的新版本都将使用 **CameraScan** 作为相机扫描基础库。
 
-> [**CameraScan**](https://github.com/jenly1314/CameraScan) + [**ViewfinderView**](https://github.com/jenly1314/ViewfinderView) + （**ZXingLite、MLKit或 WeChatQRCode其中之一**） = 完美搭配。
+> [**CameraScan**](https://github.com/jenly1314/CameraScan) + [**ViewfinderView**](https://github.com/jenly1314/ViewfinderView) + （[ZXingLite](https://github.com/jenly1314/ZXingLite)、[MLKit](https://github.com/jenly1314/MLKit)、[WeChatQRCode](https://github.com/jenly1314/WeChatQRCode)其中之一） = 完美搭配。
 
 ## 引入
 
