@@ -1,0 +1,46 @@
+plugins {
+    id 'com.android.library'
+    id 'com.vanniktech.maven.publish'
+}
+
+android {
+    namespace 'com.king.camera.scan'
+    compileSdk build_versions.compileSdk
+
+    defaultConfig {
+        minSdk build_versions.minSdk
+        targetSdk build_versions.targetSdk
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    lint {
+        abortOnError false
+    }
+}
+
+dependencies {
+
+    testImplementation "junit:junit:$versions.junit"
+    androidTestImplementation "androidx.test.ext:junit:$versions.androidExtJunit"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$versions.espresso"
+
+    implementation "androidx.appcompat:appcompat:$versions.appcompat"
+
+    // CameraX
+    api "androidx.camera:camera-core:$versions.camerax"
+    api "androidx.camera:camera-camera2:$versions.camerax"
+    api "androidx.camera:camera-lifecycle:$versions.camerax"
+    api "androidx.camera:camera-view:$versions.camerax"
+}
