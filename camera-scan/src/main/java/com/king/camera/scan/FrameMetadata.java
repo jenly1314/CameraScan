@@ -60,4 +60,13 @@ public class FrameMetadata {
         this.height = height;
         this.rotation = rotation;
     }
+
+    @Override
+    public String toString() {
+        return "FrameMetadata{" +
+                "width=" + width +
+                ", height=" + height +
+                ", rotation=" + rotation +
+                '}';
+    }
 }
