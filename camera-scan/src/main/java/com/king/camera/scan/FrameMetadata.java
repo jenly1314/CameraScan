@@ -55,7 +55,7 @@ public class FrameMetadata {
         return rotation;
     }
 
-    private FrameMetadata(int width, int height, int rotation) {
+    public FrameMetadata(int width, int height, int rotation) {
         this.width = width;
         this.height = height;
         this.rotation = rotation;

@@ -101,7 +101,7 @@ getCameraScan().setCameraConfig(cameraConfig);
 
 方式二：通过对象创建CameraConfig
 ```java
-// 此处的CameraConfig可以是CameraConfig的任意子类
+// 此处的CameraConfig可以是CameraConfig的任意子类（其它CameraConfig相关配置修改方式与设置前置摄像头类似）
 CameraConfig cameraConfig = new CameraConfig() {
     @NonNull
     @Override
