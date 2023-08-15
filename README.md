@@ -168,7 +168,7 @@ cameraScan.setAnalyzer(analyzer);
 ```
 > 如果是通过直接或间接继承 **BaseCameraScanActivity** 来实现的，可直接覆写 `createAnalyzer` 方法返回具体的分析器即可。
 
-看到这里，你对 **CameraScan** 相关配置应该有了基本的了解，**CameraScan** 作为一个简化扫描识别流程的通用基础库，将通用的预览分析流程，进行尽可能的抽象分离，然后实现公共部分；将具体分析功能进行抽象；基于**CameraScan** 你只需实现一个**Analyzer**，并根据需要进行**CameraScan**相关配置，就可以快速实现具体的扫描检测功能。
+* 看到这里，你对 **CameraScan** 相关配置应该有了基本的了解，**CameraScan** 作为一个简化扫描识别流程的通用基础库，将通用的预览分析流程，进行尽可能的抽象分离，然后实现公共部分；将具体分析功能进行抽象；基于**CameraScan** 你只需实现一个**Analyzer**，并根据需要进行**CameraScan**相关配置，就可以快速实现具体的扫描检测功能。
 
 介绍完 **CameraScan** 相关配置后，下面就来说下界面和布局部分；
 
