@@ -47,11 +47,11 @@ class CameraScanActivity : BaseCameraScanActivity<Unit>() {
     }
 
     override fun onScanResultCallback(result: AnalyzeResult<Unit>) {
-        // TODO 扫描结果回调
+        // TODO 扫描结果回调；分析后得到的结果
     }
 
     override fun createAnalyzer(): Analyzer<Unit>? {
-        // TODO 创建分析器
+        // TODO 创建分析器；由具体的分析器去实现分析检测功能
         return null
     }
 

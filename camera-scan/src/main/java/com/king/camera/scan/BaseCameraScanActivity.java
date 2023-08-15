@@ -44,7 +44,7 @@ import androidx.camera.view.PreviewView;
  * <p>
  * <a href="https://github.com/jenly1314">Follow me</a>
  */
-public abstract class BaseCameraScanActivity<T> extends AppCompatActivity implements com.king.camera.scan.CameraScan.OnScanResultCallback<T> {
+public abstract class BaseCameraScanActivity<T> extends AppCompatActivity implements CameraScan.OnScanResultCallback<T> {
 
     /**
      * 相机权限请求代码

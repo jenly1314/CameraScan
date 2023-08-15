@@ -161,6 +161,56 @@ getCameraScan().startCamera();
 getCameraScan().enableTorch(torch);
 ```
 
+设置分析器
+```java
+// 设置分析器
+cameraScan.setAnalyzer(analyzer);
+```
+> 如果是通过直接或间接继承 **BaseCameraScanActivity** 来实现的，可直接覆写 `createAnalyzer` 方法返回具体的分析器即可。
+
+看到这里，你对 **CameraScan** 相关配置应该有了基本的了解，**CameraScan** 作为一个简化扫描识别流程的通用基础库，将通用的预览分析流程，进行尽可能的抽象分离，然后实现公共部分；将具体分析功能进行抽象；基于**CameraScan** 你只需实现一个**Analyzer**，并根据需要进行**CameraScan**相关配置，就可以快速实现具体的扫描检测功能。
+
+介绍完 **CameraScan** 相关配置后，下面就来说下界面和布局部分；
+
+### 界面示例
+
+通过继承**BaseCameraScanActivity**可快速实现具体的扫描功能；（**BaseCameraScanFragment**与之类似）
+
+示例：
+```kotlin
+// 此处的泛型*表示分析得到的具体结果
+class CameraScanActivity : BaseCameraScanActivity<*>() {
+    /**
+     * 初始化CameraScan
+     */
+    override fun initCameraScan(cameraScan: CameraScan<*>) {
+        super.initCameraScan(cameraScan)
+        // TODO 根据需要初始化CameraScan相关配置
+    }
+
+    /**
+     * 布局ID；通过覆写此方法可以自定义布局
+     *
+     * @return 布局ID
+     */
+    override fun getLayoutId(): Int {
+        return super.getLayoutId()
+    }
+
+    override fun onScanResultCallback(result: AnalyzeResult<*>) {
+        // TODO 扫描结果回调；分析后得到的结果
+    }
+
+    override fun createAnalyzer(): Analyzer<*>? {
+        // TODO 创建分析器；由具体的分析器去实现分析检测功能
+        return null
+    }
+}
+
+```
+
+> 一般在 [ZXingLite](https://github.com/jenly1314/ZXingLite) 、[MLKit](https://github.com/jenly1314/MLKit) 或 [WeChatQRCode](https://github.com/jenly1314/WeChatQRCode) 对应的库中都有提供 **BaseCameraScanActivity** 的子类，可快速实现具体的分析识别功能。（比如：[MLKit](https://github.com/jenly1314/MLKit)中的条码扫描有：[BarcodeCameraScanActivity](https://github.com/jenly1314/MLKit/blob/master/mlkit-barcode-scanning/src/main/java/com/king/mlkit/vision/barcode/BarcodeCameraScanActivity.java)）
+
 ### 布局示例
 
 **PreviewView** 用来预览，布局内至少要保证有 **PreviewView** （必须的）；如果是继承 **BaseCameraScanActivity** 或
