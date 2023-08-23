@@ -135,7 +135,7 @@ getCameraScan().setCameraConfig(cameraConfig);
 
 示例：
 
-```kotlin
+```java
 // 根据需要修改CameraScan相关配置
 cameraScan.setPlayBeep(true)//设置是否播放音效，默认为false
     .setVibrate(true)//设置是否震动，默认为false
@@ -145,7 +145,7 @@ cameraScan.setPlayBeep(true)//设置是否播放音效，默认为false
     .setBrightLightLux(100f)//设置光线足够明亮的阈值（单位：lux），需要通过{@link #bindFlashlightView(View)}绑定手电筒才有效
     .bindFlashlightView(ivFlashlight)//绑定手电筒，绑定后可根据光线传感器，动态显示或隐藏手电筒按钮
     .setOnScanResultCallback(this)//设置扫描结果回调，需要自己处理或者需要连扫时，可设置回调，自己去处理相关逻辑
-    .setAnalyzeImage(true)//设置是否分析图片，默认为true。如果设置为false，相当于关闭了扫描识别功能
+    .setAnalyzeImage(true);//设置是否分析图片，默认为true。如果设置为false，相当于关闭了扫描识别功能
 
 ```
 
@@ -186,6 +186,7 @@ class CameraScanActivity : BaseCameraScanActivity<*>() {
     override fun initCameraScan(cameraScan: CameraScan<*>) {
         super.initCameraScan(cameraScan)
         // TODO 根据需要初始化CameraScan相关配置
+        cameraScan.setPlayBeep(true)
     }
 
     /**
