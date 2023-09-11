@@ -23,24 +23,22 @@ CameraScan for Android 是一个简化扫描识别流程的通用基础库。
 
 ### Gradle:
 
-1. 在Project的 **build.gradle** 里面添加远程仓库
+1. 在Project的 **build.gradle** 或 **setting.gradle** 中添加远程仓库
 
-```gradle
-allprojects {
+    ```gradle
     repositories {
         //...
         mavenCentral()
     }
-}
-```
+    ```
 
 2. 在Module的 **build.gradle** 里面添加引入依赖项
 
-```gradle
-// AndroidX 版本
-implementation 'com.github.jenly1314:camera-scan:1.0.0'
-
-```
+    ```gradle
+    // AndroidX 版本
+    implementation 'com.github.jenly1314:camera-scan:1.0.1'
+    
+    ```
 
 ### 温馨提示
 
