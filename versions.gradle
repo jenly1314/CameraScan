@@ -1,7 +1,7 @@
 // App
 def app_version = [:]
-app_version.versionCode = 1
-app_version.versionName = "1.0.0"
+app_version.versionCode = 2
+app_version.versionName = "1.0.1"
 ext.app_version = app_version
 
 // build version
@@ -32,7 +32,7 @@ versions.gralde = "7.4.2"
 versions.kotlin = "1.8.0"
 versions.coreKtx = "1.7.0"
 
-versions.camerax = "1.2.2"
+versions.camerax = "1.2.3"
 
 versions.viewfinderview = "1.0.0"
 

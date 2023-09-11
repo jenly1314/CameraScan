@@ -30,6 +30,7 @@ import androidx.annotation.Nullable;
  * <p>
  * <a href="https://github.com/jenly1314">Follow me</a>
  */
+@SuppressWarnings("unused")
 public class AnalyzeResult<T> {
 
     /**
@@ -104,6 +105,28 @@ public class AnalyzeResult<T> {
             bitmap = BitmapUtils.getBitmap(imageData, frameMetadata);
         }
         return bitmap;
+    }
+
+    /**
+     * 获取图像的宽
+     * @return
+     */
+    public int getBitmapWidth() {
+        if (frameMetadata.getRotation() % 180 == 0) {
+            return frameMetadata.getWidth();
+        }
+        return frameMetadata.getHeight();
+    }
+
+    /**
+     * 获取图像的高
+     * @return
+     */
+    public int getBitmapHeight() {
+        if (frameMetadata.getRotation() % 180 == 0) {
+            return frameMetadata.getHeight();
+        }
+        return frameMetadata.getWidth();
     }
 
     /**

@@ -28,6 +28,7 @@ import android.hardware.SensorManager;
  * <p>
  * <a href="https://github.com/jenly1314">Follow me</a>
  */
+@SuppressWarnings("unused")
 public class AmbientLightManager implements SensorEventListener {
 
     private static final int INTERVAL_TIME = 200;

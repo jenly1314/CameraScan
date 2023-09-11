@@ -24,6 +24,7 @@ import androidx.annotation.FloatRange;
  * <p>
  * <a href="https://github.com/jenly1314">Follow me</a>
  */
+@SuppressWarnings("unused")
 public interface ICameraControl {
 
     /**

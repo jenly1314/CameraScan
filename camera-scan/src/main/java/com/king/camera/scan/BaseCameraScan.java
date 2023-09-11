@@ -127,7 +127,7 @@ public class BaseCameraScan<T> extends CameraScan<T> {
     /**
      * 扫描结果回调
      */
-    private OnScanResultCallback mOnScanResultCallback;
+    private OnScanResultCallback<T> mOnScanResultCallback;
     /**
      * 分析监听器
      */
@@ -175,12 +175,13 @@ public class BaseCameraScan<T> extends CameraScan<T> {
     /**
      * 缩放手势检测
      */
-    private ScaleGestureDetector.OnScaleGestureListener mOnScaleGestureListener = new ScaleGestureDetector.SimpleOnScaleGestureListener() {
+    private final ScaleGestureDetector.OnScaleGestureListener mOnScaleGestureListener = new ScaleGestureDetector.SimpleOnScaleGestureListener() {
         @Override
         public boolean onScale(ScaleGestureDetector detector) {
             float scale = detector.getScaleFactor();
-            if (mCamera != null) {
-                float ratio = mCamera.getCameraInfo().getZoomState().getValue().getZoomRatio();
+            ZoomState zoomState = getZoomState();
+            if (zoomState != null) {
+                float ratio = zoomState.getZoomRatio();
                 // 根据缩放的手势和当前比例进行缩放
                 zoomTo(ratio * scale);
                 return true;
@@ -204,7 +205,7 @@ public class BaseCameraScan<T> extends CameraScan<T> {
             }
         });
 
-        mOnAnalyzeListener = new Analyzer.OnAnalyzeListener<AnalyzeResult<T>>() {
+        mOnAnalyzeListener = new Analyzer.OnAnalyzeListener<>() {
             @Override
             public void onSuccess(@NonNull AnalyzeResult<T> result) {
                 mResultLiveData.postValue(result);
@@ -228,22 +229,20 @@ public class BaseCameraScan<T> extends CameraScan<T> {
 
         mBeepManager = new BeepManager(mContext);
         mAmbientLightManager = new AmbientLightManager(mContext);
-        if (mAmbientLightManager != null) {
-            mAmbientLightManager.register();
-            mAmbientLightManager.setOnLightSensorEventListener((dark, lightLux) -> {
-                if (flashlightView != null) {
-                    if (dark) {
-                        if (flashlightView.getVisibility() != View.VISIBLE) {
-                            flashlightView.setVisibility(View.VISIBLE);
-                            flashlightView.setSelected(isTorchEnabled());
-                        }
-                    } else if (flashlightView.getVisibility() == View.VISIBLE && !isTorchEnabled()) {
-                        flashlightView.setVisibility(View.INVISIBLE);
-                        flashlightView.setSelected(false);
+        mAmbientLightManager.register();
+        mAmbientLightManager.setOnLightSensorEventListener((dark, lightLux) -> {
+            if (flashlightView != null) {
+                if (dark) {
+                    if (flashlightView.getVisibility() != View.VISIBLE) {
+                        flashlightView.setVisibility(View.VISIBLE);
+                        flashlightView.setSelected(isTorchEnabled());
                     }
+                } else if (flashlightView.getVisibility() == View.VISIBLE && !isTorchEnabled()) {
+                    flashlightView.setVisibility(View.INVISIBLE);
+                    flashlightView.setSelected(false);
                 }
-            });
-        }
+            }
+        });
     }
 
     /**
@@ -280,7 +279,7 @@ public class BaseCameraScan<T> extends CameraScan<T> {
      * @param aY a点Y坐标
      * @param bX b点X坐标
      * @param bY b点Y坐标
-     * @return
+     * @return 两点距离
      */
     private float distance(float aX, float aY, float bX, float bY) {
         float xDiff = aX - bX;
@@ -306,7 +305,7 @@ public class BaseCameraScan<T> extends CameraScan<T> {
     }
 
     @Override
-    public CameraScan setCameraConfig(CameraConfig cameraConfig) {
+    public CameraScan<T> setCameraConfig(CameraConfig cameraConfig) {
         if (cameraConfig != null) {
             this.mCameraConfig = cameraConfig;
         }
@@ -381,22 +380,23 @@ public class BaseCameraScan<T> extends CameraScan<T> {
     }
 
     @Override
-    public CameraScan setAnalyzeImage(boolean analyze) {
+    public CameraScan<T> setAnalyzeImage(boolean analyze) {
         isAnalyze = analyze;
         return this;
     }
 
     @Override
-    public CameraScan setAnalyzer(Analyzer<T> analyzer) {
+    public CameraScan<T> setAnalyzer(Analyzer<T> analyzer) {
         mAnalyzer = analyzer;
         return this;
     }
 
     @Override
     public void zoomIn() {
-        if (mCamera != null) {
-            float ratio = getCameraInfo().getZoomState().getValue().getZoomRatio() + ZOOM_STEP_SIZE;
-            float maxRatio = getCameraInfo().getZoomState().getValue().getMaxZoomRatio();
+        ZoomState zoomState = getZoomState();
+        if (zoomState != null) {
+            float ratio = zoomState.getZoomRatio() + ZOOM_STEP_SIZE;
+            float maxRatio = zoomState.getMaxZoomRatio();
             if (ratio <= maxRatio) {
                 mCamera.getCameraControl().setZoomRatio(ratio);
             }
@@ -405,9 +405,10 @@ public class BaseCameraScan<T> extends CameraScan<T> {
 
     @Override
     public void zoomOut() {
-        if (mCamera != null) {
-            float ratio = getCameraInfo().getZoomState().getValue().getZoomRatio() - ZOOM_STEP_SIZE;
-            float minRatio = getCameraInfo().getZoomState().getValue().getMinZoomRatio();
+        ZoomState zoomState = getZoomState();
+        if (zoomState != null) {
+            float ratio = zoomState.getZoomRatio() - ZOOM_STEP_SIZE;
+            float minRatio = zoomState.getMinZoomRatio();
             if (ratio >= minRatio) {
                 mCamera.getCameraControl().setZoomRatio(ratio);
             }
@@ -416,8 +417,8 @@ public class BaseCameraScan<T> extends CameraScan<T> {
 
     @Override
     public void zoomTo(float ratio) {
-        if (mCamera != null) {
-            ZoomState zoomState = getCameraInfo().getZoomState().getValue();
+        ZoomState zoomState = getZoomState();
+        if (zoomState != null) {
             float maxRatio = zoomState.getMaxZoomRatio();
             float minRatio = zoomState.getMinZoomRatio();
             float zoom = Math.max(Math.min(ratio, maxRatio), minRatio);
@@ -427,8 +428,9 @@ public class BaseCameraScan<T> extends CameraScan<T> {
 
     @Override
     public void lineZoomIn() {
-        if (mCamera != null) {
-            float zoom = getCameraInfo().getZoomState().getValue().getLinearZoom() + ZOOM_STEP_SIZE;
+        ZoomState zoomState = getZoomState();
+        if (zoomState != null) {
+            float zoom = zoomState.getLinearZoom() + ZOOM_STEP_SIZE;
             if (zoom <= 1f) {
                 mCamera.getCameraControl().setLinearZoom(zoom);
             }
@@ -437,8 +439,9 @@ public class BaseCameraScan<T> extends CameraScan<T> {
 
     @Override
     public void lineZoomOut() {
-        if (mCamera != null) {
-            float zoom = getCameraInfo().getZoomState().getValue().getLinearZoom() - ZOOM_STEP_SIZE;
+        ZoomState zoomState = getZoomState();
+        if (zoomState != null) {
+            float zoom = zoomState.getLinearZoom() - ZOOM_STEP_SIZE;
             if (zoom >= 0f) {
                 mCamera.getCameraControl().setLinearZoom(zoom);
             }
@@ -462,7 +465,8 @@ public class BaseCameraScan<T> extends CameraScan<T> {
     @Override
     public boolean isTorchEnabled() {
         if (mCamera != null) {
-            return getCameraInfo().getTorchState().getValue() == TorchState.ON;
+            Integer torchState = mCamera.getCameraInfo().getTorchState().getValue();
+            return torchState != null && torchState == TorchState.ON;
         }
         return false;
     }
@@ -470,13 +474,13 @@ public class BaseCameraScan<T> extends CameraScan<T> {
     @Override
     public boolean hasFlashUnit() {
         if (mCamera != null) {
-            return getCameraInfo().hasFlashUnit();
+            return mCamera.getCameraInfo().hasFlashUnit();
         }
         return mContext.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
     }
 
     @Override
-    public CameraScan setVibrate(boolean vibrate) {
+    public CameraScan<T> setVibrate(boolean vibrate) {
         if (mBeepManager != null) {
             mBeepManager.setVibrate(vibrate);
         }
@@ -484,7 +488,7 @@ public class BaseCameraScan<T> extends CameraScan<T> {
     }
 
     @Override
-    public CameraScan setPlayBeep(boolean playBeep) {
+    public CameraScan<T> setPlayBeep(boolean playBeep) {
         if (mBeepManager != null) {
             mBeepManager.setPlayBeep(playBeep);
         }
@@ -492,7 +496,7 @@ public class BaseCameraScan<T> extends CameraScan<T> {
     }
 
     @Override
-    public CameraScan setOnScanResultCallback(OnScanResultCallback callback) {
+    public CameraScan<T> setOnScanResultCallback(OnScanResultCallback<T> callback) {
         this.mOnScanResultCallback = callback;
         return this;
     }
@@ -504,12 +508,16 @@ public class BaseCameraScan<T> extends CameraScan<T> {
     }
 
     /**
-     * CameraInfo
+     * 获取ZoomState
      *
-     * @return {@link CameraInfo}
+     * @return {@link ZoomState}
      */
-    private CameraInfo getCameraInfo() {
-        return mCamera.getCameraInfo();
+    @Nullable
+    private ZoomState getZoomState() {
+        if (mCamera != null) {
+            return mCamera.getCameraInfo().getZoomState().getValue();
+        }
+        return null;
     }
 
     @Override
@@ -526,7 +534,7 @@ public class BaseCameraScan<T> extends CameraScan<T> {
     }
 
     @Override
-    public CameraScan bindFlashlightView(@Nullable View flashlightView) {
+    public CameraScan<T> bindFlashlightView(@Nullable View flashlightView) {
         this.flashlightView = flashlightView;
         if (mAmbientLightManager != null) {
             mAmbientLightManager.setLightSensorEnabled(flashlightView != null);
@@ -535,7 +543,7 @@ public class BaseCameraScan<T> extends CameraScan<T> {
     }
 
     @Override
-    public CameraScan setDarkLightLux(float lightLux) {
+    public CameraScan<T> setDarkLightLux(float lightLux) {
         if (mAmbientLightManager != null) {
             mAmbientLightManager.setDarkLightLux(lightLux);
         }
@@ -543,7 +551,7 @@ public class BaseCameraScan<T> extends CameraScan<T> {
     }
 
     @Override
-    public CameraScan setBrightLightLux(float lightLux) {
+    public CameraScan<T> setBrightLightLux(float lightLux) {
         if (mAmbientLightManager != null) {
             mAmbientLightManager.setBrightLightLux(lightLux);
         }

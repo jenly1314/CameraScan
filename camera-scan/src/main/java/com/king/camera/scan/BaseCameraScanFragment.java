@@ -47,6 +47,7 @@ import androidx.fragment.app.Fragment;
  * <p>
  * <a href="https://github.com/jenly1314">Follow me</a>
  */
+@SuppressWarnings("unused")
 public abstract class BaseCameraScanFragment<T> extends Fragment implements CameraScan.OnScanResultCallback<T> {
 
     /**
@@ -251,7 +252,7 @@ public abstract class BaseCameraScanFragment<T> extends Fragment implements Came
     /**
      * 创建{@link CameraScan}
      *
-     * @param previewView
+     * @param previewView {@link  PreviewView}
      * @return {@link CameraScan}
      */
     @NonNull

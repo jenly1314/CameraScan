@@ -29,6 +29,7 @@ import androidx.camera.core.ImageProxy;
  * <p>
  * <a href="https://github.com/jenly1314">Follow me</a>
  */
+@SuppressWarnings("unused")
 public interface Analyzer<T> {
     /**
      * 分析图像并将分析的结果通过分析监听器返回
@@ -43,7 +44,7 @@ public interface Analyzer<T> {
      *
      * @param <T> 泛型T为分析结果对应的对象
      */
-    public interface OnAnalyzeListener<T> {
+    interface OnAnalyzeListener<T> {
         /**
          * 成功
          *

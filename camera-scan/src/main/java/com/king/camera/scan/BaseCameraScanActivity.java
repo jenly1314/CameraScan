@@ -218,7 +218,7 @@ public abstract class BaseCameraScanActivity<T> extends AppCompatActivity implem
     /**
      * 创建{@link CameraScan}
      *
-     * @param previewView
+     * @param previewView {@link  PreviewView}
      * @return {@link CameraScan}
      */
     @NonNull

@@ -291,6 +291,10 @@ BaseCameraScanActivity和BaseCameraScanFragment使用的默认布局：
 
 ## 版本说明
 
+#### v1.0.1：2023-09-11
+* 更新CameraX相关依赖至v1.2.3
+* 优化细节
+
 #### v1.0.0：2023-08-05
 * CameraScan初始版本
 
