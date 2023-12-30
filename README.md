@@ -45,6 +45,7 @@ CameraScan for Android 是一个简化扫描识别流程的通用基础库。
 #### 关于CameraScan版本与编译的SDK版本要求
 
 > 使用 **v1.1.x** 以上版本时，要求 **compileSdkVersion >= 34**
+
 > 使用 **v1.0.x** 以上版本时，要求 **compileSdkVersion >= 33**
 
 ## 使用
@@ -282,7 +283,7 @@ BaseCameraScanActivity和BaseCameraScanFragment使用的默认布局：
 
 更多使用详情，请查看[app](app)中的源码使用示例或直接查看[API帮助文档](https://jitpack.io/com/github/jenly1314/CameraScan/latest/javadoc/)
 
-### 相关推荐
+## 相关推荐
 
 #### [MLKit](https://github.com/jenly1314/MLKit) 一个强大易用的工具包。通过ML Kit您可以很轻松的实现文字识别、条码识别、图像标记、人脸检测、对象检测等功能。
 #### [WeChatQRCode](https://github.com/jenly1314/WeChatQRCode) 基于OpenCV开源的微信二维码引擎移植的扫码识别库。
