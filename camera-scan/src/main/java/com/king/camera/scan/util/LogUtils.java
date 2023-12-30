@@ -20,23 +20,32 @@ import android.util.Log;
 import java.util.Locale;
 
 /**
+ * 日志工具类
+ *
+ * <pre>
+ *  ┌──────────────────────────
+ *    Method stack info
+ *  ├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+ *    Log message
+ *  └──────────────────────────
+ * </pre>
+ *
  * @author <a href="mailto:jenly1314@gmail.com">Jenly</a>
  * <p>
  * <a href="https://github.com/jenly1314">Follow me</a>
  */
+@SuppressWarnings("unused")
 public class LogUtils {
 
     public static final String TAG = "CameraScan";
 
-    public static final String VERTICAL = "|";
-
     /**
-     * 是否显示Log日志
+     * 是否显示日志
      */
     private static boolean isShowLog = true;
 
     /**
-     * Log日志优先权
+     * 日志优先级别
      */
     private static int priority = 1;
 
@@ -75,43 +84,97 @@ public class LogUtils {
      */
     public static final int ASSERT = 7;
 
-    public static final String TAG_FORMAT = "%s.%s(%s:%d)";
+    public static final String STACK_TRACE_FORMAT = "%s.%s(%s:%d)";
 
+    private static final int MIN_STACK_OFFSET = 5;
+    private static final int LOG_STACK_OFFSET = 6;
+
+    /**
+     * Drawing toolbox
+     */
+    private static final char TOP_LEFT_CORNER = '┌';
+    private static final char BOTTOM_LEFT_CORNER = '└';
+    private static final char MIDDLE_CORNER = '├';
+    private static final char HORIZONTAL_LINE = '│';
+    private static final String DOUBLE_DIVIDER = "────────────────────────────────────────────────────────";
+    private static final String SINGLE_DIVIDER = "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄";
+    private static final String TOP_BORDER = TOP_LEFT_CORNER + DOUBLE_DIVIDER + DOUBLE_DIVIDER;
+    private static final String BOTTOM_BORDER = BOTTOM_LEFT_CORNER + DOUBLE_DIVIDER + DOUBLE_DIVIDER;
+    private static final String MIDDLE_BORDER = MIDDLE_CORNER + SINGLE_DIVIDER + SINGLE_DIVIDER;
+    private static final String LINE_FEED = "\n";
+    
     private LogUtils() {
         throw new AssertionError();
     }
 
+    /**
+     * 设置是否显示日志；此设置可全局控制是否打印日志
+     * <p>
+     * 如果你只想根据日志级别来控制日志的打印；可以使用{@link LogUtils#setPriority(int)}；
+     *
+     * @param isShowLog {@link LogUtils#isShowLog}
+     */
     public static void setShowLog(boolean isShowLog) {
-
         LogUtils.isShowLog = isShowLog;
     }
 
+    /**
+     * 是否显示日志
+     *
+     * @return {@link LogUtils#isShowLog}
+     */
     public static boolean isShowLog() {
-
         return isShowLog;
     }
 
+    /**
+     * 获取日志优先级别
+     *
+     * @return {@link LogUtils#priority}
+     */
     public static int getPriority() {
-
         return priority;
     }
 
+    /**
+     * 设置日志优先级别；设置优先级之后，低于此优先级别的日志将不会打印；
+     * <p>
+     * 你也可以通过{@link LogUtils#setShowLog(boolean)}来全局控制是否打印日志
+     *
+     * @param priority {@link LogUtils#priority}
+     */
     public static void setPriority(int priority) {
-
         LogUtils.priority = priority;
     }
 
     /**
-     * 根据堆栈生成TAG
+     * 获取堆栈信息 className.methodName(fileName:lineNumber)
      *
-     * @return TAG|className.methodName(fileName:lineNumber)
+     * <pre>
+     *  ┌──────────────────────────
+     *    Method stack info
+     *  ├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+     *    Log message
+     *  └──────────────────────────
+     * </pre>
+     *
+     * @return
      */
-    private static String generateTag(StackTraceElement caller) {
-        String tag = TAG_FORMAT;
+    private static String getStackTraceMessage(Object msg, int stackOffset) {
+        StackTraceElement caller = getStackTraceElement(stackOffset);
         String callerClazzName = caller.getClassName();
         callerClazzName = callerClazzName.substring(callerClazzName.lastIndexOf(".") + 1);
-        tag = String.format(Locale.getDefault(), tag, callerClazzName, caller.getMethodName(), caller.getFileName(), caller.getLineNumber());
-        return new StringBuilder().append(TAG).append(VERTICAL).append(tag).toString();
+        String methodStack = String.format(Locale.getDefault(), STACK_TRACE_FORMAT, callerClazzName, caller.getMethodName(), caller.getFileName(), caller.getLineNumber());
+        return new StringBuilder().append(TOP_BORDER)
+                .append(LINE_FEED)
+                .append(methodStack)
+                .append(LINE_FEED)
+                .append(MIDDLE_BORDER)
+                .append(LINE_FEED)
+                .append(msg)
+                .append(LINE_FEED)
+                .append(BOTTOM_BORDER)
+                .toString();
     }
 
     /**
@@ -124,21 +187,14 @@ public class LogUtils {
      *          ...
      * @return
      */
-    public static StackTraceElement getStackTraceElement(int n) {
+    private static StackTraceElement getStackTraceElement(int n) {
         return Thread.currentThread().getStackTrace()[n];
     }
 
     /**
-     * 获取调用方的堆栈TAG
+     * 根据异常获取堆栈信息
      *
-     * @return
-     */
-    private static String getCallerStackLogTag() {
-        return generateTag(getStackTraceElement(5));
-    }
-
-    /**
-     * @param t
+     * @param t 异常
      * @return
      */
     private static String getStackTraceString(Throwable t) {
@@ -148,163 +204,231 @@ public class LogUtils {
     // -----------------------------------Log.v
 
     /**
-     * Log.v
+     * 打印日志；日志级别：{@link LogUtils#VERBOSE}
      *
-     * @param msg
+     * @param msg 日志信息
      */
     public static void v(String msg) {
         if (isShowLog && priority <= VERBOSE)
-            Log.v(getCallerStackLogTag(), String.valueOf(msg));
+            log(Log.VERBOSE, msg);
 
     }
 
+    /**
+     * 打印日志；日志级别：{@link LogUtils#VERBOSE}
+     *
+     * @param t 异常
+     */
     public static void v(Throwable t) {
         if (isShowLog && priority <= VERBOSE)
-            Log.v(getCallerStackLogTag(), getStackTraceString(t));
+            log(Log.VERBOSE, t);
     }
 
+    /**
+     * 打印日志；日志级别：{@link LogUtils#VERBOSE}
+     *
+     * @param msg 日志信息
+     * @param t   异常
+     */
     public static void v(String msg, Throwable t) {
         if (isShowLog && priority <= VERBOSE)
-            Log.v(getCallerStackLogTag(), String.valueOf(msg), t);
+            log(Log.VERBOSE, msg, t);
     }
 
     // -----------------------------------Log.d
 
     /**
-     * Log.d
+     * 打印日志；日志级别：{@link LogUtils#DEBUG}
      *
-     * @param msg
+     * @param msg 日志信息
      */
     public static void d(String msg) {
         if (isShowLog && priority <= DEBUG)
-            Log.d(getCallerStackLogTag(), String.valueOf(msg));
+            log(Log.DEBUG, msg);
     }
 
+    /**
+     * 打印日志；日志级别：{@link LogUtils#DEBUG}
+     *
+     * @param t 异常
+     */
     public static void d(Throwable t) {
         if (isShowLog && priority <= DEBUG)
-            Log.d(getCallerStackLogTag(), getStackTraceString(t));
+            log(Log.DEBUG, t);
     }
 
+    /**
+     * 打印日志；日志级别：{@link LogUtils#DEBUG}
+     *
+     * @param msg 日志信息
+     * @param t   异常
+     */
     public static void d(String msg, Throwable t) {
         if (isShowLog && priority <= DEBUG)
-            Log.d(getCallerStackLogTag(), String.valueOf(msg), t);
+            log(Log.DEBUG, msg, t);
     }
 
     // -----------------------------------Log.i
 
     /**
-     * Log.i
+     * 打印日志；日志级别：{@link LogUtils#INFO}
      *
-     * @param msg
+     * @param msg 日志信息
      */
     public static void i(String msg) {
         if (isShowLog && priority <= INFO)
-            Log.i(getCallerStackLogTag(), String.valueOf(msg));
+            log(Log.INFO, msg);
     }
 
+    /**
+     * 打印日志；日志级别：{@link LogUtils#INFO}
+     *
+     * @param t 异常
+     */
     public static void i(Throwable t) {
         if (isShowLog && priority <= INFO)
-            Log.i(getCallerStackLogTag(), getStackTraceString(t));
+            log(Log.INFO, t);
     }
 
+    /**
+     * 打印日志；日志级别：{@link LogUtils#INFO}
+     *
+     * @param msg 日志信息
+     * @param t   异常
+     */
     public static void i(String msg, Throwable t) {
         if (isShowLog && priority <= INFO)
-            Log.i(getCallerStackLogTag(), String.valueOf(msg), t);
+            log(Log.INFO, msg, t);
     }
 
     // -----------------------------------Log.w
 
     /**
-     * Log.w
+     * 打印日志；日志级别：{@link LogUtils#WARN}
      *
-     * @param msg
+     * @param msg 日志信息
      */
     public static void w(String msg) {
         if (isShowLog && priority <= WARN)
-            Log.w(getCallerStackLogTag(), String.valueOf(msg));
+            log(Log.WARN, msg);
     }
 
+    /**
+     * 打印日志；日志级别：{@link LogUtils#WARN}
+     *
+     * @param t 异常
+     */
     public static void w(Throwable t) {
         if (isShowLog && priority <= WARN)
-            Log.w(getCallerStackLogTag(), getStackTraceString(t));
+            log(Log.WARN, t);
     }
 
+    /**
+     * 打印日志；日志级别：{@link LogUtils#WARN}
+     *
+     * @param msg 日志信息
+     * @param t   异常
+     */
     public static void w(String msg, Throwable t) {
         if (isShowLog && priority <= WARN)
-            Log.w(getCallerStackLogTag(), String.valueOf(msg), t);
+            log(Log.WARN, msg, t);
     }
 
     // -----------------------------------Log.e
 
     /**
-     * Log.e
+     * 打印日志；日志级别：{@link LogUtils#ERROR}
      *
-     * @param msg
+     * @param msg 日志信息
      */
     public static void e(String msg) {
         if (isShowLog && priority <= ERROR)
-            Log.e(getCallerStackLogTag(), String.valueOf(msg));
+            log(Log.ERROR, msg);
     }
 
+    /**
+     * 打印日志；日志级别：{@link LogUtils#ERROR}
+     *
+     * @param t 异常
+     */
     public static void e(Throwable t) {
         if (isShowLog && priority <= ERROR)
-            Log.e(getCallerStackLogTag(), getStackTraceString(t));
+            log(Log.ERROR, t);
     }
 
+    /**
+     * 打印日志；日志级别：{@link LogUtils#ERROR}
+     *
+     * @param msg 日志信息
+     * @param t   异常
+     */
     public static void e(String msg, Throwable t) {
         if (isShowLog && priority <= ERROR)
-            Log.e(getCallerStackLogTag(), String.valueOf(msg), t);
+            log(Log.ERROR, msg, t);
     }
 
     // -----------------------------------Log.wtf
 
     /**
-     * Log.wtf
+     * 打印日志；日志级别：{@link LogUtils#ASSERT}
      *
-     * @param msg
+     * @param msg 日志信息
      */
     public static void wtf(String msg) {
         if (isShowLog && priority <= ASSERT)
-            Log.wtf(getCallerStackLogTag(), String.valueOf(msg));
+            log(Log.ASSERT, msg);
     }
 
+    /**
+     * 打印日志；日志级别：{@link LogUtils#ASSERT}
+     *
+     * @param t 异常
+     */
     public static void wtf(Throwable t) {
         if (isShowLog && priority <= ASSERT)
-            Log.wtf(getCallerStackLogTag(), getStackTraceString(t));
+            log(Log.ASSERT, t);
     }
 
+    /**
+     * 打印日志；日志级别：{@link LogUtils#ASSERT}
+     *
+     * @param msg 日志信息
+     * @param t   异常
+     */
     public static void wtf(String msg, Throwable t) {
         if (isShowLog && priority <= ASSERT)
-            Log.wtf(getCallerStackLogTag(), String.valueOf(msg), t);
+            log(Log.ASSERT, msg, t);
     }
-
-    // -----------------------------------System.out.print
 
     /**
-     * System.out.print
+     * 打印日志；日志级别：ASSERT
      *
-     * @param msg
+     * @param priority 日志优先级别
+     * @param msg      日志信息
      */
-    public static void print(String msg) {
-        if (isShowLog && priority <= PRINTLN)
-            System.out.print(msg);
+    private static void log(int priority, String msg) {
+        Log.println(priority, TAG, getStackTraceMessage(msg, LOG_STACK_OFFSET));
     }
-
-    public static void print(Object obj) {
-        if (isShowLog && priority <= PRINTLN)
-            System.out.print(obj);
-    }
-
-    // -----------------------------------System.out.printf
 
     /**
-     * System.out.printf
+     * 打印日志
      *
-     * @param msg
+     * @param priority 日志优先级别
+     * @param t        异常
      */
-    public static void printf(String msg) {
-        if (isShowLog && priority <= PRINTLN)
-            System.out.printf(msg);
+    private static void log(int priority, Throwable t) {
+        Log.println(priority, TAG, getStackTraceMessage(getStackTraceString(t), LOG_STACK_OFFSET));
+    }
+
+    /**
+     * 打印日志
+     *
+     * @param priority 日志优先级别
+     * @param msg      日志信息
+     * @param t        异常
+     */
+    private static void log(int priority, String msg, Throwable t) {
+        Log.println(priority, TAG, getStackTraceMessage(msg + '\n' + getStackTraceString(t), LOG_STACK_OFFSET));
     }
 
     // -----------------------------------System.out.println
@@ -316,12 +440,12 @@ public class LogUtils {
      */
     public static void println(String msg) {
         if (isShowLog && priority <= PRINTLN)
-            System.out.println(msg);
+            System.out.println(getStackTraceMessage(msg, MIN_STACK_OFFSET));
     }
 
     public static void println(Object obj) {
         if (isShowLog && priority <= PRINTLN)
-            System.out.println(obj);
+            System.out.println(getStackTraceMessage(obj, MIN_STACK_OFFSET));
     }
 
 }

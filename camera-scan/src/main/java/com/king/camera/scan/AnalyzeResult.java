@@ -36,15 +36,15 @@ public class AnalyzeResult<T> {
     /**
      * 图像数据
      */
-    private byte[] imageData;
+    private final byte[] imageData;
     /**
      * 图像格式：{@link ImageFormat}
      */
-    private int imageFormat;
+    private final int imageFormat;
     /**
      * 帧元数据
      */
-    private FrameMetadata frameMetadata;
+    private final FrameMetadata frameMetadata;
     /**
      * 分析的图像
      */
@@ -53,7 +53,7 @@ public class AnalyzeResult<T> {
     /**
      * 分析结果
      */
-    private T result;
+    private final T result;
 
     public AnalyzeResult(@NonNull byte[] imageData, int imageFormat, @NonNull FrameMetadata frameMetadata, @NonNull T result) {
         this.imageData = imageData;

@@ -22,7 +22,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
 /**
- * 环境光线管理器：主要通过传感器来监听光线的亮度变化
+ * 环境光照度管理器：主要通过传感器来监听光照强度变化
  *
  * @author <a href="mailto:jenly1314@gmail.com">Jenly</a>
  * <p>
@@ -37,11 +37,11 @@ public class AmbientLightManager implements SensorEventListener {
     protected static final float BRIGHT_LUX = 100.0F;
 
     /**
-     * 光线太暗时，默认：照度45 lux
+     * 光照度太暗时，默认：光照度 45 lux
      */
     private float darkLightLux = DARK_LUX;
     /**
-     * 光线足够亮时，默认：照度100 lux
+     * 光照度足够亮时，默认：光照度 100 lux
      */
     private float brightLightLux = BRIGHT_LUX;
 
@@ -60,18 +60,23 @@ public class AmbientLightManager implements SensorEventListener {
         isLightSensorEnabled = true;
     }
 
+    /**
+     * 注册
+     */
     public void register() {
         if (sensorManager != null && lightSensor != null) {
             sensorManager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
         }
     }
 
+    /**
+     * 注销
+     */
     public void unregister() {
         if (sensorManager != null && lightSensor != null) {
             sensorManager.unregisterListener(this);
         }
     }
-
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
@@ -96,7 +101,7 @@ public class AmbientLightManager implements SensorEventListener {
     }
 
     /**
-     * 设置光线足够暗的阈值（单位：lux）
+     * 设置光照强度足够暗的阈值（单位：lux）
      *
      * @param lightLux
      */
@@ -105,7 +110,7 @@ public class AmbientLightManager implements SensorEventListener {
     }
 
     /**
-     * 设置光线足够明亮的阈值（单位：lux）
+     * 设置光照强度足够明亮的阈值（单位：lux）
      *
      * @param lightLux
      */
@@ -123,7 +128,7 @@ public class AmbientLightManager implements SensorEventListener {
     }
 
     /**
-     * 设置是否启用光线亮度传感器
+     * 设置是否启用光照传感器
      *
      * @param lightSensorEnabled
      */
@@ -132,7 +137,7 @@ public class AmbientLightManager implements SensorEventListener {
     }
 
     /**
-     * 设置光线亮度传感器监听器，只有在 {@link #isLightSensorEnabled} 为{@code true} 才有效
+     * 设置光照传感器监听器，只有在 {@link #isLightSensorEnabled} 为{@code true} 才有效
      *
      * @param listener
      */
@@ -142,7 +147,7 @@ public class AmbientLightManager implements SensorEventListener {
 
     public interface OnLightSensorEventListener {
         /**
-         * @param lightLux 当前检测到的光线照度值
+         * @param lightLux 当前检测到的光照强度值
          */
         default void onSensorChanged(float lightLux) {
 
@@ -151,8 +156,8 @@ public class AmbientLightManager implements SensorEventListener {
         /**
          * 传感器改变事件
          *
-         * @param dark     是否太暗了，当检测到的光线照度值小于{@link #darkLightLux}时，为{@code true}
-         * @param lightLux 当前检测到的光线照度值
+         * @param dark     是否太暗了，当检测到的光照强度值小于{@link #darkLightLux}时，为{@code true}
+         * @param lightLux 当前检测到的光照强度值
          */
         void onSensorChanged(boolean dark, float lightLux);
     }

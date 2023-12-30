@@ -26,7 +26,6 @@ import androidx.annotation.FloatRange;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.camera.core.Camera;
-import androidx.camera.core.CameraInfo;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.FocusMeteringAction;
 import androidx.camera.core.ImageAnalysis;
@@ -88,12 +87,12 @@ public class BaseCameraScan<T> extends CameraScan<T> {
      */
     private static final float ZOOM_STEP_SIZE = 0.1F;
 
-    private Context mContext;
-    private LifecycleOwner mLifecycleOwner;
+    private final Context mContext;
+    private final LifecycleOwner mLifecycleOwner;
     /**
      * 预览视图
      */
-    private PreviewView mPreviewView;
+    private final PreviewView mPreviewView;
 
     private ListenableFuture<ProcessCameraProvider> mCameraProviderFuture;
     /**
@@ -113,6 +112,10 @@ public class BaseCameraScan<T> extends CameraScan<T> {
      */
     private volatile boolean isAnalyze = true;
     /**
+     * 是否自动停止分析
+     */
+    private volatile boolean isAutoStopAnalyze = true;
+    /**
      * 是否已经分析出结果
      */
     private volatile boolean isAnalyzeResult;
@@ -131,13 +134,13 @@ public class BaseCameraScan<T> extends CameraScan<T> {
     /**
      * 分析监听器
      */
-    private Analyzer.OnAnalyzeListener<AnalyzeResult<T>> mOnAnalyzeListener;
+    private Analyzer.OnAnalyzeListener<T> mOnAnalyzeListener;
     /**
-     * 蜂鸣音效管理器：主要用于播放蜂鸣提示音和振动效果
+     * 音效管理器：主要用于播放蜂鸣提示音和振动效果
      */
     private BeepManager mBeepManager;
     /**
-     * 环境光线管理器：主要通过传感器来监听光线的亮度变化
+     * 环境光照度管理器：主要通过传感器来监听光照强度变化
      */
     private AmbientLightManager mAmbientLightManager;
     /**
@@ -227,8 +230,8 @@ public class BaseCameraScan<T> extends CameraScan<T> {
             return false;
         });
 
-        mBeepManager = new BeepManager(mContext);
-        mAmbientLightManager = new AmbientLightManager(mContext);
+        mBeepManager = new BeepManager(mContext.getApplicationContext());
+        mAmbientLightManager = new AmbientLightManager(mContext.getApplicationContext());
         mAmbientLightManager.register();
         mAmbientLightManager.setOnLightSensorEventListener((dark, lightLux) -> {
             if (flashlightView != null) {
@@ -315,9 +318,8 @@ public class BaseCameraScan<T> extends CameraScan<T> {
     @Override
     public void startCamera() {
         if (mCameraConfig == null) {
-            mCameraConfig = CameraConfigFactory.createDefaultCameraConfig(mContext, -1);
+            mCameraConfig = CameraConfigFactory.createDefaultCameraConfig(mContext, CameraSelector.LENS_FACING_UNKNOWN);
         }
-        LogUtils.d("CameraConfig: " + mCameraConfig.getClass().getSimpleName());
         mCameraProviderFuture = ProcessCameraProvider.getInstance(mContext);
         mCameraProviderFuture.addListener(() -> {
             try {
@@ -342,6 +344,8 @@ public class BaseCameraScan<T> extends CameraScan<T> {
                 }
                 //绑定到生命周期
                 mCamera = mCameraProviderFuture.get().bindToLifecycle(mLifecycleOwner, cameraSelector, preview, imageAnalysis);
+                LogUtils.d("Preview resolution: " + preview.getResolutionInfo().getResolution());
+                LogUtils.d("ImageAnalysis resolution: " + imageAnalysis.getResolutionInfo().getResolution());
             } catch (Exception e) {
                 LogUtils.e(e);
             }
@@ -359,6 +363,9 @@ public class BaseCameraScan<T> extends CameraScan<T> {
             return;
         }
         isAnalyzeResult = true;
+        if (isAutoStopAnalyze) {
+            isAnalyze = false;
+        }
         if (mBeepManager != null) {
             mBeepManager.playBeepSoundAndVibrate();
         }
@@ -382,6 +389,12 @@ public class BaseCameraScan<T> extends CameraScan<T> {
     @Override
     public CameraScan<T> setAnalyzeImage(boolean analyze) {
         isAnalyze = analyze;
+        return this;
+    }
+
+    @Override
+    public CameraScan<T> setAutoStopAnalyze(boolean autoStopAnalyze) {
+        isAutoStopAnalyze = autoStopAnalyze;
         return this;
     }
 

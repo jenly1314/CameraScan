@@ -121,13 +121,29 @@ public abstract class CameraScan<T> implements ICamera, ICameraControl {
     public abstract CameraScan<T> setCameraConfig(CameraConfig cameraConfig);
 
     /**
-     * 设置是否分析图像，通过此方法可以动态控制是否分析图像，常用于中断扫码识别。如：当扫描到结果时，请停止分析
-     * 图像，处理扫描结果；如需继续连扫，等处理完后，再调用此方法，设置为true，继续扫描分析图像
+     * 设置是否分析图像，默认为：true；通过此方法可以动态控制是否分析图像；在连续扫描识别时，可能会用到。
+     * <p>
+     * 如：当分析图像成功一次之后，如需继续连扫，可以在结果回调函数中等处理了自己的业务后，继续调用此方法并设置为true，就可以继续扫描分析图像了。
      *
      * @param analyze 是否分析图像
      * @return {@link CameraScan}
      */
     public abstract CameraScan<T> setAnalyzeImage(boolean analyze);
+
+    /**
+     * 设置是否自动停止分析图像；默认为：true；
+     * <p>
+     * 大多数情况下，单次扫描的场景应用较多；很容易忘记主动调用 {@link CameraScan#setAnalyzeImage(boolean)} 来停止分析。
+     * <p>
+     * 如果设置为：true；即：启用了自动停止分析图像：当分析图像成功一次之后；那么设置的分析图像会自动停止；如果此时
+     * 需要继续分析图像，可以在结果回调里面调用 {@link CameraScan#setAnalyzeImage(boolean)} 来控制是否继续分析图像。
+     * <p>
+     * 如果设置为：false；即：禁用了自动停止分析图像：当分析图像成功一次之后；不会有任何变化；会继续分析图像。
+     *
+     * @param autoStopAnalyze
+     * @return
+     */
+    public abstract CameraScan<T> setAutoStopAnalyze(boolean autoStopAnalyze);
 
     /**
      * 设置分析器，如果内置的一些分析器不满足您的需求，你也可以自定义{@link Analyzer}，
@@ -163,7 +179,7 @@ public abstract class CameraScan<T> implements ICamera, ICameraControl {
     public abstract CameraScan<T> setOnScanResultCallback(OnScanResultCallback<T> callback);
 
     /**
-     * 绑定手电筒，绑定后可根据光线传感器，动态显示或隐藏手电筒；并自动处理点击手电筒时的开关切换。
+     * 绑定手电筒，绑定后可根据光照传感器，动态显示或隐藏手电筒；并自动处理点击手电筒时的开关切换。
      *
      * @param v 手电筒视图
      * @return {@link CameraScan}
@@ -171,17 +187,17 @@ public abstract class CameraScan<T> implements ICamera, ICameraControl {
     public abstract CameraScan<T> bindFlashlightView(@Nullable View v);
 
     /**
-     * 设置光线足够暗的阈值（单位：lux），需要通过{@link #bindFlashlightView(View)}绑定手电筒才有效
+     * 设置光照强度足够暗的阈值（单位：lux），需要通过{@link #bindFlashlightView(View)}绑定手电筒才有效
      *
-     * @param lightLux 光线亮度阈值
+     * @param lightLux 光照度阈值
      * @return {@link CameraScan}
      */
     public abstract CameraScan<T> setDarkLightLux(float lightLux);
 
     /**
-     * 设置光线足够明亮的阈值（单位：lux），需要通过{@link #bindFlashlightView(View)}绑定手电筒才有效
+     * 设置光照强度足够明亮的阈值（单位：lux），需要通过{@link #bindFlashlightView(View)}绑定手电筒才有效
      *
-     * @param lightLux 光线亮度阈值
+     * @param lightLux 光照度阈值
      * @return {@link CameraScan}
      */
     public abstract CameraScan<T> setBrightLightLux(float lightLux);

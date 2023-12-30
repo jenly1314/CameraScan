@@ -37,7 +37,7 @@ public interface Analyzer<T> {
      * @param imageProxy 需要分析的图像
      * @param listener   分析监听器，参见：{@link OnAnalyzeListener}
      */
-    void analyze(@NonNull ImageProxy imageProxy, @NonNull OnAnalyzeListener<AnalyzeResult<T>> listener);
+    void analyze(@NonNull ImageProxy imageProxy, @NonNull OnAnalyzeListener<T> listener);
 
     /**
      * Analyze listener
@@ -50,7 +50,7 @@ public interface Analyzer<T> {
          *
          * @param result 分析结果
          */
-        void onSuccess(@NonNull T result);
+        void onSuccess(@NonNull AnalyzeResult<T> result);
 
         /**
          * 失败

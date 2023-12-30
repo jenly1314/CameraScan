@@ -36,7 +36,7 @@ CameraScan for Android 是一个简化扫描识别流程的通用基础库。
 
     ```gradle
     // AndroidX 版本
-    implementation 'com.github.jenly1314:camera-scan:1.0.1'
+    implementation 'com.github.jenly1314:camera-scan:1.1.0'
     
     ```
 
@@ -44,7 +44,8 @@ CameraScan for Android 是一个简化扫描识别流程的通用基础库。
 
 #### 关于CameraScan版本与编译的SDK版本要求
 
-> 要求 **compileSdkVersion >= 33**
+> 使用 **v1.1.x** 以上版本时，要求 **compileSdkVersion >= 34**
+> 使用 **v1.0.x** 以上版本时，要求 **compileSdkVersion >= 33**
 
 ## 使用
 
@@ -73,6 +74,7 @@ CameraScan for Android 是一个简化扫描识别流程的通用基础库。
 #### 这里简单说下各自的特点：
 
 * **CameraConfig**：CameraX默认的相机配置。
+* **AdaptiveCameraConfig**：自适应相机配置：主要是根据纵横比和设备屏幕的分辨率找到与相机之间合适的相机配置（v1.1.0新增）
 * **AspectRatioCameraConfig**：根据纵横比配置相机，使输出分析的图像尽可能的接近屏幕的比例
 * **ResolutionCameraConfig**：根据尺寸配置相机的目标图像大小，使输出分析的图像的分辨率尽可能的接近屏幕尺寸
 
@@ -90,7 +92,7 @@ CameraScan for Android 是一个简化扫描识别流程的通用基础库。
 
 如：通过CameraConfig设置前置摄像头
 
-方式一：通过工厂类创建CameraConfig
+方式一：通过工厂类创建CameraConfig（推荐）
 ```java
 // 通过工厂类创建适合当前设备的CameraConfig
 CameraConfig cameraConfig = CameraConfigFactory.createDefaultCameraConfig(this, CameraSelector.LENS_FACING_FRONT);
@@ -278,7 +280,7 @@ BaseCameraScanActivity和BaseCameraScanFragment使用的默认布局：
 
 > 页面完整示例：[CameraScanActivity](app/src/main/java/com/king/camera/scan/app/CameraScanActivity.kt)
 
-更多使用详情，请查看[app](app)中的源码使用示例或直接查看[API帮助文档](https://jenly1314.github.io/projects/CameraScan/doc/)
+更多使用详情，请查看[app](app)中的源码使用示例或直接查看[API帮助文档](https://jitpack.io/com/github/jenly1314/CameraScan/latest/javadoc/)
 
 ### 相关推荐
 
@@ -289,13 +291,20 @@ BaseCameraScanActivity和BaseCameraScanFragment使用的默认布局：
 
 ## 版本说明
 
+#### v1.1.0：2023-12-30
+* 更新CameraX相关依赖至v1.3.1
+* 更新compileSdkVersion至34
+* 更新Gradle至v8.0
+* 新增方法：`CameraScan.setAutoStopAnalyze(boolean)` 用于设置是否自动停止分析图像
+* 新增类：`AdaptiveCameraConfig` 自适应相机配置
+* 修改 `CameraConfigFactory.createDefaultCameraConfig` 的默认实现
+
 #### v1.0.1：2023-09-11
 * 更新CameraX相关依赖至v1.2.3
 * 优化细节
 
 #### v1.0.0：2023-08-05
 * CameraScan初始版本
-
 
 ## 赞赏
 如果您喜欢CameraScan，或感觉CameraScan帮助到了您，可以点右上角“Star”支持一下，您的支持就是我的动力，谢谢 :smiley:<p>

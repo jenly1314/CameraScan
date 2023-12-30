@@ -35,7 +35,10 @@ import androidx.camera.core.Preview;
  * @author <a href="mailto:jenly1314@gmail.com">Jenly</a>
  * <p>
  * <a href="https://github.com/jenly1314">Follow me</a>
+ *
+ * @deprecated 后续版本可能会删除此类；请使用 {@link AdaptiveCameraConfig}
  */
+@Deprecated
 public class AspectRatioCameraConfig extends CameraConfig {
 
     /**

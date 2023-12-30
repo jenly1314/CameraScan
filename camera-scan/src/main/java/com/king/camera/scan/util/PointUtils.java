@@ -6,10 +6,12 @@ import java.util.Locale;
 
 /**
  * 坐标点工具类：主要是将宽高原始坐标点到宽高变化之后目标坐标点之间进行转换
+ *
  * @author <a href="mailto:jenly1314@gmail.com">Jenly</a>
  * <p>
  * <a href="https://github.com/jenly1314">Follow me</a>
  */
+@SuppressWarnings("unused")
 public final class PointUtils {
 
     private PointUtils() {
@@ -19,11 +21,12 @@ public final class PointUtils {
     /**
      * 转换坐标：将原始 point 的坐标点从原始：srcWidth，srcHeight 进行换算后，转换成目标：destWidth，destHeight 后的坐标点
      *
-     * @param point
-     * @param srcWidth
-     * @param srcHeight
-     * @param destWidth
-     * @param destHeight
+     * @param point      原始坐标点
+     * @param srcWidth   原始宽度
+     * @param srcHeight  原始高度
+     * @param destWidth  目标宽度
+     * @param destHeight 目标高度
+     * @return 转换之后的坐标点
      * @return
      */
     public static Point transform(Point point, int srcWidth, int srcHeight, int destWidth, int destHeight) {
@@ -33,13 +36,13 @@ public final class PointUtils {
     /**
      * 转换坐标：将原始 point 的坐标点从原始：srcWidth，srcHeight 进行换算后，转换成目标：destWidth，destHeight 后的坐标点
      *
-     * @param point
-     * @param srcWidth
-     * @param srcHeight
-     * @param destWidth
-     * @param destHeight
+     * @param point      原始坐标点
+     * @param srcWidth   原始宽度
+     * @param srcHeight  原始高度
+     * @param destWidth  目标宽度
+     * @param destHeight 目标高度
      * @param isFit      是否自适应，如果为 true 表示：宽或高自适应铺满，如果为 false 表示：填充铺满（可能会出现裁剪）
-     * @return
+     * @return 转换之后的坐标点
      */
     public static Point transform(Point point, int srcWidth, int srcHeight, int destWidth, int destHeight, boolean isFit) {
         return transform(point.x, point.y, srcWidth, srcHeight, destWidth, destHeight, isFit);
@@ -48,13 +51,13 @@ public final class PointUtils {
     /**
      * 转换坐标：将原始 x，y 的坐标点从原始：srcWidth，srcHeight 进行换算后，转换成目标：destWidth，destHeight 后的坐标点
      *
-     * @param x
-     * @param y
-     * @param srcWidth
-     * @param srcHeight
-     * @param destWidth
-     * @param destHeight
-     * @return
+     * @param x          原始X坐标
+     * @param y          原值Y坐标
+     * @param srcWidth   原始宽度
+     * @param srcHeight  原始高度
+     * @param destWidth  目标宽度
+     * @param destHeight 目标高度
+     * @return 转换之后的坐标点
      */
     public static Point transform(int x, int y, int srcWidth, int srcHeight, int destWidth, int destHeight) {
         return transform(x, y, srcWidth, srcHeight, destWidth, destHeight, false);
@@ -63,14 +66,14 @@ public final class PointUtils {
     /**
      * 转换坐标：将原始 x，y 的坐标点从原始：srcWidth，srcHeight 进行换算后，转换成目标：destWidth，destHeight 后的坐标点
      *
-     * @param x
-     * @param y
-     * @param srcWidth
-     * @param srcHeight
-     * @param destWidth
-     * @param destHeight
+     * @param x          原始X坐标
+     * @param y          原值Y坐标
+     * @param srcWidth   原始宽度
+     * @param srcHeight  原始高度
+     * @param destWidth  目标宽度
+     * @param destHeight 目标高度
      * @param isFit      是否自适应，如果为 true 表示：宽或高自适应铺满，如果为 false 表示：填充铺满（可能会出现裁剪）
-     * @return
+     * @return 转换之后的坐标点
      */
     public static Point transform(int x, int y, int srcWidth, int srcHeight, int destWidth, int destHeight, boolean isFit) {
         LogUtils.d(String.format(Locale.getDefault(), "transform: %d,%d | %d,%d", srcWidth, srcHeight, destWidth, destHeight));

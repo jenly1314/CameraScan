@@ -19,15 +19,15 @@ import android.content.Context;
 import android.util.DisplayMetrics;
 import android.util.Size;
 
-import com.king.camera.scan.CameraScan;
-import com.king.camera.scan.util.LogUtils;
-
-import java.util.Locale;
-
 import androidx.annotation.NonNull;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageAnalysis;
 import androidx.camera.core.Preview;
+
+import com.king.camera.scan.CameraScan;
+import com.king.camera.scan.util.LogUtils;
+
+import java.util.Locale;
 
 /**
  * 相机配置：根据尺寸配置相机的目标图像大小，使输出分析的图像的分辨率尽可能的接近屏幕尺寸
@@ -35,7 +35,10 @@ import androidx.camera.core.Preview;
  * @author <a href="mailto:jenly1314@gmail.com">Jenly</a>
  * <p>
  * <a href="https://github.com/jenly1314">Follow me</a>
+ *
+ * @deprecated 后续版本可能会删除此类；请使用 {@link AdaptiveCameraConfig}
  */
+@Deprecated
 public class ResolutionCameraConfig extends CameraConfig {
 
     /**
