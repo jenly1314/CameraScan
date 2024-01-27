@@ -6,8 +6,6 @@
 [![CircleCI](https://circleci.com/gh/jenly1314/CameraScan.svg?style=svg)](https://circleci.com/gh/jenly1314/CameraScan)
 [![API](https://img.shields.io/badge/API-21%2B-blue.svg?style=flat)](https://android-arsenal.com/api?level=21)
 [![License](https://img.shields.io/badge/license-Apche%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
-[![Blog](https://img.shields.io/badge/blog-Jenly-9933CC.svg)](https://jenly1314.github.io/)
-[![QQGroup](https://img.shields.io/badge/QQGroup-20867961-blue.svg)](http://shang.qq.com/wpa/qunwpa?idkey=8fcc6a2f88552ea44b1.1.982c94fd124f7bb3ec227e2a400dbbfaad3dc2f5ad)
 
 CameraScan for Android 是一个简化扫描识别流程的通用基础库。
 
@@ -171,7 +169,7 @@ cameraScan.setAnalyzer(analyzer);
 
 * 看到这里，你对 **CameraScan** 相关配置应该有了基本的了解，**CameraScan** 作为一个简化扫描识别流程的通用基础库，将通用的预览分析流程，进行尽可能的抽象分离，然后实现公共部分；将具体分析功能进行抽象；基于**CameraScan** 你只需实现一个**Analyzer**，并根据需要进行**CameraScan**相关配置，就可以快速实现具体的扫描检测功能。
 
-介绍完 **CameraScan** 相关配置后，下面就来说下界面和布局部分；
+> 介绍完 **CameraScan** 相关配置后，下面就来说下界面和布局部分；
 
 ### 界面示例
 
@@ -308,30 +306,28 @@ BaseCameraScanActivity和BaseCameraScanFragment使用的默认布局：
 * CameraScan初始版本
 
 ## 赞赏
-如果您喜欢CameraScan，或感觉CameraScan帮助到了您，可以点右上角“Star”支持一下，您的支持就是我的动力，谢谢 :smiley:<p>
-您也可以扫描下面的二维码，请作者喝杯咖啡 :coffee:
+如果您喜欢CameraScan，或感觉CameraScan帮助到了您，可以点右上角“Star”支持一下，您的支持就是我的动力，谢谢 :smiley:
+<p>您也可以扫描下面的二维码，请作者喝杯咖啡 :coffee:
+
 <div>
-<img src="https://jenly1314.github.io/image/pay/sponsor.png" width="98%">
+   <img src="https://jenly1314.github.io/image/page/rewardcode.png">
 </div>
 
 ## 关于我
-Name: <a title="关于作者" href="https://jenly1314.github.io" target="_blank">Jenly</a>
 
-Email: <a title="欢迎邮件与我交流" href="mailto:jenly1314@gmail.com" target="_blank">jenly1314#gmail.com</a> / <a title="给我发邮件" href="mailto:jenly1314@vip.qq.com" target="_blank">jenly1314#vip.qq.com</a>
+| 我的博客                                                                                | GitHub                                                                                  | Gitee                                                                                  | CSDN                                                                                 | 博客园                                                                            |
+|:------------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------|
+| <a title="我的博客" href="https://jenly1314.github.io" target="_blank">Jenly's Blog</a> | <a title="GitHub开源项目" href="https://github.com/jenly1314" target="_blank">jenly1314</a> | <a title="Gitee开源项目" href="https://gitee.com/jenly1314" target="_blank">jenly1314</a>  | <a title="CSDN博客" href="http://blog.csdn.net/jenly121" target="_blank">jenly121</a>  | <a title="博客园" href="https://www.cnblogs.com/jenly" target="_blank">jenly</a>  |
 
-CSDN: <a title="CSDN博客" href="http://blog.csdn.net/jenly121" target="_blank">jenly121</a>
+## 联系我
 
-CNBlogs: <a title="博客园" href="https://www.cnblogs.com/jenly" target="_blank">jenly</a>
+| 微信公众号        | Gmail邮箱                                                                          | QQ邮箱                                                                              | QQ群                                                                                                                       | QQ群                                                                                                                       |
+|:-------------|:---------------------------------------------------------------------------------|:----------------------------------------------------------------------------------|:--------------------------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------------------------------------------------------------------|
+| [Jenly666](http://weixin.qq.com/r/wzpWTuPEQL4-ract92-R) | <a title="给我发邮件" href="mailto:jenly1314@gmail.com" target="_blank">jenly1314</a> | <a title="给我发邮件" href="mailto:jenly1314@vip.qq.com" target="_blank">jenly1314</a> | <a title="点击加入QQ群" href="https://qm.qq.com/cgi-bin/qm/qr?k=6_RukjAhwjAdDHEk2G7nph-o8fBFFzZz" target="_blank">20867961</a> | <a title="点击加入QQ群" href="https://qm.qq.com/cgi-bin/qm/qr?k=Z9pobM8bzAW7tM_8xC31W8IcbIl0A-zT" target="_blank">64020761</a> |
 
-GitHub: <a title="GitHub开源项目" href="https://github.com/jenly1314" target="_blank">jenly1314</a>
-
-Gitee: <a title="Gitee开源项目" href="https://gitee.com/jenly1314" target="_blank">jenly1314</a>
-
-加入QQ群: <a title="点击加入QQ群" href="http://shang.qq.com/wpa/qunwpa?idkey=8fcc6a2f88552ea44b1411582c94fd124f7bb3ec227e2a400dbbfaad3dc2f5ad" target="_blank">20867961</a>
-   <div>
-       <img src="https://jenly1314.github.io/image/jenly666.png">
-       <img src="https://jenly1314.github.io/image/qqgourp.png">
-   </div>
+<div>
+   <img src="https://jenly1314.github.io/image/page/footer.png">
+</div>
 
 
 
