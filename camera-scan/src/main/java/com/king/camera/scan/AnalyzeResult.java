@@ -18,10 +18,10 @@ package com.king.camera.scan;
 import android.graphics.Bitmap;
 import android.graphics.ImageFormat;
 
-import com.king.camera.scan.util.BitmapUtils;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.king.camera.scan.util.BitmapUtils;
 
 /**
  * 分析结果
@@ -109,9 +109,21 @@ public class AnalyzeResult<T> {
 
     /**
      * 获取图像的宽
+     *
+     * @return
+     * @deprecated 替换为 {@link #getImageWidth()}
+     */
+    @Deprecated
+    public int getBitmapWidth() {
+        return getImageWidth();
+    }
+
+    /**
+     * 获取图像的宽
+     *
      * @return
      */
-    public int getBitmapWidth() {
+    public int getImageWidth() {
         if (frameMetadata.getRotation() % 180 == 0) {
             return frameMetadata.getWidth();
         }
@@ -120,9 +132,21 @@ public class AnalyzeResult<T> {
 
     /**
      * 获取图像的高
+     *
+     * @return
+     * @deprecated 替换为 {@link #getImageHeight()}
+     */
+    @Deprecated
+    public int getBitmapHeight() {
+        return getImageHeight();
+    }
+
+    /**
+     * 获取图像的高
+     *
      * @return
      */
-    public int getBitmapHeight() {
+    public int getImageHeight() {
         if (frameMetadata.getRotation() % 180 == 0) {
             return frameMetadata.getHeight();
         }

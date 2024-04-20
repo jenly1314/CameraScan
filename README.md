@@ -33,9 +33,7 @@ CameraScan for Android 是一个简化扫描识别流程的通用基础库。
 2. 在Module的 **build.gradle** 里面添加引入依赖项
 
     ```gradle
-    // AndroidX 版本
-    implementation 'com.github.jenly1314:camera-scan:1.1.0'
-    
+    implementation 'com.github.jenly1314:camera-scan:1.1.1'
     ```
 
 ### 温馨提示
@@ -289,6 +287,10 @@ BaseCameraScanActivity和BaseCameraScanFragment使用的默认布局：
 #### [ViewfinderView](https://github.com/jenly1314/ViewfinderView) ViewfinderView一个取景视图：主要用于渲染扫描相关的动画效果。
 
 ## 版本说明
+
+#### v1.1.1：2024-04-20
+* 更新CameraX相关依赖至v1.3.2
+* 优化细节
 
 #### v1.1.0：2023-12-30
 * 更新CameraX相关依赖至v1.3.1

@@ -69,7 +69,7 @@ class CameraScanActivity : BaseCameraScanActivity<Unit>() {
             CameraConfigFactory.createDefaultCameraConfig(this, lensFacing)
         )
         // 修改CameraConfig相关配置后，需重新调用startCamera后配置才能生效
-        cameraScan.startCamera()
+        startCamera()
     }
 
     fun onClick(v: View) {

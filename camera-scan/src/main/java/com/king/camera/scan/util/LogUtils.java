@@ -17,6 +17,8 @@ package com.king.camera.scan.util;
 
 import android.util.Log;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Locale;
 
 /**
@@ -24,7 +26,7 @@ import java.util.Locale;
  *
  * <pre>
  *  ┌──────────────────────────
- *    Method stack info
+ *    Thread: name ➔ Method stack info
  *  ├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
  *    Log message
  *  └──────────────────────────
@@ -96,12 +98,15 @@ public class LogUtils {
     private static final char BOTTOM_LEFT_CORNER = '└';
     private static final char MIDDLE_CORNER = '├';
     private static final char HORIZONTAL_LINE = '│';
-    private static final String DOUBLE_DIVIDER = "────────────────────────────────────────────────────────";
-    private static final String SINGLE_DIVIDER = "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄";
+    private static final String DOUBLE_DIVIDER = "───────────────────────────────────────";
+    private static final String SINGLE_DIVIDER = "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄";
     private static final String TOP_BORDER = TOP_LEFT_CORNER + DOUBLE_DIVIDER + DOUBLE_DIVIDER;
     private static final String BOTTOM_BORDER = BOTTOM_LEFT_CORNER + DOUBLE_DIVIDER + DOUBLE_DIVIDER;
     private static final String MIDDLE_BORDER = MIDDLE_CORNER + SINGLE_DIVIDER + SINGLE_DIVIDER;
     private static final String LINE_FEED = "\n";
+
+    private static final String SPACE = " ";
+    private static final String ARROW = " ➔ ";
     
     private LogUtils() {
         throw new AssertionError();
@@ -152,7 +157,7 @@ public class LogUtils {
      *
      * <pre>
      *  ┌──────────────────────────
-     *    Method stack info
+     *    Thread: name ➔ Method stack info
      *  ├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
      *    Log message
      *  └──────────────────────────
@@ -167,10 +172,15 @@ public class LogUtils {
         String methodStack = String.format(Locale.getDefault(), STACK_TRACE_FORMAT, callerClazzName, caller.getMethodName(), caller.getFileName(), caller.getLineNumber());
         return new StringBuilder().append(TOP_BORDER)
                 .append(LINE_FEED)
+                .append(SPACE)
+                .append("Thread: ")
+                .append(Thread.currentThread().getName())
+                .append(ARROW)
                 .append(methodStack)
                 .append(LINE_FEED)
                 .append(MIDDLE_BORDER)
                 .append(LINE_FEED)
+                .append(SPACE)
                 .append(msg)
                 .append(LINE_FEED)
                 .append(BOTTOM_BORDER)
@@ -198,7 +208,14 @@ public class LogUtils {
      * @return
      */
     private static String getStackTraceString(Throwable t) {
-        return Log.getStackTraceString(t);
+        if(t != null) {
+            StringWriter sw = new StringWriter(256);
+            PrintWriter pw = new PrintWriter(sw, false);
+            t.printStackTrace(pw);
+            pw.flush();
+            return sw.toString();
+        }
+        return "";
     }
 
     // -----------------------------------Log.v

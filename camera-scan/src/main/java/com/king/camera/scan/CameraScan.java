@@ -179,7 +179,7 @@ public abstract class CameraScan<T> implements ICamera, ICameraControl {
     public abstract CameraScan<T> setOnScanResultCallback(OnScanResultCallback<T> callback);
 
     /**
-     * 绑定手电筒，绑定后可根据光照传感器，动态显示或隐藏手电筒；并自动处理点击手电筒时的开关切换。
+     * 绑定手电筒，绑定后可根据光照传感器，动态显示或隐藏手电筒。
      *
      * @param v 手电筒视图
      * @return {@link CameraScan}
