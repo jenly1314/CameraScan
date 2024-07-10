@@ -291,6 +291,7 @@ BaseCameraScanActivity和BaseCameraScanFragment使用的默认布局：
 #### v1.2.0：2024-07-10
 * 废弃内部的`LogUtils`类，改用[LogX](https://github.com/jenly1314/LogX) 来统一管理日志
 * 更新CameraX相关依赖至v1.3.4
+* 优化细节
 
 #### v1.1.1：2024-04-20
 * 更新CameraX相关依赖至v1.3.2
