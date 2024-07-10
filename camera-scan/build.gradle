@@ -23,8 +23,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
     lint {
         abortOnError false
@@ -44,4 +44,6 @@ dependencies {
     api "androidx.camera:camera-camera2:$versions.camerax"
     api "androidx.camera:camera-lifecycle:$versions.camerax"
     api "androidx.camera:camera-view:$versions.camerax"
+
+    api "com.github.jenly1314:logx:$versions.logx"
 }

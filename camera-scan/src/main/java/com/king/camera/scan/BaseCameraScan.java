@@ -31,6 +31,7 @@ import androidx.camera.core.FocusMeteringAction;
 import androidx.camera.core.ImageAnalysis;
 import androidx.camera.core.MeteringPoint;
 import androidx.camera.core.Preview;
+import androidx.camera.core.ResolutionInfo;
 import androidx.camera.core.TorchState;
 import androidx.camera.core.ZoomState;
 import androidx.camera.lifecycle.ProcessCameraProvider;
@@ -47,7 +48,7 @@ import com.king.camera.scan.config.CameraConfig;
 import com.king.camera.scan.config.CameraConfigFactory;
 import com.king.camera.scan.manager.AmbientLightManager;
 import com.king.camera.scan.manager.BeepManager;
-import com.king.camera.scan.util.LogUtils;
+import com.king.logx.LogX;
 
 import java.util.concurrent.Executors;
 
@@ -160,12 +161,13 @@ public class BaseCameraScan<T> extends CameraScan<T> {
      */
     private float mDownY;
 
+    @SuppressLint("RestrictedApi")
     public BaseCameraScan(@NonNull ComponentActivity activity, @NonNull PreviewView previewView) {
         this(activity, activity, previewView);
     }
 
     public BaseCameraScan(@NonNull Fragment fragment, @NonNull PreviewView previewView) {
-        this(fragment.getContext(), fragment.getViewLifecycleOwner(), previewView);
+        this(fragment.requireContext(), fragment.getViewLifecycleOwner(), previewView);
     }
 
     public BaseCameraScan(@NonNull Context context, @NonNull LifecycleOwner lifecycleOwner, @NonNull PreviewView previewView) {
@@ -208,7 +210,7 @@ public class BaseCameraScan<T> extends CameraScan<T> {
             }
         });
 
-        mOnAnalyzeListener = new Analyzer.OnAnalyzeListener<>() {
+        mOnAnalyzeListener = new Analyzer.OnAnalyzeListener<T>() {
             @Override
             public void onSuccess(@NonNull AnalyzeResult<T> result) {
                 mResultLiveData.postValue(result);
@@ -302,7 +304,7 @@ public class BaseCameraScan<T> extends CameraScan<T> {
             FocusMeteringAction focusMeteringAction = new FocusMeteringAction.Builder(point).build();
             if (mCamera.getCameraInfo().isFocusMeteringSupported(focusMeteringAction)) {
                 mCamera.getCameraControl().startFocusAndMetering(focusMeteringAction);
-                LogUtils.d("startFocusAndMetering: " + x + "," + y);
+                LogX.d("startFocusAndMetering: %f, %f", x, y);
             }
         }
     }
@@ -344,10 +346,16 @@ public class BaseCameraScan<T> extends CameraScan<T> {
                 }
                 //绑定到生命周期
                 mCamera = mCameraProviderFuture.get().bindToLifecycle(mLifecycleOwner, cameraSelector, preview, imageAnalysis);
-                LogUtils.d("Preview resolution: " + preview.getResolutionInfo().getResolution());
-                LogUtils.d("ImageAnalysis resolution: " + imageAnalysis.getResolutionInfo().getResolution());
+                ResolutionInfo previewResolutionInfo = preview.getResolutionInfo();
+                if(previewResolutionInfo != null) {
+                    LogX.d("Preview resolution: " +previewResolutionInfo.getResolution());
+                }
+                ResolutionInfo imageResolutionInfo = imageAnalysis.getResolutionInfo();
+                if(imageResolutionInfo != null) {
+                    LogX.d("ImageAnalysis resolution: " + imageResolutionInfo.getResolution());
+                }
             } catch (Exception e) {
-                LogUtils.e(e);
+                LogX.e(e);
             }
 
         }, ContextCompat.getMainExecutor(mContext));
@@ -381,7 +389,7 @@ public class BaseCameraScan<T> extends CameraScan<T> {
             try {
                 mCameraProviderFuture.get().unbindAll();
             } catch (Exception e) {
-                LogUtils.e(e);
+                LogX.e(e);
             }
         }
     }

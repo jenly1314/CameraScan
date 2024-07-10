@@ -22,8 +22,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.king.camera.scan.analyze.Analyzer;
-import com.king.camera.scan.util.LogUtils;
 import com.king.camera.scan.util.PermissionUtils;
+import com.king.logx.LogX;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -73,7 +73,7 @@ public abstract class BaseCameraScanFragment<T> extends Fragment implements Came
     private CameraScan<T> mCameraScan;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (isContentView()) {
             mRootView = createRootView(inflater, container);
         }
@@ -137,10 +137,10 @@ public abstract class BaseCameraScanFragment<T> extends Fragment implements Came
      */
     public void startCamera() {
         if (mCameraScan != null) {
-            if (PermissionUtils.checkPermission(getContext(), Manifest.permission.CAMERA)) {
+            if (PermissionUtils.checkPermission(requireContext(), Manifest.permission.CAMERA)) {
                 mCameraScan.startCamera();
             } else {
-                LogUtils.d("checkPermissionResult != PERMISSION_GRANTED");
+                LogX.d("checkPermissionResult != PERMISSION_GRANTED");
                 PermissionUtils.requestPermission(this, Manifest.permission.CAMERA, CAMERA_PERMISSION_REQUEST_CODE);
             }
         }
@@ -173,7 +173,7 @@ public abstract class BaseCameraScanFragment<T> extends Fragment implements Came
         if (PermissionUtils.requestPermissionsResult(Manifest.permission.CAMERA, permissions, grantResults)) {
             startCamera();
         } else {
-            getActivity().finish();
+            requireActivity().finish();
         }
     }
 

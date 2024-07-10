@@ -15,6 +15,7 @@ import android.os.Build;
 import android.provider.MediaStore;
 
 import com.king.camera.scan.FrameMetadata;
+import com.king.logx.LogX;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -63,7 +64,7 @@ public class BitmapUtils {
             stream.close();
             return rotateBitmap(bmp, rotationDegrees, false, false);
         } catch (Exception e) {
-            LogUtils.e("Error: " + e.getMessage());
+            LogX.e(e);
         }
         return null;
     }
@@ -166,7 +167,7 @@ public class BitmapUtils {
 
             exif = new ExifInterface(inputStream);
         } catch (IOException e) {
-            LogUtils.e("failed to open file to read rotation meta data: " + imageUri, e);
+            LogX.e(e, "failed to open file to read rotation meta data: " + imageUri);
             return 0;
         }
 

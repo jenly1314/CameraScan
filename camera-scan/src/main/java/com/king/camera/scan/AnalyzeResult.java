@@ -65,7 +65,7 @@ public class AnalyzeResult<T> {
     /**
      * 获取图像帧数据：YUV数据
      *
-     * @return
+     * @return 图像帧数据：YUV数据
      */
     @NonNull
     public byte[] getImageData() {
@@ -75,7 +75,7 @@ public class AnalyzeResult<T> {
     /**
      * 获取图像格式：{@link ImageFormat}
      *
-     * @return
+     * @return {@link ImageFormat}
      */
     public int getImageFormat() {
         return imageFormat;
@@ -84,7 +84,7 @@ public class AnalyzeResult<T> {
     /**
      * 获取帧元数据：{@link FrameMetadata}
      *
-     * @return
+     * @return {@link FrameMetadata}
      */
     @NonNull
     public FrameMetadata getFrameMetadata() {
@@ -94,7 +94,7 @@ public class AnalyzeResult<T> {
     /**
      * 获取分析图像
      *
-     * @return
+     * @return 分析的图像
      */
     @Nullable
     public Bitmap getBitmap() {
@@ -110,7 +110,7 @@ public class AnalyzeResult<T> {
     /**
      * 获取图像的宽
      *
-     * @return
+     * @return 图像的宽
      * @deprecated 替换为 {@link #getImageWidth()}
      */
     @Deprecated
@@ -121,7 +121,7 @@ public class AnalyzeResult<T> {
     /**
      * 获取图像的宽
      *
-     * @return
+     * @return 图像的宽
      */
     public int getImageWidth() {
         if (frameMetadata.getRotation() % 180 == 0) {
@@ -133,7 +133,7 @@ public class AnalyzeResult<T> {
     /**
      * 获取图像的高
      *
-     * @return
+     * @return 图像的高
      * @deprecated 替换为 {@link #getImageHeight()}
      */
     @Deprecated
@@ -144,7 +144,7 @@ public class AnalyzeResult<T> {
     /**
      * 获取图像的高
      *
-     * @return
+     * @return 图像的高
      */
     public int getImageHeight() {
         if (frameMetadata.getRotation() % 180 == 0) {
@@ -156,7 +156,7 @@ public class AnalyzeResult<T> {
     /**
      * 获取分析结果
      *
-     * @return
+     * @return 分析结果
      */
     @NonNull
     public T getResult() {

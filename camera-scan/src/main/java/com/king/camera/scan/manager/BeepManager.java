@@ -24,7 +24,7 @@ import android.os.Vibrator;
 import android.os.VibratorManager;
 
 import com.king.camera.scan.R;
-import com.king.camera.scan.util.LogUtils;
+import com.king.logx.LogX;
 
 import java.io.Closeable;
 
@@ -37,7 +37,7 @@ import java.io.Closeable;
  */
 public final class BeepManager implements MediaPlayer.OnErrorListener, Closeable {
 
-    private static final long VIBRATE_DURATION = 200L;
+    private static final long VIBRATE_DURATION = 100L;
 
     private final Context context;
     private MediaPlayer mediaPlayer;
@@ -76,7 +76,7 @@ public final class BeepManager implements MediaPlayer.OnErrorListener, Closeable
         if (playBeep && mediaPlayer != null) {
             mediaPlayer.start();
         }
-        if (vibrate && vibrator.hasVibrator()) {
+        if (vibrate && vibrator != null && vibrator.hasVibrator()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 vibrator.vibrate(VibrationEffect.createOneShot(VIBRATE_DURATION, VibrationEffect.DEFAULT_AMPLITUDE));
             } else {
@@ -95,7 +95,7 @@ public final class BeepManager implements MediaPlayer.OnErrorListener, Closeable
             mediaPlayer.prepare();
             return mediaPlayer;
         } catch (Exception e) {
-            LogUtils.w(e);
+            LogX.w(e);
             mediaPlayer.release();
             return null;
         }
@@ -116,7 +116,7 @@ public final class BeepManager implements MediaPlayer.OnErrorListener, Closeable
                 mediaPlayer = null;
             }
         } catch (Exception e) {
-            LogUtils.e(e);
+            LogX.w(e);
         }
     }
 

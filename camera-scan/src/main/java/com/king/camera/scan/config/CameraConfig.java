@@ -57,8 +57,8 @@ public class CameraConfig {
      * <p>
      * 切记，外部请勿直接调用 {@link #options(CameraSelector.Builder)}
      *
-     * @param builder
-     * @return
+     * @param builder {@link CameraSelector.Builder}
+     * @return {@link CameraSelector}
      */
     @NonNull
     public CameraSelector options(@NonNull CameraSelector.Builder builder) {
@@ -72,8 +72,8 @@ public class CameraConfig {
      * <p>
      * 切记，外部请勿直接调用 {@link #options(Preview.Builder)}
      *
-     * @param builder
-     * @return
+     * @param builder {@link Preview.Builder}
+     * @return {@link Preview}
      */
     @NonNull
     public Preview options(@NonNull Preview.Builder builder) {
@@ -85,10 +85,10 @@ public class CameraConfig {
      * <p>
      * 如配置目标旋转角度为90度：{@code builder.setTargetRotation(Surface.ROTATION_90)}
      * <p>
-     * 切记，外部请勿直接调用 {@link #options(ImageAnalysis.Builder)}
+     * 切记，外部请勿直接调用 {@link  #options(ImageAnalysis.Builder)}
      *
-     * @param builder
-     * @return
+     * @param builder {@link ImageAnalysis.Builder}
+     * @return {@link ImageAnalysis}
      */
     @NonNull
     public ImageAnalysis options(@NonNull ImageAnalysis.Builder builder) {

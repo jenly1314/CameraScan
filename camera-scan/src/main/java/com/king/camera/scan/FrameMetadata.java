@@ -15,6 +15,8 @@
  */
 package com.king.camera.scan;
 
+import androidx.annotation.NonNull;
+
 /**
  * 帧元数据
  *
@@ -31,7 +33,7 @@ public class FrameMetadata {
     /**
      * 帧元数据的宽
      *
-     * @return
+     * @return 帧元数据的宽
      */
     public int getWidth() {
         return width;
@@ -40,7 +42,7 @@ public class FrameMetadata {
     /**
      * 帧元数据的高
      *
-     * @return
+     * @return 帧元数据的高
      */
     public int getHeight() {
         return height;
@@ -49,7 +51,7 @@ public class FrameMetadata {
     /**
      * 获取旋转角度
      *
-     * @return
+     * @return 旋转角度
      */
     public int getRotation() {
         return rotation;
@@ -61,6 +63,7 @@ public class FrameMetadata {
         this.rotation = rotation;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "FrameMetadata{" +

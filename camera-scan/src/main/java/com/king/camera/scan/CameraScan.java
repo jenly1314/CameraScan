@@ -140,8 +140,8 @@ public abstract class CameraScan<T> implements ICamera, ICameraControl {
      * <p>
      * 如果设置为：false；即：禁用了自动停止分析图像：当分析图像成功一次之后；不会有任何变化；会继续分析图像。
      *
-     * @param autoStopAnalyze
-     * @return
+     * @param autoStopAnalyze 是否自动停止分析
+     * @return {@link CameraScan}
      */
     public abstract CameraScan<T> setAutoStopAnalyze(boolean autoStopAnalyze);
 

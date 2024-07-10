@@ -2,7 +2,7 @@ package com.king.camera.scan.util;
 
 import android.graphics.Point;
 
-import java.util.Locale;
+import com.king.logx.LogX;
 
 /**
  * 坐标点工具类：主要是将宽高原始坐标点到宽高变化之后目标坐标点之间进行转换
@@ -27,7 +27,6 @@ public final class PointUtils {
      * @param destWidth  目标宽度
      * @param destHeight 目标高度
      * @return 转换之后的坐标点
-     * @return
      */
     public static Point transform(Point point, int srcWidth, int srcHeight, int destWidth, int destHeight) {
         return transform(point, srcWidth, srcHeight, destWidth, destHeight, false);
@@ -76,7 +75,7 @@ public final class PointUtils {
      * @return 转换之后的坐标点
      */
     public static Point transform(int x, int y, int srcWidth, int srcHeight, int destWidth, int destHeight, boolean isFit) {
-        LogUtils.d(String.format(Locale.getDefault(), "transform: %d,%d | %d,%d", srcWidth, srcHeight, destWidth, destHeight));
+        LogX.d("transform: %d,%d | %d,%d", srcWidth, srcHeight, destWidth, destHeight);
         float widthRatio = destWidth * 1.0f / srcWidth;
         float heightRatio = destHeight * 1.0f / srcHeight;
         Point point = new Point();

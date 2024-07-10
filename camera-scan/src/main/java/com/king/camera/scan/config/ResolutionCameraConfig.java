@@ -25,9 +25,7 @@ import androidx.camera.core.ImageAnalysis;
 import androidx.camera.core.Preview;
 
 import com.king.camera.scan.CameraScan;
-import com.king.camera.scan.util.LogUtils;
-
-import java.util.Locale;
+import com.king.logx.LogX;
 
 /**
  * 相机配置：根据尺寸配置相机的目标图像大小，使输出分析的图像的分辨率尽可能的接近屏幕尺寸
@@ -85,7 +83,7 @@ public class ResolutionCameraConfig extends CameraConfig {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         int width = displayMetrics.widthPixels;
         int height = displayMetrics.heightPixels;
-        LogUtils.d(String.format(Locale.getDefault(), "displayMetrics: %dx%d", width, height));
+        LogX.d("displayMetrics: %dx%d", width, height);
 
         // 因为为了保持流畅性和性能，尽可能的限制在imageQuality（默认：1080p），在此前提下尽可能的找到屏幕接近的分辨率
         if (width < height) {
@@ -105,7 +103,7 @@ public class ResolutionCameraConfig extends CameraConfig {
                 mTargetSize = new Size(Math.round(size * CameraScan.ASPECT_RATIO_16_9), size);
             }
         }
-        LogUtils.d("targetSize: " + mTargetSize);
+        LogX.d("targetSize: " + mTargetSize);
     }
 
     @NonNull

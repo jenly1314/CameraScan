@@ -35,8 +35,10 @@ import java.util.Locale;
  * @author <a href="mailto:jenly1314@gmail.com">Jenly</a>
  * <p>
  * <a href="https://github.com/jenly1314">Follow me</a>
+ *
+ * @deprecated 此类已标记为废弃，后续可能会删除；后续内部的日志都将使用 <a href="https://github.com/jenly1314/LogX">LogX</a> 进行来管理。
  */
-@SuppressWarnings("unused")
+@Deprecated
 public class LogUtils {
 
     public static final String TAG = "CameraScan";
@@ -107,7 +109,7 @@ public class LogUtils {
 
     private static final String SPACE = " ";
     private static final String ARROW = " ➔ ";
-    
+
     private LogUtils() {
         throw new AssertionError();
     }
@@ -208,7 +210,7 @@ public class LogUtils {
      * @return
      */
     private static String getStackTraceString(Throwable t) {
-        if(t != null) {
+        if (t != null) {
             StringWriter sw = new StringWriter(256);
             PrintWriter pw = new PrintWriter(sw, false);
             t.printStackTrace(pw);

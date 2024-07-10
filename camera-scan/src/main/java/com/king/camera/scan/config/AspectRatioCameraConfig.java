@@ -19,9 +19,7 @@ import android.content.Context;
 import android.util.DisplayMetrics;
 
 import com.king.camera.scan.CameraScan;
-import com.king.camera.scan.util.LogUtils;
-
-import java.util.Locale;
+import com.king.logx.LogX;
 
 import androidx.annotation.NonNull;
 import androidx.camera.core.AspectRatio;
@@ -54,13 +52,13 @@ public class AspectRatioCameraConfig extends CameraConfig {
     /**
      * 初始化 {@link #mAspectRatio}
      *
-     * @param context
+     * @param context 上下文
      */
     private void initTargetAspectRatio(Context context) {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         int width = displayMetrics.widthPixels;
         int height = displayMetrics.heightPixels;
-        LogUtils.d(String.format(Locale.getDefault(), "displayMetrics: %dx%d", width, height));
+        LogX.d("displayMetrics: %dx%d", width, height);
 
         float ratio = Math.max(width, height) / (float) Math.min(width, height);
         if (Math.abs(ratio - CameraScan.ASPECT_RATIO_4_3) < Math.abs(ratio - CameraScan.ASPECT_RATIO_16_9)) {
@@ -68,7 +66,7 @@ public class AspectRatioCameraConfig extends CameraConfig {
         } else {
             mAspectRatio = AspectRatio.RATIO_16_9;
         }
-        LogUtils.d("aspectRatio: " + mAspectRatio);
+        LogX.d("aspectRatio: %d" , mAspectRatio);
     }
 
     @NonNull

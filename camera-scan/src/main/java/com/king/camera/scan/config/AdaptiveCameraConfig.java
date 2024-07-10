@@ -13,11 +13,10 @@ import androidx.camera.core.resolutionselector.ResolutionSelector;
 import androidx.camera.core.resolutionselector.ResolutionStrategy;
 
 import com.king.camera.scan.CameraScan;
-import com.king.camera.scan.util.LogUtils;
+import com.king.logx.LogX;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * 自适应相机配置：主要是根据纵横比和设备屏幕的分辨率找到与相机之间合适的相机配置；
@@ -63,7 +62,7 @@ public class AdaptiveCameraConfig extends CameraConfig {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         int width = displayMetrics.widthPixels;
         int height = displayMetrics.heightPixels;
-        LogUtils.d(String.format(Locale.getDefault(), "displayMetrics: %dx%d", width, height));
+        LogX.d("displayMetrics: %dx%d", width, height);
 
         if (width < height) {
             float ratio = height / (float) width;
@@ -128,7 +127,7 @@ public class AdaptiveCameraConfig extends CameraConfig {
                 .setAspectRatioStrategy(mAspectRatioStrategy)
                 .setResolutionStrategy(new ResolutionStrategy(mPreviewTargetSize, ResolutionStrategy.FALLBACK_RULE_CLOSEST_HIGHER_THEN_LOWER))
                 .setResolutionFilter((supportedSizes, rotationDegrees) -> {
-                    LogUtils.d("Preview supportedSizes: " + supportedSizes);
+                    LogX.d("Preview supportedSizes: " + supportedSizes);
                     List<Size> list = new ArrayList<>();
                     for (Size supportedSize : supportedSizes) {
                         int size = Math.min(supportedSize.getWidth(), supportedSize.getHeight());
@@ -151,7 +150,7 @@ public class AdaptiveCameraConfig extends CameraConfig {
                 .setAspectRatioStrategy(mAspectRatioStrategy)
                 .setResolutionStrategy(new ResolutionStrategy(mAnalysisTargetSize, ResolutionStrategy.FALLBACK_RULE_CLOSEST_HIGHER_THEN_LOWER))
                 .setResolutionFilter((supportedSizes, rotationDegrees) -> {
-                    LogUtils.d("ImageAnalysis supportedSizes: " + supportedSizes);
+                    LogX.d("ImageAnalysis supportedSizes: " + supportedSizes);
                     List<Size> list = new ArrayList<>();
                     for (Size supportedSize : supportedSizes) {
                         int size = Math.min(supportedSize.getWidth(), supportedSize.getHeight());
