@@ -13,9 +13,9 @@ CameraScan for Android 是一个简化扫描识别流程的通用基础库。
 
 > 如果你之前有使用过 [ZXingLite](https://github.com/jenly1314/ZXingLite) 、[MLKit](https://github.com/jenly1314/MLKit) 或 [WeChatQRCode](https://github.com/jenly1314/WeChatQRCode)，可能会对 **CameraScan** 比较眼熟。现已将 **CameraScan** 独立出来，便于后续统一维护。
 
-> 以后[ZXingLite](https://github.com/jenly1314/ZXingLite)、[MLKit](https://github.com/jenly1314/MLKit)、[WeChatQRCode](https://github.com/jenly1314/WeChatQRCode) 发布的新版本都将使用 **CameraScan** 作为相机扫描基础库。
+> 以后 [ZXingLite](https://github.com/jenly1314/ZXingLite)、[MLKit](https://github.com/jenly1314/MLKit)、[WeChatQRCode](https://github.com/jenly1314/WeChatQRCode) 发布的新版本都将使用 **CameraScan** 作为相机扫描基础库。
 
-> [**CameraScan**](https://github.com/jenly1314/CameraScan) + [**ViewfinderView**](https://github.com/jenly1314/ViewfinderView) + （[ZXingLite](https://github.com/jenly1314/ZXingLite)、[MLKit](https://github.com/jenly1314/MLKit)、[WeChatQRCode](https://github.com/jenly1314/WeChatQRCode)其中之一） = 完美搭配。
+> [**CameraScan**](https://github.com/jenly1314/CameraScan) + [**ViewfinderView**](https://github.com/jenly1314/ViewfinderView) +（[ZXingLite](https://github.com/jenly1314/ZXingLite)、[MLKit](https://github.com/jenly1314/MLKit)、[WeChatQRCode](https://github.com/jenly1314/WeChatQRCode) 其中之一） = 完美搭配。
 
 ## 引入
 
@@ -89,14 +89,14 @@ CameraScan for Android 是一个简化扫描识别流程的通用基础库。
 
 如：通过CameraConfig设置前置摄像头
 
-方式一：通过工厂类创建CameraConfig（推荐）
+**方式一：** 通过工厂类创建CameraConfig（**推荐**）
 ```java
 // 通过工厂类创建适合当前设备的CameraConfig
 CameraConfig cameraConfig = CameraConfigFactory.createDefaultCameraConfig(this, CameraSelector.LENS_FACING_FRONT);
 getCameraScan().setCameraConfig(cameraConfig);
 ```
 
-方式二：通过对象创建CameraConfig
+**方式二：** 通过对象创建CameraConfig
 ```java
 // 此处的CameraConfig可以是CameraConfig的任意子类（其它CameraConfig相关配置修改方式与设置前置摄像头类似）
 CameraConfig cameraConfig = new CameraConfig() {
@@ -289,7 +289,7 @@ BaseCameraScanActivity和BaseCameraScanFragment使用的默认布局：
 ## 版本说明
 
 #### v1.2.0：2024-07-10
-* 内部的`LogUtils`类标记为废弃，改用[LogX](https://github.com/jenly1314/LogX) 来统一管理日志
+* 废弃内部的`LogUtils`类，改用[LogX](https://github.com/jenly1314/LogX) 来统一管理日志
 * 更新CameraX相关依赖至v1.3.4
 
 #### v1.1.1：2024-04-20
