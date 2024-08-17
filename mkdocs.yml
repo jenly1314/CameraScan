@@ -36,16 +36,16 @@ theme:
         name: "切换到浅色模式"
   features:
     - navigation.tabs
-    - navigation.top
+    - content.code.copy
 
 extra:
   social:
-    - icon: material/github
-      link: https://github.com/jenly1314/
     - icon: material/home-outline
       link: https://jenly1314.github.io/
-    - icon: material/email-outline
-      link: jenly1314@gmail.com
+    - icon: fontawesome/brands/github
+      link: https://github.com/jenly1314/
+    - icon: fontawesome/solid/paper-plane
+      link: mailto:jenly1314@gmail.com
 
 markdown_extensions:
   - smarty
