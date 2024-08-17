@@ -14,6 +14,7 @@ set -ex
 mv camera-scan/build/dokka/html docs/api
 
 # Copy in special files that GitHub wants in the project root.
+mkdir -p docs/changelog
 cp CHANGELOG.md docs/changelog/changelog.md
 
 # Build the site locally
