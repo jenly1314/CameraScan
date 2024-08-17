@@ -165,13 +165,13 @@ cameraScan.setAnalyzer(analyzer);
 ```
 > 如果是通过直接或间接继承 **BaseCameraScanActivity** 来实现的，可直接覆写 `createAnalyzer` 方法返回具体的分析器即可。
 
-* 看到这里，你对 **CameraScan** 相关配置应该有了基本的了解，**CameraScan** 作为一个简化扫描识别流程的通用基础库，将通用的预览分析流程，进行尽可能的抽象分离，然后实现公共部分；将具体分析功能进行抽象；基于**CameraScan** 你只需实现一个**Analyzer**，并根据需要进行**CameraScan**相关配置，就可以快速实现具体的扫描检测功能。
+* 看到这里，你对 **CameraScan** 相关配置应该有了基本的了解，**CameraScan** 作为一个简化扫描识别流程的通用基础库，将通用的预览分析流程，进行尽可能的抽象分离，然后实现公共部分；将具体分析功能进行抽象；基于 **CameraScan** 你只需实现一个**Analyzer**，并根据需要进行**CameraScan**相关配置，就可以快速实现具体的扫描检测功能。
 
 > 介绍完 **CameraScan** 相关配置后，下面就来说下界面和布局部分；
 
 ### 界面示例
 
-通过继承**BaseCameraScanActivity**可快速实现具体的扫描功能；（**BaseCameraScanFragment**与之类似）
+通过继承 **BaseCameraScanActivity** 可快速实现具体的扫描功能；（ **BaseCameraScanFragment** 与之类似）
 
 示例：
 ```kotlin
@@ -212,12 +212,12 @@ class CameraScanActivity : BaseCameraScanActivity<*>() {
 ### 布局示例
 
 **PreviewView** 用来预览，布局内至少要保证有 **PreviewView** （必须的）；如果是继承 **BaseCameraScanActivity** 或
-**BaseCameraScanFragment** 或其子类实现的相机扫描；快速实现扫描功能； 
+**BaseCameraScanFragment** 或其子类实现的相机扫描；快速实现扫描功能；
 需自定义布局时，通过覆写`getLayoutId`方法即可；预览控件ID可覆写`getPreviewViewId`方法自定义；
 
 **ivFlashlight** 是布局内置的手电筒（非必须的），如果是继承 **BaseCameraScanActivity** 或 **BaseCameraScanFragment**，其内部已默认处理了手电筒点击开关事件；控件id可覆写`getFlashlightId`方法自定义，默认为 **ivFlashlight**。返回0表示无需内置手电筒。您也可以自己去定义
 
-更多CameraScan相关用法可查看**BaseCameraScanActivity**源码或参见下面的使用示例。
+更多CameraScan相关用法可查看 **BaseCameraScanActivity** 源码或参见下面的使用示例。
 
 
 BaseCameraScanActivity和BaseCameraScanFragment使用的默认布局：
@@ -285,6 +285,8 @@ BaseCameraScanActivity和BaseCameraScanFragment使用的默认布局：
 #### [WeChatQRCode](https://github.com/jenly1314/WeChatQRCode) 基于OpenCV开源的微信二维码引擎移植的扫码识别库。
 #### [ZXingLite](https://github.com/jenly1314/ZXingLite) 基于zxing实现的扫码库，优化扫码和生成二维码/条形码功能。
 #### [ViewfinderView](https://github.com/jenly1314/ViewfinderView) ViewfinderView一个取景视图：主要用于渲染扫描相关的动画效果。
+
+[end](#)
 
 ## 版本说明
 

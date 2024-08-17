@@ -15,8 +15,8 @@ mkdir -p docs/api
 mv camera-scan/build/dokka/html/* docs/api
 
 # Copy in special files that GitHub wants in the project root.
-sed '/## 版本说明/q' README.md > docs/index.md
-cp CHANGELOG.md docs/changelog.md
+sed '/[end](#)/q' README.md > docs/index.md
+cat CHANGELOG.md | grep -v '## 版本说明' > docs/changelog.md
 
 # Build the site locally
 mkdocs build

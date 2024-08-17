@@ -11,14 +11,13 @@ repo_name: CameraScan
 repo_url: https://github.com/jenly1314/CameraScan
 
 # Copyright
-copyright: 'Copyright (C) 2024 Jenly.'
+copyright: 'Copyright &copy; 2024 Jenly.'
 
 # Configuration
 theme:
   name: 'material'
   icon:
     logo: material/github
-    repo: fontawesome/brands/github
   language: zh
   palette:
     - media: "(prefers-color-scheme: light)"
@@ -27,14 +26,14 @@ theme:
       accent: blue
       toggle:
         icon: octicons/sun-24
-        name: "Switch to Dark Mode"
+        name: "切换到深色模式"
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
       primary: teal
       accent: blue
       toggle:
         icon: octicons/moon-24
-        name: "Switch to Light Mode"
+        name: "切换到浅色模式"
   features:
     - navigation.tabs
 
@@ -65,7 +64,7 @@ plugins:
   - search
 
 nav:
-  - 'Overview': index.md
-  - 'API': api/index.html
-  - 'Change Log': changelog.md
+  - '概览': index.md
+  - 'API文档': api/index.html
+  - '版本记录': changelog.md
 
