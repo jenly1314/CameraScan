@@ -286,7 +286,7 @@ BaseCameraScanActivity和BaseCameraScanFragment使用的默认布局：
 #### [ZXingLite](https://github.com/jenly1314/ZXingLite) 基于zxing实现的扫码库，优化扫码和生成二维码/条形码功能。
 #### [ViewfinderView](https://github.com/jenly1314/ViewfinderView) ViewfinderView一个取景视图：主要用于渲染扫描相关的动画效果。
 
-[](#)
+<!-- end -->
 
 ## 版本说明
 

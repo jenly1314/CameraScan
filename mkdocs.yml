@@ -66,5 +66,5 @@ plugins:
 nav:
   - '概览': index.md
   - 'API文档': api/index.html
-  - '版本记录': changelog.md
+  - '版本日志': changelog.md
 
