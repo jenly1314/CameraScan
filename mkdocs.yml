@@ -11,11 +11,12 @@ repo_name: CameraScan
 repo_url: https://github.com/jenly1314/CameraScan
 
 # Copyright
-copyright: 'Copyright &copy; 2024 Jenly.'
+copyright: 'Copyright &copy; 2023 - 2024 Jenly.'
 
 # Configuration
 theme:
   name: 'material'
+  favicon: https://jenly1314.github.io/favicon.png
   icon:
     logo: material/github
   language: zh
@@ -40,7 +41,7 @@ theme:
 
 extra:
   social:
-    - icon: material/home-outline
+    - icon: material/home-circle
       link: https://jenly1314.github.io/
     - icon: fontawesome/brands/github
       link: https://github.com/jenly1314/

@@ -1,4 +1,4 @@
-## 版本说明
+## 版本日志
 
 #### v1.2.0：2024-07-10
 * 废弃内部的`LogUtils`类，改用[LogX](https://github.com/jenly1314/LogX) 来统一管理日志
