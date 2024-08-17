@@ -42,6 +42,10 @@ extra:
   social:
     - icon: material/github
       link: https://github.com/jenly1314/
+    - icon: material/home-outline
+      link: https://jenly1314.github.io/
+    - icon: material/email-outline
+      link: jenly1314@gmail.com
 
 markdown_extensions:
   - smarty
