@@ -1,0 +1,72 @@
+# Project information
+site_name: CameraScan
+site_url: https://jenly1314.github.io/CameraScan/
+site_description: "CameraScan for Android"
+site_author: Jenly
+remote_branch: gh-pages
+edit_uri: ""
+
+# Repository
+repo_name: CameraScan
+repo_url: https://github.com/jenly1314/CameraScan
+
+# Copyright
+copyright: 'Copyright (C) 2024 Jenly.'
+
+# Configuration
+theme:
+  name: 'material'
+  icon:
+    logo: material/github
+    repo: fontawesome/brands/github
+  language: zh
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: teal
+      accent: blue
+      toggle:
+        icon: octicons/sun-24
+        name: "Switch to Dark Mode"
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: teal
+      accent: blue
+      toggle:
+        icon: octicons/moon-24
+        name: "Switch to Light Mode"
+  features:
+    - navigation.tabs
+
+markdown_extensions:
+  - smarty
+  - footnotes
+  - meta
+  - toc:
+      permalink: true
+  - attr_list
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.inlinehilite
+  - pymdownx.magiclink
+  - pymdownx.smartsymbols
+  - pymdownx.superfences
+  - pymdownx.tilde
+  - pymdownx.tabbed:
+      alternate_style: true
+  - tables
+
+# Plugins
+plugins:
+  - search
+
+nav:
+  - 'Overview':
+      - 'Overview': index.md
+  - 'API': api/index.html
+  - 'Change Logs':
+      - 'Change Log': changelog/changelog.md

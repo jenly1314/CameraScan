@@ -1,0 +1,52 @@
+name: docs
+
+on:
+  push:
+    branches:
+      - master
+#  workflow_run:
+#    workflows: [Publish Release]
+#    types:
+#      - completed
+
+permissions:
+  contents: read
+
+env:
+  GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4g -Dorg.gradle.daemon=false -Dkotlin.incremental=false"
+
+jobs:
+  publish_docs:
+    permissions:
+      checks: write # for actions/upload-artifact
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: 17
+
+      - name: Install Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.x
+
+      - name: Install MkDocs Material
+        run: pip install mkdocs-material mkdocs-redirects
+
+      - name: Generate Docs
+        run: ./build_docs.sh
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: docs
+          path: site/
