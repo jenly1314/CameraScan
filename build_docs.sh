@@ -11,7 +11,7 @@ set -ex
 # Generate the API docs
 ./gradlew dokkaHtml
 
-mv ./build/dokka/html docs/api
+mv camera-scan/build/dokka/html docs/api
 
 # Copy in special files that GitHub wants in the project root.
 cp CHANGELOG.md docs/changelog/changelog.md
