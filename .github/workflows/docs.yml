@@ -16,7 +16,7 @@ env:
   GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4g -Dorg.gradle.daemon=false -Dkotlin.incremental=false"
 
 jobs:
-  publish_docs:
+  docs:
     permissions:
       checks: write # for actions/upload-artifact
     runs-on: ubuntu-latest
@@ -45,8 +45,10 @@ jobs:
       - name: Generate Docs
         run: ./build_docs.sh
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
+      - name: Upload to GitHub Pages
+        uses: actions/upload-pages-artifact@v3
         with:
-          name: docs
-          path: site/
+          path: site
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4

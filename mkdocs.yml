@@ -65,8 +65,7 @@ plugins:
   - search
 
 nav:
-  - 'Overview':
-      - 'Overview': index.md
+  - 'Overview': index.md
   - 'API': api/index.html
-  - 'Change Logs':
-      - 'Change Log': changelog/changelog.md
+  - 'Change Log': changelog.md
+
