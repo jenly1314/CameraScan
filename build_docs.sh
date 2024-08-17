@@ -8,13 +8,12 @@
 
 set -ex
 
- Generate the API docs
+# Generate the API docs
 ./gradlew dokkaHtml
 
 mv ./build/dokka/html docs/api
 
 # Copy in special files that GitHub wants in the project root.
-cp README.md docs/index.md
 cp CHANGELOG.md docs/changelog/changelog.md
 
 # Build the site locally
