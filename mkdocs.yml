@@ -17,8 +17,7 @@ copyright: 'Copyright &copy; 2023 - 2024 Jenly.'
 theme:
   name: 'material'
   favicon: https://jenly1314.github.io/favicon.png
-  icon:
-    logo: material/github
+  logo: https://jenly1314.github.io/medias/logo.png
   language: zh
   palette:
     - media: "(prefers-color-scheme: light)"
