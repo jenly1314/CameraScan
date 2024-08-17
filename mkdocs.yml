@@ -36,6 +36,12 @@ theme:
         name: "切换到浅色模式"
   features:
     - navigation.tabs
+    - navigation.top
+
+extra:
+  social:
+    - icon: material/github
+      link: https://github.com/jenly1314/
 
 markdown_extensions:
   - smarty
