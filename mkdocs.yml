@@ -18,6 +18,8 @@ theme:
   name: 'material'
   favicon: https://jenly1314.github.io/favicon.png
   logo: https://jenly1314.github.io/medias/logo.png
+  icon:
+    repo: fontawesome/brands/github
   language: zh
   palette:
     - media: "(prefers-color-scheme: light)"
@@ -35,6 +37,8 @@ theme:
         icon: octicons/moon-24
         name: "切换到浅色模式"
   features:
+    - navigation.instant
+    - navigation.instant.progress
     - navigation.tabs
     - content.code.copy
 
@@ -42,8 +46,10 @@ extra:
   social:
     - icon: material/home-circle
       link: https://jenly1314.github.io/
-    - icon: fontawesome/brands/github
+    - icon: simple/github
       link: https://github.com/jenly1314/
+    - icon: simple/gitee
+      link: https://gitee.com/jenly1314/
     - icon: fontawesome/solid/paper-plane
       link: mailto:jenly1314@gmail.com
 
