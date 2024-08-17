@@ -277,7 +277,7 @@ BaseCameraScanActivity和BaseCameraScanFragment使用的默认布局：
 
 > 页面完整示例：[CameraScanActivity](app/src/main/java/com/king/camera/scan/app/CameraScanActivity.kt)
 
-更多使用详情，请查看[app](app)中的源码使用示例或直接查看[API帮助文档](https://jitpack.io/com/github/jenly1314/CameraScan/latest/javadoc/)
+更多使用详情，请查看[app](app)中的源码使用示例或直接查看[API帮助文档](https://jenly1314.github.io/CameraScan/api/)
 
 ## 相关推荐
 
