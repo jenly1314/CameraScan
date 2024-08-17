@@ -18,7 +18,9 @@ env:
 jobs:
   docs:
     permissions:
-      checks: write # for actions/upload-artifact
+      contents: read
+      pages: write
+      id-token: write
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
 
