@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityOptionsCompat
+
 
 /**
  * CameraScan 演示示例
@@ -22,9 +24,12 @@ class MainActivity : AppCompatActivity() {
      * 跳转到相机扫描页
      */
     private fun startCameraScanActivity(customLayout: Boolean) {
+        val optionsCompat = ActivityOptionsCompat.makeCustomAnimation(
+            this, android.R.anim.fade_in, android.R.anim.fade_out
+        )
         val intent = Intent(this, CameraScanActivity::class.java)
         intent.putExtra(KEY_CUSTOM_LAYOUT, customLayout)
-        startActivity(intent)
+        startActivity(intent, optionsCompat.toBundle())
     }
 
     fun onClick(v: View) {

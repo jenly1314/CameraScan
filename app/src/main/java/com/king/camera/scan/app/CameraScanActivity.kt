@@ -55,6 +55,11 @@ class CameraScanActivity : BaseCameraScanActivity<Unit>() {
         return null
     }
 
+    override fun finish() {
+        super.finish()
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+    }
+
     /**
      * 切换摄像头
      */

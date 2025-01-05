@@ -72,8 +72,8 @@ CameraScan for Android 是一个简化扫描识别流程的通用基础库。
 
 * **CameraConfig**：CameraX默认的相机配置。
 * **AdaptiveCameraConfig**：自适应相机配置：主要是根据纵横比和设备屏幕的分辨率找到与相机之间合适的相机配置（v1.1.0新增）
-* **AspectRatioCameraConfig**：根据纵横比配置相机，使输出分析的图像尽可能的接近屏幕的比例
-* **ResolutionCameraConfig**：根据尺寸配置相机的目标图像大小，使输出分析的图像的分辨率尽可能的接近屏幕尺寸
+* **AspectRatioCameraConfig**：根据纵横比配置相机，使输出分析的图像尽可能的接近屏幕的比例（已废弃）
+* **ResolutionCameraConfig**：根据尺寸配置相机的目标图像大小，使输出分析的图像的分辨率尽可能的接近屏幕尺寸（已废弃）
 
 > 你也可以自定义或覆写 **CameraConfig** 中的 **options** 方法，根据需要定制配置。
 
@@ -149,13 +149,13 @@ cameraScan.setPlayBeep(true)//设置是否播放音效，默认为false
 启动相机预览
 ```java
 // 启动预览（如果是通过直接或间接继承BaseCameraScanActivity或BaseCameraScanFragment实现的则无需调用startCamera）
-getCameraScan().startCamera();
+cameraScan.startCamera();
 ```
 
 控制闪光灯
 ```java
 // 设置闪光灯（手电筒）是否开启,需在startCamera之后调用才有效
-getCameraScan().enableTorch(torch);
+cameraScan.enableTorch(torch);
 ```
 
 设置分析器
@@ -290,29 +290,12 @@ BaseCameraScanActivity和BaseCameraScanFragment使用的默认布局：
 
 ## 版本日志
 
-#### v1.2.0：2024-07-10
-* 废弃内部的`LogUtils`类，改用[LogX](https://github.com/jenly1314/LogX) 来统一管理日志
-* 更新CameraX相关依赖至v1.3.4
+#### v1.3.0：2025-01-05
+* 更新CameraX相关依赖至v1.4.1
+* 更新[LogX](https://github.com/jenly1314/LogX)依赖至v1.1.0
 * 优化细节
 
-#### v1.1.1：2024-04-20
-* 更新CameraX相关依赖至v1.3.2
-* 优化细节
-
-#### v1.1.0：2023-12-30
-* 更新CameraX相关依赖至v1.3.1
-* 更新compileSdkVersion至34
-* 更新Gradle至v8.0
-* 新增方法：`CameraScan.setAutoStopAnalyze(boolean)` 用于设置是否自动停止分析图像
-* 新增类：`AdaptiveCameraConfig` 自适应相机配置
-* 修改 `CameraConfigFactory.createDefaultCameraConfig` 的默认实现
-
-#### v1.0.1：2023-09-11
-* 更新CameraX相关依赖至v1.2.3
-* 优化细节
-
-#### v1.0.0：2023-08-05
-* CameraScan初始版本
+#### [查看更多版本日志](CHANGELOG.md)
 
 ## 赞赏
 如果您喜欢CameraScan，或感觉CameraScan帮助到了您，可以点右上角“Star”支持一下，您的支持就是我的动力，谢谢 :smiley:

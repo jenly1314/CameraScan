@@ -1,5 +1,10 @@
 ## 版本日志
 
+#### v1.3.0：2025-01-05
+* 更新CameraX相关依赖至v1.4.1
+* 更新[LogX](https://github.com/jenly1314/LogX)依赖至v1.1.0
+* 优化细节
+
 #### v1.2.0：2024-07-10
 * 废弃内部的`LogUtils`类，改用[LogX](https://github.com/jenly1314/LogX) 来统一管理日志
 * 更新CameraX相关依赖至v1.3.4

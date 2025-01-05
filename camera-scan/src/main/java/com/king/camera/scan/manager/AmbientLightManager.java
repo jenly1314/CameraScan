@@ -31,7 +31,7 @@ import android.hardware.SensorManager;
 @SuppressWarnings("unused")
 public class AmbientLightManager implements SensorEventListener {
 
-    private static final int INTERVAL_TIME = 200;
+    private static final int INTERVAL_DURATION = 150;
 
     protected static final float DARK_LUX = 45.0F;
     protected static final float BRIGHT_LUX = 100.0F;
@@ -45,8 +45,8 @@ public class AmbientLightManager implements SensorEventListener {
      */
     private float brightLightLux = BRIGHT_LUX;
 
-    private SensorManager sensorManager;
-    private Sensor lightSensor;
+    private final SensorManager sensorManager;
+    private final Sensor lightSensor;
 
     private long lastTime;
 
@@ -82,7 +82,7 @@ public class AmbientLightManager implements SensorEventListener {
     public void onSensorChanged(SensorEvent sensorEvent) {
         if (isLightSensorEnabled) {
             long currentTime = System.currentTimeMillis();
-            if (currentTime - lastTime < INTERVAL_TIME) {
+            if (currentTime - lastTime < INTERVAL_DURATION) {
                 // 降低频率
                 return;
             }
@@ -145,6 +145,9 @@ public class AmbientLightManager implements SensorEventListener {
         mOnLightSensorEventListener = listener;
     }
 
+    /**
+     * 光线传感器事件监听器
+     */
     public interface OnLightSensorEventListener {
         /**
          * @param lightLux 当前检测到的光照强度值

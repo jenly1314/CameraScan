@@ -19,7 +19,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.view.MotionEvent;
-import android.view.ScaleGestureDetector;
 import android.view.View;
 
 import androidx.annotation.FloatRange;
@@ -36,7 +35,7 @@ import androidx.camera.core.TorchState;
 import androidx.camera.core.ZoomState;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
-import androidx.core.app.ComponentActivity;
+import androidx.activity.ComponentActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
@@ -46,10 +45,12 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.king.camera.scan.analyze.Analyzer;
 import com.king.camera.scan.config.CameraConfig;
 import com.king.camera.scan.config.CameraConfigFactory;
+import com.king.camera.scan.internal.ZoomGestureDetector;
 import com.king.camera.scan.manager.AmbientLightManager;
 import com.king.camera.scan.manager.BeepManager;
 import com.king.logx.LogX;
 
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
@@ -94,6 +95,10 @@ public class BaseCameraScan<T> extends CameraScan<T> {
      * 预览视图
      */
     private final PreviewView mPreviewView;
+
+    private ExecutorService mExecutorService;
+
+    private ZoomGestureDetector mZoomGestureDetector;
 
     private ListenableFuture<ProcessCameraProvider> mCameraProviderFuture;
     /**
@@ -161,7 +166,6 @@ public class BaseCameraScan<T> extends CameraScan<T> {
      */
     private float mDownY;
 
-    @SuppressLint("RestrictedApi")
     public BaseCameraScan(@NonNull ComponentActivity activity, @NonNull PreviewView previewView) {
         this(activity, activity, previewView);
     }
@@ -178,29 +182,11 @@ public class BaseCameraScan<T> extends CameraScan<T> {
     }
 
     /**
-     * 缩放手势检测
-     */
-    private final ScaleGestureDetector.OnScaleGestureListener mOnScaleGestureListener = new ScaleGestureDetector.SimpleOnScaleGestureListener() {
-        @Override
-        public boolean onScale(ScaleGestureDetector detector) {
-            float scale = detector.getScaleFactor();
-            ZoomState zoomState = getZoomState();
-            if (zoomState != null) {
-                float ratio = zoomState.getZoomRatio();
-                // 根据缩放的手势和当前比例进行缩放
-                zoomTo(ratio * scale);
-                return true;
-            }
-            return false;
-        }
-
-    };
-
-    /**
      * 初始化
      */
     @SuppressLint("ClickableViewAccessibility")
     private void initData() {
+        mExecutorService = Executors.newSingleThreadExecutor();
         mResultLiveData = new MutableLiveData<>();
         mResultLiveData.observe(mLifecycleOwner, result -> {
             if (result != null) {
@@ -222,12 +208,25 @@ public class BaseCameraScan<T> extends CameraScan<T> {
             }
 
         };
+        mZoomGestureDetector = new ZoomGestureDetector(mContext,
+            zoomEvent -> {
+                if (zoomEvent instanceof ZoomGestureDetector.ZoomEvent.Move) {
+                    float pinchToZoomScale = ((ZoomGestureDetector.ZoomEvent.Move) zoomEvent)
+                            .getIncrementalScaleFactor();
 
-        ScaleGestureDetector scaleGestureDetector = new ScaleGestureDetector(mContext, mOnScaleGestureListener);
+                    ZoomState zoomState = getZoomState();
+                    if (zoomState != null) {
+                        float clampedRatio = zoomState.getZoomRatio() * pinchToZoomScale;
+                        zoomTo(clampedRatio);
+                    }
+                }
+                return true;
+            });
+
         mPreviewView.setOnTouchListener((v, event) -> {
             handlePreviewViewClickTap(event);
             if (isNeedTouchZoom()) {
-                return scaleGestureDetector.onTouchEvent(event);
+                return mZoomGestureDetector.onTouchEvent(event);
             }
             return false;
         });
@@ -335,7 +334,7 @@ public class BaseCameraScan<T> extends CameraScan<T> {
                 ImageAnalysis imageAnalysis = mCameraConfig.options(new ImageAnalysis.Builder()
                         .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_YUV_420_888)
                         .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST));
-                imageAnalysis.setAnalyzer(Executors.newSingleThreadExecutor(), image -> {
+                imageAnalysis.setAnalyzer(mExecutorService, image -> {
                     if (isAnalyze && !isAnalyzeResult && mAnalyzer != null) {
                         mAnalyzer.analyze(image, mOnAnalyzeListener);
                     }
@@ -550,6 +549,9 @@ public class BaseCameraScan<T> extends CameraScan<T> {
         }
         if (mBeepManager != null) {
             mBeepManager.close();
+        }
+        if(mExecutorService != null) {
+            mExecutorService.shutdown();
         }
         stopCamera();
     }
