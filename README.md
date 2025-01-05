@@ -33,7 +33,7 @@ CameraScan for Android 是一个简化扫描识别流程的通用基础库。
 2. 在Module的 **build.gradle** 里面添加引入依赖项
 
     ```gradle
-    implementation 'com.github.jenly1314:camera-scan:1.2.0'
+    implementation 'com.github.jenly1314:camera-scan:1.3.0'
     ```
 
 ### 温馨提示
@@ -72,8 +72,8 @@ CameraScan for Android 是一个简化扫描识别流程的通用基础库。
 
 * **CameraConfig**：CameraX默认的相机配置。
 * **AdaptiveCameraConfig**：自适应相机配置：主要是根据纵横比和设备屏幕的分辨率找到与相机之间合适的相机配置（v1.1.0新增）
-* **AspectRatioCameraConfig**：根据纵横比配置相机，使输出分析的图像尽可能的接近屏幕的比例（已废弃）
-* **ResolutionCameraConfig**：根据尺寸配置相机的目标图像大小，使输出分析的图像的分辨率尽可能的接近屏幕尺寸（已废弃）
+* ~ **AspectRatioCameraConfig**：根据纵横比配置相机，使输出分析的图像尽可能的接近屏幕的比例~（已废弃）
+* ~ **ResolutionCameraConfig**：根据尺寸配置相机的目标图像大小，使输出分析的图像的分辨率尽可能的接近屏幕尺寸~（已废弃）
 
 > 你也可以自定义或覆写 **CameraConfig** 中的 **options** 方法，根据需要定制配置。
 
@@ -211,7 +211,7 @@ class CameraScanActivity : BaseCameraScanActivity<*>() {
 
 ### 布局示例
 
-**PreviewView** 用来预览，布局内至少要保证有 **PreviewView** （必须的）；如果是继承 **BaseCameraScanActivity** 或
+**PreviewView** 用来预览，布局内至少要保证有 **PreviewView** （必须*）；如果是继承 **BaseCameraScanActivity** 或
 **BaseCameraScanFragment** 或其子类实现的相机扫描；快速实现扫描功能；
 需自定义布局时，通过覆写`getLayoutId`方法即可；预览控件ID可覆写`getPreviewViewId`方法自定义；
 
@@ -281,10 +281,10 @@ BaseCameraScanActivity和BaseCameraScanFragment使用的默认布局：
 
 ## 相关推荐
 
-#### [MLKit](https://github.com/jenly1314/MLKit) 一个强大易用的工具包。通过ML Kit您可以很轻松的实现文字识别、条码识别、图像标记、人脸检测、对象检测等功能。
-#### [WeChatQRCode](https://github.com/jenly1314/WeChatQRCode) 基于OpenCV开源的微信二维码引擎移植的扫码识别库。
-#### [ZXingLite](https://github.com/jenly1314/ZXingLite) 基于zxing实现的扫码库，优化扫码和生成二维码/条形码功能。
-#### [ViewfinderView](https://github.com/jenly1314/ViewfinderView) ViewfinderView一个取景视图：主要用于渲染扫描相关的动画效果。
+- [MLKit](https://github.com/jenly1314/MLKit) 一个强大易用的工具包。通过ML Kit您可以很轻松的实现文字识别、条码识别、图像标记、人脸检测、对象检测等功能。
+- [WeChatQRCode](https://github.com/jenly1314/WeChatQRCode) 基于OpenCV开源的微信二维码引擎移植的扫码识别库。
+- [ZXingLite](https://github.com/jenly1314/ZXingLite) 基于zxing实现的扫码库，优化扫码和生成二维码/条形码功能。
+- [ViewfinderView](https://github.com/jenly1314/ViewfinderView) ViewfinderView一个取景视图：主要用于渲染扫描相关的动画效果。
 
 <!-- end -->
 
