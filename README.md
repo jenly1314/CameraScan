@@ -285,6 +285,8 @@ BaseCameraScanActivity和BaseCameraScanFragment使用的默认布局：
 - [WeChatQRCode](https://github.com/jenly1314/WeChatQRCode) 基于OpenCV开源的微信二维码引擎移植的扫码识别库。
 - [ZXingLite](https://github.com/jenly1314/ZXingLite) 基于zxing实现的扫码库，优化扫码和生成二维码/条形码功能。
 - [ViewfinderView](https://github.com/jenly1314/ViewfinderView) ViewfinderView一个取景视图：主要用于渲染扫描相关的动画效果。
+- [LibYuv](https://github.com/jenly1314/libyuv) 基于Google的libyuv编译封装的YUV转换工具库，主要用途是在各种YUV与RGB之间进行相互转换、裁减、旋转、缩放、镜像等。
+- [LogX](https://github.com/jenly1314/LogX) 一个小而美的日志记录框架；好用不解释。
 
 <!-- end -->
 
