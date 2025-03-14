@@ -279,6 +279,10 @@ BaseCameraScanActivity和BaseCameraScanFragment使用的默认布局：
 
 更多使用详情，请查看[app](app)中的源码使用示例或直接查看[API帮助文档](https://jenly1314.github.io/CameraScan/api/)
 
+## 其他
+
+- [常见问题解答](https://github.com/jenly1314/ZXingLite/issues/69#issue-529829908)
+
 ## 相关推荐
 
 - [MLKit](https://github.com/jenly1314/MLKit) 一个强大易用的工具包。通过ML Kit您可以很轻松的实现文字识别、条码识别、图像标记、人脸检测、对象检测等功能。
