@@ -343,7 +343,7 @@ public class BaseCameraScan<T> extends CameraScan<T> {
                 if (mCamera != null) {
                     mCameraProviderFuture.get().unbindAll();
                 }
-                //绑定到生命周期
+                // 绑定到生命周期
                 mCamera = mCameraProviderFuture.get().bindToLifecycle(mLifecycleOwner, cameraSelector, preview, imageAnalysis);
                 ResolutionInfo previewResolutionInfo = preview.getResolutionInfo();
                 if(previewResolutionInfo != null) {

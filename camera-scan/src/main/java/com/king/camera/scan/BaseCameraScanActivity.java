@@ -21,6 +21,7 @@ import android.view.View;
 
 import com.king.camera.scan.analyze.Analyzer;
 import com.king.camera.scan.util.PermissionUtils;
+import com.king.logx.LogX;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -127,6 +128,7 @@ public abstract class BaseCameraScanActivity<T> extends AppCompatActivity implem
             if (PermissionUtils.checkPermission(this, Manifest.permission.CAMERA)) {
                 mCameraScan.startCamera();
             } else {
+                LogX.d("Camera permission not granted, requesting permission.");
                 PermissionUtils.requestPermission(this, Manifest.permission.CAMERA, CAMERA_PERMISSION_REQUEST_CODE);
             }
         }

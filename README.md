@@ -30,10 +30,10 @@ CameraScan for Android 是一个简化扫描识别流程的通用基础库。
     }
     ```
 
-2. 在Module的 **build.gradle** 里面添加引入依赖项
+2. 在Module的 **build.gradle** 中添加依赖项
 
     ```gradle
-    implementation 'com.github.jenly1314:camera-scan:1.3.0'
+    implementation 'com.github.jenly1314:camera-scan:1.3.1'
     ```
 
 ### 温馨提示
@@ -134,15 +134,15 @@ getCameraScan().setCameraConfig(cameraConfig);
 
 ```java
 // 根据需要修改CameraScan相关配置
-cameraScan.setPlayBeep(true)//设置是否播放音效，默认为false
-    .setVibrate(true)//设置是否震动，默认为false
-    .setCameraConfig(CameraConfigFactory.createDefaultCameraConfig(this, CameraSelector.LENS_FACING_BACK))//设置相机配置信息
-    .setNeedTouchZoom(true)//支持多指触摸捏合缩放，默认为true
-    .setDarkLightLux(45f)//设置光线足够暗的阈值（单位：lux），需要通过{@link #bindFlashlightView(View)}绑定手电筒才有效
-    .setBrightLightLux(100f)//设置光线足够明亮的阈值（单位：lux），需要通过{@link #bindFlashlightView(View)}绑定手电筒才有效
-    .bindFlashlightView(ivFlashlight)//绑定手电筒，绑定后可根据光线传感器，动态显示或隐藏手电筒按钮
-    .setOnScanResultCallback(this)//设置扫描结果回调，需要自己处理或者需要连扫时，可设置回调，自己去处理相关逻辑
-    .setAnalyzeImage(true);//设置是否分析图片，默认为true。如果设置为false，相当于关闭了扫描识别功能
+cameraScan.setPlayBeep(true) // 设置是否播放音效，默认为false
+    .setVibrate(true) // 设置是否震动，默认为false
+    .setCameraConfig(CameraConfigFactory.createDefaultCameraConfig(this, CameraSelector.LENS_FACING_BACK)) // 设置相机配置信息
+    .setNeedTouchZoom(true) // 支持多指触摸捏合缩放，默认为true
+    .setDarkLightLux(45f) // 设置光线足够暗的阈值（单位：lux），需要通过{@link #bindFlashlightView(View)}绑定手电筒才有效
+    .setBrightLightLux(100f) // 设置光线足够明亮的阈值（单位：lux），需要通过{@link #bindFlashlightView(View)}绑定手电筒才有效
+    .bindFlashlightView(ivFlashlight) // 绑定手电筒，绑定后可根据光线传感器，动态显示或隐藏手电筒按钮
+    .setOnScanResultCallback(this) // 设置扫描结果回调，需要自己处理或者需要连扫时，可设置回调，自己去处理相关逻辑
+    .setAnalyzeImage(true); // 设置是否分析图片，默认为true。如果设置为false，相当于关闭了扫描识别功能
 
 ```
 
@@ -290,15 +290,15 @@ BaseCameraScanActivity和BaseCameraScanFragment使用的默认布局：
 - [ZXingLite](https://github.com/jenly1314/ZXingLite) 基于zxing实现的扫码库，优化扫码和生成二维码/条形码功能。
 - [ViewfinderView](https://github.com/jenly1314/ViewfinderView) ViewfinderView一个取景视图：主要用于渲染扫描相关的动画效果。
 - [LibYuv](https://github.com/jenly1314/libyuv) 基于Google的libyuv编译封装的YUV转换工具库，主要用途是在各种YUV与RGB之间进行相互转换、裁减、旋转、缩放、镜像等。
-- [LogX](https://github.com/jenly1314/LogX) 一个小而美的日志记录框架；好用不解释。
+- [LogX](https://github.com/jenly1314/LogX) 一个轻量而强大的日志框架；好用不解释。
 
 <!-- end -->
 
 ## 版本日志
 
-#### v1.3.0：2025-01-05
-* 更新CameraX相关依赖至v1.4.1
-* 更新[LogX](https://github.com/jenly1314/LogX)依赖至v1.1.0
+#### v1.3.1：2025-05-06
+* 更新CameraX相关依赖至v1.4.2
+* 更新[LogX](https://github.com/jenly1314/LogX)依赖至v1.2.0
 * 优化细节
 
 #### [查看更多版本日志](CHANGELOG.md)

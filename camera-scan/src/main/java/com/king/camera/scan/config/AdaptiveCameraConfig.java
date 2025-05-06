@@ -29,6 +29,10 @@ import java.util.List;
 public class AdaptiveCameraConfig extends CameraConfig {
 
     /**
+     * 1440P
+     */
+    private static final int IMAGE_QUALITY_1440P = 1440;
+    /**
      * 1080P
      */
     private static final int IMAGE_QUALITY_1080P = 1080;
@@ -36,6 +40,10 @@ public class AdaptiveCameraConfig extends CameraConfig {
      * 720P
      */
     private static final int IMAGE_QUALITY_720P = 720;
+    /**
+     * 480P
+     */
+    private static final int IMAGE_QUALITY_480P = 480;
 
     private AspectRatioStrategy mAspectRatioStrategy;
 
@@ -63,35 +71,52 @@ public class AdaptiveCameraConfig extends CameraConfig {
         int width = displayMetrics.widthPixels;
         int height = displayMetrics.heightPixels;
         LogX.d("displayMetrics: %dx%d", width, height);
-
+        int processors = Runtime.getRuntime().availableProcessors();
+        LogX.d("processors: %d", processors);
         if (width < height) {
             float ratio = height / (float) width;
-            mPreviewQuality = Math.min(width, IMAGE_QUALITY_1080P);
             if (Math.abs(ratio - CameraScan.ASPECT_RATIO_4_3) < Math.abs(ratio - CameraScan.ASPECT_RATIO_16_9)) {
                 mAspectRatioStrategy = AspectRatioStrategy.RATIO_4_3_FALLBACK_AUTO_STRATEGY;
             } else {
                 mAspectRatioStrategy = AspectRatioStrategy.RATIO_16_9_FALLBACK_AUTO_STRATEGY;
             }
-            mPreviewTargetSize = new Size(mPreviewQuality, Math.round(mPreviewQuality * ratio));
-            if (width > IMAGE_QUALITY_1080P) {
-                mAnalysisQuality = IMAGE_QUALITY_1080P;
+
+            if (width >= IMAGE_QUALITY_1080P) {
+                mPreviewQuality = IMAGE_QUALITY_1080P;
             } else {
-                mAnalysisQuality = Math.min(width, IMAGE_QUALITY_720P);
+                mPreviewQuality = Math.max(width, IMAGE_QUALITY_720P);
+            }
+            mPreviewTargetSize = new Size(mPreviewQuality, Math.round(mPreviewQuality * ratio));
+
+            if (width >= IMAGE_QUALITY_1440P && processors >= 8) {
+                mAnalysisQuality = IMAGE_QUALITY_1080P;
+            } else if (width > IMAGE_QUALITY_720P) {
+                mAnalysisQuality = IMAGE_QUALITY_720P;
+            } else {
+                mAnalysisQuality = IMAGE_QUALITY_480P;
             }
             mAnalysisTargetSize = new Size(mAnalysisQuality, Math.round(mAnalysisQuality * ratio));
         } else {
-            mPreviewQuality = Math.min(height, IMAGE_QUALITY_1080P);
             float ratio = width / (float) height;
             if (Math.abs(ratio - CameraScan.ASPECT_RATIO_4_3) < Math.abs(ratio - CameraScan.ASPECT_RATIO_16_9)) {
                 mAspectRatioStrategy = AspectRatioStrategy.RATIO_4_3_FALLBACK_AUTO_STRATEGY;
             } else {
                 mAspectRatioStrategy = AspectRatioStrategy.RATIO_16_9_FALLBACK_AUTO_STRATEGY;
             }
-            mPreviewTargetSize = new Size(Math.round(mPreviewQuality * ratio), mPreviewQuality);
-            if (height > IMAGE_QUALITY_1080P) {
-                mAnalysisQuality = IMAGE_QUALITY_1080P;
+
+            if (height >= IMAGE_QUALITY_1080P) {
+                mPreviewQuality = IMAGE_QUALITY_1080P;
             } else {
-                mAnalysisQuality = Math.min(height, IMAGE_QUALITY_720P);
+                mPreviewQuality = Math.max(height, IMAGE_QUALITY_720P);
+            }
+            mPreviewTargetSize = new Size(Math.round(mPreviewQuality * ratio), mPreviewQuality);
+
+            if (height >= IMAGE_QUALITY_1440P && processors >= 8) {
+                mAnalysisQuality = IMAGE_QUALITY_1080P;
+            } else if (height > IMAGE_QUALITY_720P) {
+                mAnalysisQuality = IMAGE_QUALITY_720P;
+            } else {
+                mAnalysisQuality = IMAGE_QUALITY_480P;
             }
             mAnalysisTargetSize = new Size(Math.round(mAnalysisQuality * ratio), mAnalysisQuality);
         }
@@ -124,20 +149,20 @@ public class AdaptiveCameraConfig extends CameraConfig {
      */
     private ResolutionSelector createPreviewResolutionSelector() {
         return new ResolutionSelector.Builder()
-                .setAspectRatioStrategy(mAspectRatioStrategy)
-                .setResolutionStrategy(new ResolutionStrategy(mPreviewTargetSize, ResolutionStrategy.FALLBACK_RULE_CLOSEST_HIGHER_THEN_LOWER))
-                .setResolutionFilter((supportedSizes, rotationDegrees) -> {
-                    LogX.d("Preview supportedSizes: " + supportedSizes);
-                    List<Size> list = new ArrayList<>();
-                    for (Size supportedSize : supportedSizes) {
-                        int size = Math.min(supportedSize.getWidth(), supportedSize.getHeight());
-                        if (size <= mPreviewQuality) {
-                            list.add(supportedSize);
-                        }
+            .setAspectRatioStrategy(mAspectRatioStrategy)
+            .setResolutionStrategy(new ResolutionStrategy(mPreviewTargetSize, ResolutionStrategy.FALLBACK_RULE_CLOSEST_HIGHER_THEN_LOWER))
+            .setResolutionFilter((supportedSizes, rotationDegrees) -> {
+                LogX.d("Preview supportedSizes: " + supportedSizes);
+                List<Size> list = new ArrayList<>();
+                for (Size supportedSize : supportedSizes) {
+                    int size = Math.min(supportedSize.getWidth(), supportedSize.getHeight());
+                    if (size <= mPreviewQuality) {
+                        list.add(supportedSize);
                     }
-                    return list;
-                })
-                .build();
+                }
+                return list;
+            })
+            .build();
     }
 
     /**
@@ -147,19 +172,19 @@ public class AdaptiveCameraConfig extends CameraConfig {
      */
     private ResolutionSelector createAnalysisResolutionSelector() {
         return new ResolutionSelector.Builder()
-                .setAspectRatioStrategy(mAspectRatioStrategy)
-                .setResolutionStrategy(new ResolutionStrategy(mAnalysisTargetSize, ResolutionStrategy.FALLBACK_RULE_CLOSEST_HIGHER_THEN_LOWER))
-                .setResolutionFilter((supportedSizes, rotationDegrees) -> {
-                    LogX.d("ImageAnalysis supportedSizes: " + supportedSizes);
-                    List<Size> list = new ArrayList<>();
-                    for (Size supportedSize : supportedSizes) {
-                        int size = Math.min(supportedSize.getWidth(), supportedSize.getHeight());
-                        if (size <= mAnalysisQuality) {
-                            list.add(supportedSize);
-                        }
+            .setAspectRatioStrategy(mAspectRatioStrategy)
+            .setResolutionStrategy(new ResolutionStrategy(mAnalysisTargetSize, ResolutionStrategy.FALLBACK_RULE_CLOSEST_HIGHER_THEN_LOWER))
+            .setResolutionFilter((supportedSizes, rotationDegrees) -> {
+                LogX.d("ImageAnalysis supportedSizes: " + supportedSizes);
+                List<Size> list = new ArrayList<>();
+                for (Size supportedSize : supportedSizes) {
+                    int size = Math.min(supportedSize.getWidth(), supportedSize.getHeight());
+                    if (size <= mAnalysisQuality) {
+                        list.add(supportedSize);
                     }
-                    return list;
-                })
-                .build();
+                }
+                return list;
+            })
+            .build();
     }
 }

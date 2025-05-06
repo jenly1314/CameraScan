@@ -140,7 +140,7 @@ public abstract class BaseCameraScanFragment<T> extends Fragment implements Came
             if (PermissionUtils.checkPermission(requireContext(), Manifest.permission.CAMERA)) {
                 mCameraScan.startCamera();
             } else {
-                LogX.d("checkPermissionResult != PERMISSION_GRANTED");
+                LogX.d("Camera permission not granted, requesting permission.");
                 PermissionUtils.requestPermission(this, Manifest.permission.CAMERA, CAMERA_PERMISSION_REQUEST_CODE);
             }
         }
