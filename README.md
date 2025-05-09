@@ -2,7 +2,7 @@
 
 [![MavenCentral](https://img.shields.io/maven-central/v/com.github.jenly1314/camera-scan?logo=sonatype)](https://repo1.maven.org/maven2/com/github/jenly1314/camera-scan)
 [![JitPack](https://img.shields.io/jitpack/v/github/jenly1314/CameraScan?logo=jitpack)](https://jitpack.io/#jenly1314/CameraScan)
-[![CircleCI](https:///img.shields.io/circleci/build/github/jenly1314/CameraScan?logo=circleci)](https://circleci.com/gh/jenly1314/CameraScan)
+[![CircleCI](https:///img.shields.io/circleci/build/github/jenly1314/CameraScan?logo=circleci)](https://app.circleci.com/pipelines/github/jenly1314/CameraScan)
 [![Download](https://img.shields.io/badge/download-APK-brightgreen?logo=github)](https://raw.githubusercontent.com/jenly1314/CameraScan/master/app/release/app-release.apk)
 [![API](https://img.shields.io/badge/API-21%2B-brightgreen?logo=android)](https://developer.android.com/guide/topics/manifest/uses-sdk-element#ApiLevels)
 [![License](https://img.shields.io/github/license/jenly1314/CameraScan?logo=open-source-initiative)](https://opensource.org/licenses/apache-2-0)
