@@ -1,11 +1,11 @@
 # CameraScan
 
-[![Download](https://img.shields.io/badge/download-App-blue.svg)](https://raw.githubusercontent.com/jenly1314/CameraScan/master/app/release/app-release.apk)
-[![MavenCentral](https://img.shields.io/maven-central/v/com.github.jenly1314/camera-scan)](https://repo1.maven.org/maven2/com/github/jenly1314/camera-scan)
-[![JitPack](https://jitpack.io/v/jenly1314/CameraScan.svg)](https://jitpack.io/#jenly1314/CameraScan)
-[![CircleCI](https://circleci.com/gh/jenly1314/CameraScan.svg?style=svg)](https://circleci.com/gh/jenly1314/CameraScan)
-[![API](https://img.shields.io/badge/API-21%2B-blue.svg?style=flat)](https://android-arsenal.com/api?level=21)
-[![License](https://img.shields.io/badge/license-Apche%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
+[![MavenCentral](https://img.shields.io/maven-central/v/com.github.jenly1314/camera-scan?logo=sonatype)](https://repo1.maven.org/maven2/com/github/jenly1314/camera-scan)
+[![JitPack](https://img.shields.io/jitpack/v/github/jenly1314/CameraScan?logo=jitpack)](https://jitpack.io/#jenly1314/CameraScan)
+[![CircleCI](https:///img.shields.io/circleci/build/github/jenly1314/CameraScan?logo=circleci)](https://circleci.com/gh/jenly1314/CameraScan)
+[![Download](https://img.shields.io/badge/download-APK-brightgreen?logo=github)](https://raw.githubusercontent.com/jenly1314/CameraScan/master/app/release/app-release.apk)
+[![API](https://img.shields.io/badge/API-21%2B-brightgreen?logo=android)](https://developer.android.com/guide/topics/manifest/uses-sdk-element#ApiLevels)
+[![License](https://img.shields.io/github/license/jenly1314/CameraScan?logo=open-source-initiative)](https://opensource.org/licenses/apache-2-0)
 
 CameraScan for Android 是一个简化扫描识别流程的通用基础库。
 
