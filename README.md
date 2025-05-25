@@ -11,11 +11,9 @@ CameraScan for Android 是一个简化扫描识别流程的通用基础库。
 
 **CameraScan** 本身并不提供具体的分析识别功能，只是将相机预览、扫描分析等过程进行抽象分离，从而简化扫描识别功能的实现，你只需将 **CameraScan** 作为基础库，然后实现具体的识别业务，便可快速实现各种扫描识别相关功能。
 
-> 如果你之前有使用过 [ZXingLite](https://github.com/jenly1314/ZXingLite) 、[MLKit](https://github.com/jenly1314/MLKit) 或 [WeChatQRCode](https://github.com/jenly1314/WeChatQRCode)，可能会对 **CameraScan** 比较眼熟。现已将 **CameraScan** 独立出来，便于后续统一维护。
+> 最新发布的 [ZXingLite](https://github.com/jenly1314/ZXingLite)、[MLKit](https://github.com/jenly1314/MLKit) 和 [WeChatQRCode](https://github.com/jenly1314/WeChatQRCode) 版本现已统一使用 **CameraScan** 作为核心相机扫描基础库。
 
-> 以后 [ZXingLite](https://github.com/jenly1314/ZXingLite)、[MLKit](https://github.com/jenly1314/MLKit)、[WeChatQRCode](https://github.com/jenly1314/WeChatQRCode) 发布的新版本都将使用 **CameraScan** 作为相机扫描基础库。
-
-> [**CameraScan**](https://github.com/jenly1314/CameraScan) + [**ViewfinderView**](https://github.com/jenly1314/ViewfinderView) +（[ZXingLite](https://github.com/jenly1314/ZXingLite)、[MLKit](https://github.com/jenly1314/MLKit)、[WeChatQRCode](https://github.com/jenly1314/WeChatQRCode) 其中之一） = 完美搭配。
+> [CameraScan](https://github.com/jenly1314/CameraScan) + [ViewfinderView](https://github.com/jenly1314/ViewfinderView) +（[ZXingLite](https://github.com/jenly1314/ZXingLite)、[MLKit](https://github.com/jenly1314/MLKit)、[WeChatQRCode](https://github.com/jenly1314/WeChatQRCode) 其中之一） = 完美搭配。
 
 ## 引入
 
