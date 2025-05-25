@@ -46,13 +46,12 @@ CameraScan for Android 是一个简化扫描识别流程的通用基础库。
 
 ### 快速实现扫描识别主要有以下几种方式：
 
-> 1、通过继承 **BaseCameraScanActivity** 或者 **BaseCameraScanFragment** 或其子类，可快速实现扫描识别。
-> （适用于大多场景，自定义布局时需覆写 **getLayoutId** 方法）
+1. 通过继承 **BaseCameraScanActivity** 或者 **BaseCameraScanFragment** 或其子类，可快速实现扫描识别。（适用于大多场景，自定义布局时需覆写 **getLayoutId** 方法）
 
-> 2、在你项目的Activity或者Fragment中实例化一个 **BaseCameraScan**。（适用于想在扫描界面写交互逻辑，又因为项目
-> 架构或其它原因，无法直接或间接继承 **BaseCameraScanActivity** 或 **BaseCameraScanFragment** 时使用）
+2. 在你项目的Activity或者Fragment中实例化一个 **BaseCameraScan**。（适用于想在扫描界面写交互逻辑，又因为项目
+架构或其它原因，无法直接或间接继承 **BaseCameraScanActivity** 或 **BaseCameraScanFragment** 时使用）
 
-> 3、继承 **CameraScan** 自己实现一个，可参照默认实现类 **BaseCameraScan**，其他步骤同方式2。（高级用法，谨慎使用）
+3. 继承 **CameraScan** 自己实现一个，可参照默认实现类 **BaseCameraScan**，其他步骤同方式2。（高级用法，谨慎使用）
 
 ### 关于 CameraScan
 
@@ -62,18 +61,16 @@ CameraScan for Android 是一个简化扫描识别流程的通用基础库。
 
 主要是相机相关的配置；如：摄像头的前置后置、相机预览相关、图像分析相关等配置。
 
-> CameraConfig中提供的可配置项：`CameraSelector.Builder`、`Preview.Builder`、`ImageAnalysis.Builder`；
+> CameraConfig中提供的可配置项主要有：`CameraSelector.Builder`、`Preview.Builder` 和 `ImageAnalysis.Builder`。
 
-> 你可以直接库中内置实现的相机配置： **CameraConfig** 、**AspectRatioCameraConfig** 和 **ResolutionCameraConfig**。
-
-#### 这里简单说下各自的特点：
+#### 这里简单说下`CameraConfig`和其子类各自的特点：
 
 * **CameraConfig**：CameraX默认的相机配置。
 * **AdaptiveCameraConfig**：自适应相机配置：主要是根据纵横比和设备屏幕的分辨率找到与相机之间合适的相机配置（v1.1.0新增）
 * ~~**AspectRatioCameraConfig**：根据纵横比配置相机，使输出分析的图像尽可能的接近屏幕的比例~~（已废弃）
 * ~~**ResolutionCameraConfig**：根据尺寸配置相机的目标图像大小，使输出分析的图像的分辨率尽可能的接近屏幕尺寸~~（已废弃）
 
-> 你也可以自定义或覆写 **CameraConfig** 中的 **options** 方法，根据需要定制配置。
+> 你也可以覆写`CameraConfig`或其子类中的 **options** 方法，根据需要修改相机配置。
 
 这里特别温馨提示：默认配置在未配置相机的目标分析图像大小时，会优先使用：横屏：640 * 480 竖屏：480 * 640；
 
