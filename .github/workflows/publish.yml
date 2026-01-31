@@ -1,16 +1,12 @@
 name: publish
 
 on:
-  push:
-    tags:
-      - '**'
-
   workflow_dispatch:
     inputs:
       confirm:
-        description: 'Type "yes" to publish to Maven Central'
+        description: 'Enter "yes" to publish'
         required: true
-        default: 'no'
+        default: ''
         type: string
 
 env:
@@ -19,7 +15,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: ${{ github.repository == 'jenly1314/CameraScan' && (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.confirm == 'yes')) }}
+    if: ${{ github.repository == 'jenly1314/CameraScan' && github.event_name == 'workflow_dispatch' && github.event.inputs.confirm == 'yes' }}
 
     steps:
       - name: Checkout
