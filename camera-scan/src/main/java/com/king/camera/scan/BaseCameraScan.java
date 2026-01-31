@@ -340,6 +340,13 @@ public class BaseCameraScan<T> extends CameraScan<T> {
                     }
                     image.close();
                 });
+
+                if(mAnalyzer != null) {
+                    LogX.d("Analyzer: %s", mAnalyzer.getClass().getName());
+                } else {
+                    LogX.w("Analyzer is null");
+                }
+
                 if (mCamera != null) {
                     mCameraProviderFuture.get().unbindAll();
                 }

@@ -1,5 +1,12 @@
 ## 版本日志
 
+#### v1.4.0：2026-01-31
+* 更新CameraX相关依赖至v1.5.3
+* 更新minSdk至23
+* 更新compileSdk至35
+* 更新Gradle至v8.13
+* 优化细节
+
 #### v1.3.1：2025-05-06
 * 更新CameraX相关依赖至v1.4.2
 * 更新[LogX](https://github.com/jenly1314/LogX)依赖至v1.2.0

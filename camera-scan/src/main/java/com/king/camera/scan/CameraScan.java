@@ -181,7 +181,7 @@ public abstract class CameraScan<T> implements ICamera, ICameraControl {
     /**
      * 绑定手电筒，绑定后可根据光照传感器，动态显示或隐藏手电筒。
      *
-     * @param v 手电筒视图
+     * @param v 手电筒视图；传空表示不绑定
      * @return {@link CameraScan}
      */
     public abstract CameraScan<T> bindFlashlightView(@Nullable View v);

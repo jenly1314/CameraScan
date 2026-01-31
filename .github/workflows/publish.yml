@@ -1,0 +1,44 @@
+name: publish
+
+on:
+  push:
+    tags:
+      - '**'
+
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type "yes" to publish to Maven Central'
+        required: true
+        default: 'no'
+        type: string
+
+env:
+  GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4g -Dorg.gradle.daemon=false -Dkotlin.incremental=false"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: ${{ github.repository == 'jenly1314/CameraScan' && (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.confirm == 'yes')) }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'zulu'
+          java-version-file: .github/workflows/.java-version
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v5
+
+      - name: Upload Artifacts
+        run: ./gradlew clean publish --stacktrace
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.GPG_PRIVATE_KEY }}

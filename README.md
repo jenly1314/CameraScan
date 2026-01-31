@@ -4,16 +4,16 @@
 [![JitPack](https://img.shields.io/jitpack/v/github/jenly1314/CameraScan?logo=jitpack)](https://jitpack.io/#jenly1314/CameraScan)
 [![CI](https://img.shields.io/github/actions/workflow/status/jenly1314/CameraScan/build.yml?logo=github)](https://github.com/jenly1314/CameraScan/actions/workflows/build.yml)
 [![Download](https://img.shields.io/badge/download-APK-brightgreen?logo=github)](https://raw.githubusercontent.com/jenly1314/CameraScan/master/app/release/app-release.apk)
-[![API](https://img.shields.io/badge/API-21%2B-brightgreen?logo=android)](https://developer.android.com/guide/topics/manifest/uses-sdk-element#ApiLevels)
+[![API](https://img.shields.io/badge/API-23%2B-brightgreen?logo=android)](https://developer.android.com/guide/topics/manifest/uses-sdk-element#ApiLevels)
 [![License](https://img.shields.io/github/license/jenly1314/CameraScan?logo=open-source-initiative)](https://opensource.org/licenses/apache-2-0)
 
 CameraScan for Android 是一个简化扫描识别流程的通用基础库。
 
 **CameraScan** 本身并不提供具体的分析识别功能，只是将相机预览、扫描分析等过程进行抽象分离，从而简化扫描识别功能的实现，你只需将 **CameraScan** 作为基础库，然后实现具体的识别业务，便可快速实现各种扫描识别相关功能。
 
-> 最新发布的 [ZXingLite](https://github.com/jenly1314/ZXingLite)、[MLKit](https://github.com/jenly1314/MLKit) 和 [WeChatQRCode](https://github.com/jenly1314/WeChatQRCode) 版本现已统一使用 **CameraScan** 作为核心相机扫描基础库。
+> 在 [ZXingLite](https://github.com/jenly1314/ZXingLite)、[MLKit](https://github.com/jenly1314/MLKit)、[WeChatQRCode](https://github.com/jenly1314/WeChatQRCode) 发布的新版本中都使用了 **CameraScan** 作为相机扫描基础库。
 
-> [CameraScan](https://github.com/jenly1314/CameraScan) + [ViewfinderView](https://github.com/jenly1314/ViewfinderView) +（[ZXingLite](https://github.com/jenly1314/ZXingLite)、[MLKit](https://github.com/jenly1314/MLKit)、[WeChatQRCode](https://github.com/jenly1314/WeChatQRCode) 其中之一） = 完美搭配。
+> [**CameraScan**](https://github.com/jenly1314/CameraScan) + [**ViewfinderView**](https://github.com/jenly1314/ViewfinderView) +（[ZXingLite](https://github.com/jenly1314/ZXingLite)、[MLKit](https://github.com/jenly1314/MLKit)、[WeChatQRCode](https://github.com/jenly1314/WeChatQRCode) 其中之一） = 完美搭配。
 
 ## 引入
 
@@ -31,27 +31,30 @@ CameraScan for Android 是一个简化扫描识别流程的通用基础库。
 2. 在Module的 **build.gradle** 中添加依赖项
 
     ```gradle
-    implementation 'com.github.jenly1314:camera-scan:1.3.1'
+    implementation 'com.github.jenly1314:camera-scan:1.4.0'
     ```
 
 ### 温馨提示
 
 #### 关于CameraScan版本与编译的SDK版本要求
 
-> 使用 **v1.1.x** 以上版本时，要求 **compileSdkVersion >= 34**
+> 使用 **v1.4.x** 以上版本时，要求 **compileSdk >= 35**
 
-> 使用 **v1.0.x** 以上版本时，要求 **compileSdkVersion >= 33**
+> 使用 **v1.1.x** 以上版本时，要求 **compileSdk >= 34**
+
+> 使用 **v1.0.x** 以上版本时，要求 **compileSdk >= 33**
 
 ## 使用
 
 ### 快速实现扫描识别主要有以下几种方式：
 
-1. 通过继承 **BaseCameraScanActivity** 或者 **BaseCameraScanFragment** 或其子类，可快速实现扫描识别。（适用于大多场景，自定义布局时需覆写 **getLayoutId** 方法）
+> 1、通过继承 **BaseCameraScanActivity** 或者 **BaseCameraScanFragment** 或其子类，可快速实现扫描识别。
+> （适用于大多场景，自定义布局时需覆写 **getLayoutId** 方法）
 
-2. 在你项目的Activity或者Fragment中实例化一个 **BaseCameraScan**。（适用于想在扫描界面写交互逻辑，又因为项目
-架构或其它原因，无法直接或间接继承 **BaseCameraScanActivity** 或 **BaseCameraScanFragment** 时使用）
+> 2、在你项目的Activity或者Fragment中实例化一个 **BaseCameraScan**。（适用于想在扫描界面写交互逻辑，又因为项目
+> 架构或其它原因，无法直接或间接继承 **BaseCameraScanActivity** 或 **BaseCameraScanFragment** 时使用）
 
-3. 继承 **CameraScan** 自己实现一个，可参照默认实现类 **BaseCameraScan**，其他步骤同方式2。（高级用法，谨慎使用）
+> 3、继承 **CameraScan** 自己实现一个，可参照默认实现类 **BaseCameraScan**，其他步骤同方式2。（高级用法，谨慎使用）
 
 ### 关于 CameraScan
 
@@ -61,16 +64,18 @@ CameraScan for Android 是一个简化扫描识别流程的通用基础库。
 
 主要是相机相关的配置；如：摄像头的前置后置、相机预览相关、图像分析相关等配置。
 
-> CameraConfig中提供的可配置项主要有：`CameraSelector.Builder`、`Preview.Builder` 和 `ImageAnalysis.Builder`。
+> CameraConfig中提供的可配置项：`CameraSelector.Builder`、`Preview.Builder`、`ImageAnalysis.Builder`；
 
-#### 这里简单说下`CameraConfig`和其子类各自的特点：
+> 你可以直接库中内置实现的相机配置： **CameraConfig** 、**AspectRatioCameraConfig** 和 **ResolutionCameraConfig**。
 
-* **CameraConfig**：CameraX默认的相机配置。
+#### 这里简单说下各自的特点：
+
+* **CameraConfig**：CameraX默认的相机配置（基类）。
 * **AdaptiveCameraConfig**：自适应相机配置：主要是根据纵横比和设备屏幕的分辨率找到与相机之间合适的相机配置（v1.1.0新增）
 * ~~**AspectRatioCameraConfig**：根据纵横比配置相机，使输出分析的图像尽可能的接近屏幕的比例~~（已废弃）
 * ~~**ResolutionCameraConfig**：根据尺寸配置相机的目标图像大小，使输出分析的图像的分辨率尽可能的接近屏幕尺寸~~（已废弃）
 
-> 你也可以覆写`CameraConfig`或其子类中的 **options** 方法，根据需要修改相机配置。
+> 你也可以自定义或覆写 **CameraConfig** 中的 **options** 方法，根据需要定制配置。
 
 这里特别温馨提示：默认配置在未配置相机的目标分析图像大小时，会优先使用：横屏：640 * 480 竖屏：480 * 640；
 
@@ -135,7 +140,7 @@ cameraScan.setPlayBeep(true) // 设置是否播放音效，默认为false
     .setNeedTouchZoom(true) // 支持多指触摸捏合缩放，默认为true
     .setDarkLightLux(45f) // 设置光线足够暗的阈值（单位：lux），需要通过{@link #bindFlashlightView(View)}绑定手电筒才有效
     .setBrightLightLux(100f) // 设置光线足够明亮的阈值（单位：lux），需要通过{@link #bindFlashlightView(View)}绑定手电筒才有效
-    .bindFlashlightView(ivFlashlight) // 绑定手电筒，绑定后可根据光线传感器，动态显示或隐藏手电筒按钮
+    .bindFlashlightView(ivFlashlight) // 绑定手电筒，绑定后可根据光线传感器，动态显示或隐藏手电筒按钮；（传空表示不绑定）
     .setOnScanResultCallback(this) // 设置扫描结果回调，需要自己处理或者需要连扫时，可设置回调，自己去处理相关逻辑
     .setAnalyzeImage(true); // 设置是否分析图片，默认为true。如果设置为false，相当于关闭了扫描识别功能
 
@@ -291,15 +296,16 @@ BaseCameraScanActivity和BaseCameraScanFragment使用的默认布局：
 
 ## 版本日志
 
-#### v1.3.1：2025-05-06
-* 更新CameraX相关依赖至v1.4.2
-* 更新[LogX](https://github.com/jenly1314/LogX)依赖至v1.2.0
+#### v1.4.0：2026-01-31
+* 更新CameraX相关依赖至v1.5.3
+* 更新minSdk至23
+* 更新compileSdk至35
+* 更新Gradle至v8.13
 * 优化细节
+
 
 #### [查看更多版本日志](CHANGELOG.md)
 
 ---
 
 ![footer](https://jenly1314.github.io/page/footer.svg)
-
-
