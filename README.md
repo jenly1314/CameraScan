@@ -38,11 +38,11 @@ CameraScan for Android 是一个简化扫描识别流程的通用基础库。
 
 #### 关于CameraScan版本与编译的SDK版本要求
 
-> 使用 **v1.4.x** 以上版本时，要求 **compileSdk ≥ 35**
+> 使用 **v1.4.0** 及以上版本时，要求 **compileSdk ≥ 35**
 
-> 使用 **v1.1.x** 以上版本时，要求 **compileSdk ≥ 34**
+> 使用 **v1.1.0** 及以上版本时，要求 **compileSdk ≥ 34**
 
-> 使用 **v1.0.x** 以上版本时，要求 **compileSdk ≥ 33**
+> 使用 **v1.0.0** 及以上版本时，要求 **compileSdk ≥ 33**
 
 ## 使用
 
