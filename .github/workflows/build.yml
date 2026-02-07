@@ -8,6 +8,6 @@ on:
 
 jobs:
   build:
-    uses: jenly1314/actions/.github/workflows/reusable-build.yml@1
+    uses: jenly1314/actions/.github/workflows/reusable-build.yml@main
     with:
       java-version-file: '.github/workflows/.java-version'

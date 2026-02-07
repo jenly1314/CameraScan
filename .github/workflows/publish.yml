@@ -11,7 +11,7 @@ on:
 jobs:
   publish:
     if: ${{ startsWith(github.repository, 'jenly1314/') && github.event_name == 'workflow_dispatch' && github.event.inputs.confirm == 'yes' }}
-    uses: jenly1314/actions/.github/workflows/reusable-publish.yml@v1
+    uses: jenly1314/actions/.github/workflows/reusable-publish.yml@main
     with:
       java-version-file: '.github/workflows/.java-version'
     secrets:

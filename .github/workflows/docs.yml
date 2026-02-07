@@ -4,8 +4,13 @@ on:
   push:
     branches: [ master ]
 
+permissions:
+  contents: write
+  id-token: write
+  pages: write
+
 jobs:
   docs:
-    uses: jenly1314/actions/.github/workflows/reusable-docs.yml@v1
+    uses: jenly1314/actions/.github/workflows/reusable-docs.yml@main
     with:
       java-version-file: '.github/workflows/.java-version'
