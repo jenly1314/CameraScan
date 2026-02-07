@@ -11,6 +11,6 @@ jobs:
       id-token: write
       pages: write
     if: github.ref == 'refs/heads/master'
-    uses: jenly1314/actions/.github/workflows/reusable-docs.yml@main
+    uses: jenly1314/actions/.github/workflows/reusable-docs.yml@v1
     with:
       java-version-file: '.github/workflows/.java-version'

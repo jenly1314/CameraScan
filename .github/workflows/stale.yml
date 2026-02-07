@@ -10,4 +10,4 @@ jobs:
       actions: write
       issues: write
       pull-requests: write
-    uses: jenly1314/actions/.github/workflows/reusable-stale.yml@main
+    uses: jenly1314/actions/.github/workflows/reusable-stale.yml@v1
