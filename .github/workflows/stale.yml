@@ -1,0 +1,9 @@
+name: Cleanup Stale
+
+on:
+  schedule:
+    - cron: '0 16 * * *'
+
+jobs:
+  stale:
+    uses: jenly1314/actions/.github/workflows/reusable-stale.yml@v1
