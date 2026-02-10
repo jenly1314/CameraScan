@@ -61,7 +61,18 @@ public final class BeepManager implements MediaPlayer.OnErrorListener, Closeable
 
     private synchronized void updatePrefs() {
         if (mediaPlayer == null) {
-            mediaPlayer = buildMediaPlayer(context);
+            new Thread(() -> {
+                MediaPlayer mp = buildMediaPlayer(context);
+                synchronized (BeepManager.this) {
+                    if (mp != null) {
+                        if (mediaPlayer == null) {
+                            mediaPlayer = mp;
+                        } else {
+                            mp.release();
+                        }
+                    }
+                }
+            }).start();
         }
         if (vibrator == null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
