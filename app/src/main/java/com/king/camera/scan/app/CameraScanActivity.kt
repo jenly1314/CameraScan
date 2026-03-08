@@ -1,5 +1,6 @@
 package com.king.camera.scan.app
 
+import android.media.SoundPool
 import android.os.Build
 import android.view.View
 import androidx.camera.core.CameraSelector
@@ -20,11 +21,15 @@ class CameraScanActivity : BaseCameraScanActivity<Unit>() {
 
     private var isFront = false
 
+    private lateinit var mSoundPool: SoundPool
+    private var soundId = 0
     /**
      * 初始化CameraScan
      */
     override fun initCameraScan(cameraScan: CameraScan<Unit>) {
         super.initCameraScan(cameraScan)
+        mSoundPool = SoundPool.Builder().build()
+        soundId = mSoundPool.load(this, com.king.camera.scan.R.raw.camera_scan_beep, 1);
         // 根据需要修改CameraScan相关配置
         cameraScan.setPlayBeep(true) // 设置是否播放音效，默认为false
             .setVibrate(true) // 设置是否震动，默认为false
@@ -37,6 +42,9 @@ class CameraScanActivity : BaseCameraScanActivity<Unit>() {
             .setAnalyzeImage(false) // 设置是否分析图片，默认为true。如果设置为false，相当于关闭了扫描识别功能
     }
 
+    override fun toggleTorchState() {
+        super.toggleTorchState()
+    }
     /**
      * 布局ID；通过覆写此方法可以自定义布局
      *
@@ -76,6 +84,7 @@ class CameraScanActivity : BaseCameraScanActivity<Unit>() {
         } else {
             CameraSelector.LENS_FACING_BACK
         }
+
         cameraScan.setCameraConfig(
             CameraConfigFactory.createDefaultCameraConfig(this, lensFacing)
         )

@@ -18,6 +18,7 @@ package com.king.camera.scan.manager;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.os.Build;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
@@ -41,6 +42,8 @@ public final class BeepManager implements MediaPlayer.OnErrorListener, Closeable
 
     private final Context context;
     private MediaPlayer mediaPlayer;
+    private SoundPool mSoundPool;
+    private int soundId = 0;
     private Vibrator vibrator;
     private boolean playBeep;
     private boolean vibrate;
@@ -63,6 +66,10 @@ public final class BeepManager implements MediaPlayer.OnErrorListener, Closeable
         if (mediaPlayer == null) {
             mediaPlayer = buildMediaPlayer(context);
         }
+        if(mSoundPool == null) {
+            mSoundPool = new SoundPool.Builder().build();
+            soundId = mSoundPool.load(context, R.raw.camera_scan_beep, 1);
+        }
         if (vibrator == null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 vibrator = ((VibratorManager) context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE)).getDefaultVibrator();
@@ -73,8 +80,11 @@ public final class BeepManager implements MediaPlayer.OnErrorListener, Closeable
     }
 
     public synchronized void playBeepSoundAndVibrate() {
-        if (playBeep && mediaPlayer != null) {
-            mediaPlayer.start();
+//        if (playBeep && mediaPlayer != null) {
+//            mediaPlayer.start();
+//        }
+        if (playBeep && mSoundPool != null) {
+            mSoundPool.play(soundId, 1f, 1f, 1, 0, 1f);
         }
         if (vibrate && vibrator != null && vibrator.hasVibrator()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -114,6 +124,10 @@ public final class BeepManager implements MediaPlayer.OnErrorListener, Closeable
             if (mediaPlayer != null) {
                 mediaPlayer.release();
                 mediaPlayer = null;
+            }
+            if(mSoundPool != null) {
+                mSoundPool.release();
+                mSoundPool = null;
             }
         } catch (Exception e) {
             LogX.w(e);
