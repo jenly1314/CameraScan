@@ -5,7 +5,6 @@ import android.util.DisplayMetrics;
 import android.util.Size;
 
 import androidx.annotation.NonNull;
-import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageAnalysis;
 import androidx.camera.core.Preview;
 import androidx.camera.core.resolutionselector.AspectRatioStrategy;
@@ -45,12 +44,17 @@ public class AdaptiveCameraConfig extends CameraConfig {
      */
     private static final int IMAGE_QUALITY_480P = 480;
 
+    /**
+     * 允许的尺寸偏差比例 15%
+     */
+    private static final float ALLOWED_DEVIATION_RATIO = 0.15f;
+
     private AspectRatioStrategy mAspectRatioStrategy;
 
-    private int mPreviewQuality;
-    private int mAnalysisQuality;
     private Size mPreviewTargetSize;
     private Size mAnalysisTargetSize;
+    private int mPreviewQuality;
+    private int mAnalysisQuality;
 
     /**
      * 构造
@@ -73,118 +77,91 @@ public class AdaptiveCameraConfig extends CameraConfig {
         LogX.d("displayMetrics: %dx%d", width, height);
         int processors = Runtime.getRuntime().availableProcessors();
         LogX.d("processors: %d", processors);
-        if (width < height) {
-            float ratio = height / (float) width;
-            if (Math.abs(ratio - CameraScan.ASPECT_RATIO_4_3) < Math.abs(ratio - CameraScan.ASPECT_RATIO_16_9)) {
-                mAspectRatioStrategy = AspectRatioStrategy.RATIO_4_3_FALLBACK_AUTO_STRATEGY;
-            } else {
-                mAspectRatioStrategy = AspectRatioStrategy.RATIO_16_9_FALLBACK_AUTO_STRATEGY;
-            }
 
-            if (width >= IMAGE_QUALITY_1080P) {
-                mPreviewQuality = IMAGE_QUALITY_1080P;
-            } else {
-                mPreviewQuality = Math.max(width, IMAGE_QUALITY_720P);
-            }
-            mPreviewTargetSize = new Size(mPreviewQuality, Math.round(mPreviewQuality * ratio));
+        int shortSide = Math.min(width, height);
+        int longSide = Math.max(width, height);
+        float ratio = longSide / (float) shortSide;
 
-            if (width >= IMAGE_QUALITY_1440P && processors >= 8) {
-                mAnalysisQuality = IMAGE_QUALITY_1080P;
-            } else if (width > IMAGE_QUALITY_720P) {
-                mAnalysisQuality = IMAGE_QUALITY_720P;
-            } else {
-                mAnalysisQuality = IMAGE_QUALITY_480P;
-            }
-            mAnalysisTargetSize = new Size(mAnalysisQuality, Math.round(mAnalysisQuality * ratio));
+        if (Math.abs(ratio - CameraScan.ASPECT_RATIO_4_3) < Math.abs(ratio - CameraScan.ASPECT_RATIO_16_9)) {
+            mAspectRatioStrategy = AspectRatioStrategy.RATIO_4_3_FALLBACK_AUTO_STRATEGY;
         } else {
-            float ratio = width / (float) height;
-            if (Math.abs(ratio - CameraScan.ASPECT_RATIO_4_3) < Math.abs(ratio - CameraScan.ASPECT_RATIO_16_9)) {
-                mAspectRatioStrategy = AspectRatioStrategy.RATIO_4_3_FALLBACK_AUTO_STRATEGY;
-            } else {
-                mAspectRatioStrategy = AspectRatioStrategy.RATIO_16_9_FALLBACK_AUTO_STRATEGY;
-            }
-
-            if (height >= IMAGE_QUALITY_1080P) {
-                mPreviewQuality = IMAGE_QUALITY_1080P;
-            } else {
-                mPreviewQuality = Math.max(height, IMAGE_QUALITY_720P);
-            }
-            mPreviewTargetSize = new Size(Math.round(mPreviewQuality * ratio), mPreviewQuality);
-
-            if (height >= IMAGE_QUALITY_1440P && processors >= 8) {
-                mAnalysisQuality = IMAGE_QUALITY_1080P;
-            } else if (height > IMAGE_QUALITY_720P) {
-                mAnalysisQuality = IMAGE_QUALITY_720P;
-            } else {
-                mAnalysisQuality = IMAGE_QUALITY_480P;
-            }
-            mAnalysisTargetSize = new Size(Math.round(mAnalysisQuality * ratio), mAnalysisQuality);
+            mAspectRatioStrategy = AspectRatioStrategy.RATIO_16_9_FALLBACK_AUTO_STRATEGY;
         }
-    }
 
-    @NonNull
-    @Override
-    public CameraSelector options(@NonNull CameraSelector.Builder builder) {
-        return super.options(builder);
+        if (shortSide >= IMAGE_QUALITY_1080P) {
+            mPreviewQuality = IMAGE_QUALITY_1080P;
+        } else {
+            mPreviewQuality = Math.max(shortSide, IMAGE_QUALITY_720P);
+        }
+
+        mPreviewTargetSize = new Size(Math.round(mPreviewQuality * ratio), mPreviewQuality);
+
+        if (shortSide >= IMAGE_QUALITY_1440P && processors >= 8) {
+            mAnalysisQuality = IMAGE_QUALITY_1080P;
+        } else if (shortSide > IMAGE_QUALITY_720P) {
+            mAnalysisQuality = IMAGE_QUALITY_720P;
+        } else {
+            mAnalysisQuality = IMAGE_QUALITY_480P;
+        }
+
+        mAnalysisTargetSize = new Size(Math.round(mAnalysisQuality * ratio), mAnalysisQuality);
+
+        LogX.d("Preview target: %s, Analysis target: %s", mPreviewTargetSize, mAnalysisTargetSize);
     }
 
     @NonNull
     @Override
     public Preview options(@NonNull Preview.Builder builder) {
-        builder.setResolutionSelector(createPreviewResolutionSelector());
+        builder.setResolutionSelector(createResolutionSelector("Preview", mPreviewTargetSize, mPreviewQuality));
         return super.options(builder);
     }
 
     @NonNull
     @Override
     public ImageAnalysis options(@NonNull ImageAnalysis.Builder builder) {
-        builder.setResolutionSelector(createAnalysisResolutionSelector());
+        builder.setResolutionSelector(createResolutionSelector("ImageAnalysis", mAnalysisTargetSize, mAnalysisQuality));
         return super.options(builder);
     }
 
     /**
-     * 创建预览 分辨率选择器；根据自适应策略，创建一个合适的 {@link ResolutionSelector}
+     * 创建分辨率选择器；根据自适应策略，创建一个合适的 {@link ResolutionSelector}
      *
      * @return {@link ResolutionSelector}
      */
-    private ResolutionSelector createPreviewResolutionSelector() {
+    private ResolutionSelector createResolutionSelector(String tag, Size targetSize, int quality) {
         return new ResolutionSelector.Builder()
             .setAspectRatioStrategy(mAspectRatioStrategy)
-            .setResolutionStrategy(new ResolutionStrategy(mPreviewTargetSize, ResolutionStrategy.FALLBACK_RULE_CLOSEST_HIGHER_THEN_LOWER))
+            .setResolutionStrategy(new ResolutionStrategy(targetSize, ResolutionStrategy.FALLBACK_RULE_CLOSEST_HIGHER_THEN_LOWER))
             .setResolutionFilter((supportedSizes, rotationDegrees) -> {
-                LogX.d("Preview supportedSizes: " + supportedSizes);
-                List<Size> list = new ArrayList<>();
-                for (Size supportedSize : supportedSizes) {
-                    int size = Math.min(supportedSize.getWidth(), supportedSize.getHeight());
-                    if (size <= mPreviewQuality) {
-                        list.add(supportedSize);
-                    }
-                }
-                return list;
+                LogX.d("%s supportedSizes: %s", tag, supportedSizes);
+                return filterResolutions(supportedSizes, quality);
             })
             .build();
     }
 
     /**
-     * 创建分析 分辨率选择器；根据自适应策略，创建一个合适的 {@link ResolutionSelector}
-     *
-     * @return {@link ResolutionSelector}
+     * 过滤分辨率
      */
-    private ResolutionSelector createAnalysisResolutionSelector() {
-        return new ResolutionSelector.Builder()
-            .setAspectRatioStrategy(mAspectRatioStrategy)
-            .setResolutionStrategy(new ResolutionStrategy(mAnalysisTargetSize, ResolutionStrategy.FALLBACK_RULE_CLOSEST_HIGHER_THEN_LOWER))
-            .setResolutionFilter((supportedSizes, rotationDegrees) -> {
-                LogX.d("ImageAnalysis supportedSizes: " + supportedSizes);
-                List<Size> list = new ArrayList<>();
-                for (Size supportedSize : supportedSizes) {
-                    int size = Math.min(supportedSize.getWidth(), supportedSize.getHeight());
-                    if (size <= mAnalysisQuality) {
-                        list.add(supportedSize);
-                    }
-                }
-                return list;
-            })
-            .build();
+    private List<Size> filterResolutions(List<Size> supportedSizes, int targetQuality) {
+        List<Size> list = new ArrayList<>();
+        int minAcceptable = Math.round(targetQuality * (1 - ALLOWED_DEVIATION_RATIO));
+        int maxAcceptable = Math.round(targetQuality * (1 + ALLOWED_DEVIATION_RATIO));
+
+        for (Size supportedSize : supportedSizes) {
+            int size = Math.min(supportedSize.getWidth(), supportedSize.getHeight());
+            if (size >= minAcceptable && size <= maxAcceptable) {
+                list.add(supportedSize);
+            }
+        }
+
+        LogX.d("Filtered resolutions for target %d (%d~%d): %s",
+            targetQuality, minAcceptable, maxAcceptable, list);
+
+        if (list.isEmpty()) {
+            LogX.w("No suitable resolution found, returning all supported sizes");
+            return supportedSizes;
+        }
+
+        return list;
     }
 }
