@@ -1,6 +1,5 @@
 package com.king.camera.scan.app
 
-import android.media.SoundPool
 import android.os.Build
 import android.view.View
 import androidx.camera.core.CameraSelector
@@ -21,15 +20,11 @@ class CameraScanActivity : BaseCameraScanActivity<Unit>() {
 
     private var isFront = false
 
-    private lateinit var mSoundPool: SoundPool
-    private var soundId = 0
     /**
      * 初始化CameraScan
      */
     override fun initCameraScan(cameraScan: CameraScan<Unit>) {
         super.initCameraScan(cameraScan)
-        mSoundPool = SoundPool.Builder().build()
-        soundId = mSoundPool.load(this, com.king.camera.scan.R.raw.camera_scan_beep, 1);
         // 根据需要修改CameraScan相关配置
         cameraScan.setPlayBeep(true) // 设置是否播放音效，默认为false
             .setVibrate(true) // 设置是否震动，默认为false
@@ -72,6 +67,10 @@ class CameraScanActivity : BaseCameraScanActivity<Unit>() {
         } else {
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         }
+    }
+
+    override fun onClickFlashlight() {
+        super.onClickFlashlight()
     }
 
     /**

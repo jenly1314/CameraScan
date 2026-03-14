@@ -31,7 +31,7 @@ CameraScan for Android 是一个简化扫描识别流程的通用基础库。
 2. 在Module的 **build.gradle** 中添加依赖项
 
     ```gradle
-    implementation 'com.github.jenly1314:camera-scan:1.4.0'
+    implementation 'com.github.jenly1314:camera-scan:1.4.1'
     ```
 
 ### 温馨提示
@@ -296,13 +296,10 @@ BaseCameraScanActivity和BaseCameraScanFragment使用的默认布局：
 
 ## 版本日志
 
-#### v1.4.0：2026-01-31
-* 更新CameraX相关依赖至v1.5.3
-* 更新minSdk至23
-* 更新compileSdk至35
-* 更新Gradle至v8.13
-* 优化细节
-
+#### v1.4.1：2026-03-14
+- 内部权限请求改用新方式`ActivityResultLauncher`
+- 优化`AdaptiveCameraConfig`内部分辨率匹配策略
+- 优化`BeepManager`内部播放音效实现细节
 
 #### [查看更多版本日志](CHANGELOG.md)
 

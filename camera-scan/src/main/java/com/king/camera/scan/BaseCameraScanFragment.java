@@ -25,6 +25,8 @@ import com.king.camera.scan.analyze.Analyzer;
 import com.king.camera.scan.util.PermissionUtils;
 import com.king.logx.LogX;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.camera.view.PreviewView;
@@ -72,6 +74,17 @@ public abstract class BaseCameraScanFragment<T> extends Fragment implements Came
      */
     private CameraScan<T> mCameraScan;
 
+    private ActivityResultLauncher<String> mRequestPermissionLauncher;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mRequestPermissionLauncher = registerForActivityResult(
+            new ActivityResultContracts.RequestPermission(),
+            this::requestCameraPermissionResult
+        );
+    }
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (isContentView()) {
@@ -108,8 +121,8 @@ public abstract class BaseCameraScanFragment<T> extends Fragment implements Came
      */
     public void initCameraScan(@NonNull CameraScan<T> cameraScan) {
         cameraScan.setAnalyzer(createAnalyzer())
-                .bindFlashlightView(ivFlashlight)
-                .setOnScanResultCallback(this);
+            .bindFlashlightView(ivFlashlight)
+            .setOnScanResultCallback(this);
     }
 
     /**
@@ -141,8 +154,10 @@ public abstract class BaseCameraScanFragment<T> extends Fragment implements Came
                 mCameraScan.startCamera();
             } else {
                 LogX.d("Camera permission not granted, requesting permission.");
-                PermissionUtils.requestPermission(this, Manifest.permission.CAMERA, CAMERA_PERMISSION_REQUEST_CODE);
+                mRequestPermissionLauncher.launch(Manifest.permission.CAMERA);
             }
+        } else {
+            LogX.w("startCamera failed: mCameraScan is null");
         }
     }
 
@@ -155,24 +170,16 @@ public abstract class BaseCameraScanFragment<T> extends Fragment implements Came
         }
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
-            requestCameraPermissionResult(permissions, grantResults);
-        }
-    }
-
     /**
      * 请求Camera权限回调结果
      *
-     * @param permissions  权限
-     * @param grantResults 授权结果
      */
-    public void requestCameraPermissionResult(@NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (PermissionUtils.requestPermissionsResult(Manifest.permission.CAMERA, permissions, grantResults)) {
-            startCamera();
+    protected void requestCameraPermissionResult(Boolean granted) {
+        if (granted) {
+            LogX.d("Camera permission granted, starting camera");
+            mCameraScan.startCamera();
         } else {
+            LogX.w("Camera permission denied, finishing activity");
             requireActivity().finish();
         }
     }

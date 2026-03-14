@@ -19,14 +19,16 @@ import android.Manifest;
 import android.os.Bundle;
 import android.view.View;
 
-import com.king.camera.scan.analyze.Analyzer;
-import com.king.camera.scan.util.PermissionUtils;
-import com.king.logx.LogX;
-
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.view.PreviewView;
+
+import com.king.camera.scan.analyze.Analyzer;
+import com.king.camera.scan.util.PermissionUtils;
+import com.king.logx.LogX;
 
 /**
  * 相机扫描基类；{@link BaseCameraScanActivity} 内部持有{@link CameraScan}，便于快速实现扫描识别。
@@ -48,10 +50,6 @@ import androidx.camera.view.PreviewView;
 public abstract class BaseCameraScanActivity<T> extends AppCompatActivity implements CameraScan.OnScanResultCallback<T> {
 
     /**
-     * 相机权限请求代码
-     */
-    private static final int CAMERA_PERMISSION_REQUEST_CODE = 0x86;
-    /**
      * 预览视图
      */
     protected PreviewView previewView;
@@ -64,13 +62,21 @@ public abstract class BaseCameraScanActivity<T> extends AppCompatActivity implem
      */
     private CameraScan<T> mCameraScan;
 
+    private ActivityResultLauncher<String> mRequestPermissionLauncher;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mRequestPermissionLauncher = registerForActivityResult(
+            new ActivityResultContracts.RequestPermission(),
+            this::requestCameraPermissionResult
+        );
         if (isContentView()) {
             setContentView(getLayoutId());
         }
         initUI();
+
     }
 
     /**
@@ -95,8 +101,8 @@ public abstract class BaseCameraScanActivity<T> extends AppCompatActivity implem
      */
     public void initCameraScan(@NonNull CameraScan<T> cameraScan) {
         cameraScan.setAnalyzer(createAnalyzer())
-                .bindFlashlightView(ivFlashlight)
-                .setOnScanResultCallback(this);
+            .bindFlashlightView(ivFlashlight)
+            .setOnScanResultCallback(this);
 
     }
 
@@ -129,8 +135,10 @@ public abstract class BaseCameraScanActivity<T> extends AppCompatActivity implem
                 mCameraScan.startCamera();
             } else {
                 LogX.d("Camera permission not granted, requesting permission.");
-                PermissionUtils.requestPermission(this, Manifest.permission.CAMERA, CAMERA_PERMISSION_REQUEST_CODE);
+                mRequestPermissionLauncher.launch(Manifest.permission.CAMERA);
             }
+        } else {
+            LogX.w("startCamera failed: mCameraScan is null");
         }
     }
 
@@ -143,24 +151,16 @@ public abstract class BaseCameraScanActivity<T> extends AppCompatActivity implem
         }
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
-            requestCameraPermissionResult(permissions, grantResults);
-        }
-    }
-
     /**
      * 请求Camera权限回调结果
      *
-     * @param permissions  权限
-     * @param grantResults 授权结果
      */
-    public void requestCameraPermissionResult(@NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (PermissionUtils.requestPermissionsResult(Manifest.permission.CAMERA, permissions, grantResults)) {
-            startCamera();
+    protected void requestCameraPermissionResult(Boolean granted) {
+        if (granted) {
+            LogX.d("Camera permission granted, starting camera");
+            mCameraScan.startCamera();
         } else {
+            LogX.w("Camera permission denied, finishing activity");
             finish();
         }
     }

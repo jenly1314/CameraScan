@@ -16,8 +16,7 @@
 package com.king.camera.scan.manager;
 
 import android.content.Context;
-import android.content.res.AssetFileDescriptor;
-import android.media.MediaPlayer;
+import android.media.AudioAttributes;
 import android.media.SoundPool;
 import android.os.Build;
 import android.os.VibrationEffect;
@@ -36,12 +35,11 @@ import java.io.Closeable;
  * <p>
  * <a href="https://github.com/jenly1314">Follow me</a>
  */
-public final class BeepManager implements MediaPlayer.OnErrorListener, Closeable {
+public final class BeepManager implements Closeable {
 
-    private static final long VIBRATE_DURATION = 100L;
+    private static final long VIBRATE_DURATION = 50L;
 
     private final Context context;
-    private MediaPlayer mediaPlayer;
     private SoundPool mSoundPool;
     private int soundId = 0;
     private Vibrator vibrator;
@@ -50,7 +48,6 @@ public final class BeepManager implements MediaPlayer.OnErrorListener, Closeable
 
     public BeepManager(Context context) {
         this.context = context;
-        this.mediaPlayer = null;
         updatePrefs();
     }
 
@@ -62,12 +59,17 @@ public final class BeepManager implements MediaPlayer.OnErrorListener, Closeable
         this.playBeep = playBeep;
     }
 
-    private synchronized void updatePrefs() {
-        if (mediaPlayer == null) {
-            mediaPlayer = buildMediaPlayer(context);
-        }
-        if(mSoundPool == null) {
-            mSoundPool = new SoundPool.Builder().build();
+    private void updatePrefs() {
+        if (mSoundPool == null) {
+            AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .build();
+            mSoundPool = new SoundPool.Builder()
+                .setMaxStreams(1)
+                .setAudioAttributes(audioAttributes)
+                .build();
+
             soundId = mSoundPool.load(context, R.raw.camera_scan_beep, 1);
         }
         if (vibrator == null) {
@@ -79,10 +81,7 @@ public final class BeepManager implements MediaPlayer.OnErrorListener, Closeable
         }
     }
 
-    public synchronized void playBeepSoundAndVibrate() {
-//        if (playBeep && mediaPlayer != null) {
-//            mediaPlayer.start();
-//        }
+    public void playBeepSoundAndVibrate() {
         if (playBeep && mSoundPool != null) {
             mSoundPool.play(soundId, 1f, 1f, 1, 0, 1f);
         }
@@ -95,37 +94,10 @@ public final class BeepManager implements MediaPlayer.OnErrorListener, Closeable
         }
     }
 
-    private MediaPlayer buildMediaPlayer(Context context) {
-        MediaPlayer mediaPlayer = new MediaPlayer();
-        try {
-            AssetFileDescriptor file = context.getResources().openRawResourceFd(R.raw.camera_scan_beep);
-            mediaPlayer.setDataSource(file.getFileDescriptor(), file.getStartOffset(), file.getLength());
-            mediaPlayer.setOnErrorListener(this);
-            mediaPlayer.setLooping(false);
-            mediaPlayer.prepare();
-            return mediaPlayer;
-        } catch (Exception e) {
-            LogX.w(e);
-            mediaPlayer.release();
-            return null;
-        }
-    }
-
     @Override
-    public synchronized boolean onError(MediaPlayer mp, int what, int extra) {
-        close();
-        updatePrefs();
-        return true;
-    }
-
-    @Override
-    public synchronized void close() {
+    public void close() {
         try {
-            if (mediaPlayer != null) {
-                mediaPlayer.release();
-                mediaPlayer = null;
-            }
-            if(mSoundPool != null) {
+            if (mSoundPool != null) {
                 mSoundPool.release();
                 mSoundPool = null;
             }
