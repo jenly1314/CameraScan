@@ -38,3 +38,7 @@ jobs:
     with:
       version-name: ${{ github.event.inputs.version-name }}
       release-body: ${{ github.event.inputs.release-body }}
+
+  docs:
+    needs: [release]
+    uses: ./.github/workflows/docs.yml
