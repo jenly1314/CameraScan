@@ -296,6 +296,9 @@ BaseCameraScanActivity和BaseCameraScanFragment使用的默认布局：
 
 ## 版本日志
 
+#### 待发布版本（[提前体验](test.md)）
+- 修复`stopCamera()`可能出现ANR的问题（#9）
+
 #### v1.4.1：2026-03-14
 - 内部权限请求改用新方式`ActivityResultLauncher`
 - 优化`AdaptiveCameraConfig`内部分辨率匹配策略
