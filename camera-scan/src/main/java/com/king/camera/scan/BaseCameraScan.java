@@ -100,7 +100,7 @@ public class BaseCameraScan<T> extends CameraScan<T> {
 
     private ZoomGestureDetector mZoomGestureDetector;
 
-    private ListenableFuture<ProcessCameraProvider> mCameraProviderFuture;
+    private ProcessCameraProvider mCameraProvider;
     /**
      * 相机
      */
@@ -321,8 +321,9 @@ public class BaseCameraScan<T> extends CameraScan<T> {
         if (mCameraConfig == null) {
             mCameraConfig = CameraConfigFactory.createDefaultCameraConfig(mContext, CameraSelector.LENS_FACING_UNKNOWN);
         }
-        mCameraProviderFuture = ProcessCameraProvider.getInstance(mContext);
-        mCameraProviderFuture.addListener(() -> {
+        stopCamera();
+        ListenableFuture<ProcessCameraProvider> cameraProviderFuture = ProcessCameraProvider.getInstance(mContext);
+        cameraProviderFuture.addListener(() -> {
             try {
                 // 相机选择器
                 CameraSelector cameraSelector = mCameraConfig.options(new CameraSelector.Builder());
@@ -347,11 +348,9 @@ public class BaseCameraScan<T> extends CameraScan<T> {
                     LogX.w("Analyzer is null");
                 }
 
-                if (mCamera != null) {
-                    mCameraProviderFuture.get().unbindAll();
-                }
+                mCameraProvider = cameraProviderFuture.get();
                 // 绑定到生命周期
-                mCamera = mCameraProviderFuture.get().bindToLifecycle(mLifecycleOwner, cameraSelector, preview, imageAnalysis);
+                mCamera = mCameraProvider.bindToLifecycle(mLifecycleOwner, cameraSelector, preview, imageAnalysis);
                 ResolutionInfo previewResolutionInfo = preview.getResolutionInfo();
                 if(previewResolutionInfo != null) {
                     LogX.d("Preview resolution: " +previewResolutionInfo.getResolution());
@@ -391,11 +390,14 @@ public class BaseCameraScan<T> extends CameraScan<T> {
 
     @Override
     public void stopCamera() {
-        if (mCameraProviderFuture != null) {
+        if (mCameraProvider != null) {
             try {
-                mCameraProviderFuture.get().unbindAll();
+                mCameraProvider.unbindAll();
             } catch (Exception e) {
                 LogX.e(e);
+            } finally {
+                mCameraProvider = null;
+                mCamera = null;
             }
         }
     }
