@@ -52,6 +52,7 @@ import com.king.logx.LogX;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 相机扫描基类；{@link BaseCameraScan} 为 {@link CameraScan} 的默认实现
@@ -101,6 +102,14 @@ public class BaseCameraScan<T> extends CameraScan<T> {
     private ZoomGestureDetector mZoomGestureDetector;
 
     private ProcessCameraProvider mCameraProvider;
+    /**
+     * 相机会话token；用于丢弃过期的异步启动回调
+     */
+    private final AtomicInteger mCameraSessionToken = new AtomicInteger(0);
+    /**
+     * 是否已释放
+     */
+    private volatile boolean isReleased;
     /**
      * 相机
      */
@@ -264,13 +273,19 @@ public class BaseCameraScan<T> extends CameraScan<T> {
                     mLastHoveTapTime = System.currentTimeMillis();
                     break;
                 case MotionEvent.ACTION_MOVE:
-                    isClickTap = distance(mDownX, mDownY, event.getX(), event.getY()) < HOVER_TAP_SLOP;
+                    // Once moved out of tap slop, this gesture should not become a tap again.
+                    if (isClickTap && distance(mDownX, mDownY, event.getX(), event.getY()) >= HOVER_TAP_SLOP) {
+                        isClickTap = false;
+                    }
                     break;
                 case MotionEvent.ACTION_UP:
                     if (isClickTap && mLastHoveTapTime + HOVER_TAP_TIMEOUT > System.currentTimeMillis()) {
                         // 开始对焦和测光
                         startFocusAndMetering(event.getX(), event.getY());
                     }
+                    break;
+                case MotionEvent.ACTION_CANCEL:
+                    isClickTap = false;
                     break;
             }
         }
@@ -318,13 +333,21 @@ public class BaseCameraScan<T> extends CameraScan<T> {
 
     @Override
     public void startCamera() {
+        if (isReleased) {
+            LogX.w("startCamera ignored: BaseCameraScan has been released");
+            return;
+        }
         if (mCameraConfig == null) {
             mCameraConfig = CameraConfigFactory.createDefaultCameraConfig(mContext, CameraSelector.LENS_FACING_UNKNOWN);
         }
         stopCamera();
+        final int sessionToken = mCameraSessionToken.incrementAndGet();
         ListenableFuture<ProcessCameraProvider> cameraProviderFuture = ProcessCameraProvider.getInstance(mContext);
         cameraProviderFuture.addListener(() -> {
             try {
+                if (isStartCameraCanceled(sessionToken, "before config")) {
+                    return;
+                }
                 // 相机选择器
                 CameraSelector cameraSelector = mCameraConfig.options(new CameraSelector.Builder());
                 // 预览
@@ -335,6 +358,10 @@ public class BaseCameraScan<T> extends CameraScan<T> {
                 ImageAnalysis imageAnalysis = mCameraConfig.options(new ImageAnalysis.Builder()
                         .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_YUV_420_888)
                         .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST));
+                if (mExecutorService == null || mExecutorService.isShutdown()) {
+                    LogX.w("startCamera canceled: analyzer executor is shutdown");
+                    return;
+                }
                 imageAnalysis.setAnalyzer(mExecutorService, image -> {
                     if (isAnalyze && !isAnalyzeResult && mAnalyzer != null) {
                         mAnalyzer.analyze(image, mOnAnalyzeListener);
@@ -349,6 +376,9 @@ public class BaseCameraScan<T> extends CameraScan<T> {
                 }
 
                 mCameraProvider = cameraProviderFuture.get();
+                if (isStartCameraCanceled(sessionToken, "before bind")) {
+                    return;
+                }
                 // 绑定到生命周期
                 mCamera = mCameraProvider.bindToLifecycle(mLifecycleOwner, cameraSelector, preview, imageAnalysis);
                 ResolutionInfo previewResolutionInfo = preview.getResolutionInfo();
@@ -364,6 +394,20 @@ public class BaseCameraScan<T> extends CameraScan<T> {
             }
 
         }, ContextCompat.getMainExecutor(mContext));
+    }
+
+    private boolean isStartCameraCanceled(int sessionToken, @NonNull String stage) {
+        if (isReleased) {
+            LogX.d("startCamera canceled(%s): released", stage);
+            return true;
+        }
+        int currentToken = mCameraSessionToken.get();
+        if (sessionToken != currentToken) {
+            LogX.d("startCamera canceled(%s): stale session token=%d, current=%d",
+                stage, sessionToken, currentToken);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -390,6 +434,7 @@ public class BaseCameraScan<T> extends CameraScan<T> {
 
     @Override
     public void stopCamera() {
+        mCameraSessionToken.incrementAndGet();
         if (mCameraProvider != null) {
             try {
                 mCameraProvider.unbindAll();
@@ -551,6 +596,7 @@ public class BaseCameraScan<T> extends CameraScan<T> {
 
     @Override
     public void release() {
+        isReleased = true;
         isAnalyze = false;
         flashlightView = null;
         if (mAmbientLightManager != null) {
