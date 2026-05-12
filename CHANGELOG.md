@@ -1,5 +1,10 @@
 ## 版本日志
 
+#### v1.5.0：2026-05-12
+- 更新LogX依赖至v1.3.0
+- 修复`stopCamera()`可能出现ANR的问题（#9）
+- 优化细节
+
 #### v1.4.1：2026-03-14
 - 内部权限请求改用新方式`ActivityResultLauncher`
 - 优化`AdaptiveCameraConfig`内部分辨率匹配策略
