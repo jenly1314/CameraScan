@@ -84,7 +84,8 @@ class CameraScanActivity : BaseCameraScanActivity<Unit>() {
             CameraSelector.LENS_FACING_BACK
         }
 
-        getCameraScan()?.setCameraConfig(
+        val currentCameraScan = getCameraScan() ?: return
+        currentCameraScan.setCameraConfig(
             CameraConfigFactory.createDefaultCameraConfig(this, lensFacing)
         )
         // 修改CameraConfig相关配置后，需重新调用startCamera后配置才能生效
