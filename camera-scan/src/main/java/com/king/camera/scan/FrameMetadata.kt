@@ -22,7 +22,7 @@ package com.king.camera.scan
  * <p>
  * <a href="https://github.com/jenly1314">Follow me</a>
  */
-class FrameMetadata(
+data class FrameMetadata(
     /**
      * 帧元数据的宽
      */

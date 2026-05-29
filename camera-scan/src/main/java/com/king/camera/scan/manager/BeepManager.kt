@@ -33,7 +33,7 @@ import java.io.Closeable
  * <p>
  * <a href="https://github.com/jenly1314">Follow me</a>
  */
-class BeepManager(private val context: Context) : Closeable {
+open class BeepManager(private val context: Context) : Closeable {
 
     companion object {
         private const val VIBRATE_DURATION = 50L
