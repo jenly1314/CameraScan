@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.king.camera.scan;
+package com.king.camera.scan
 
-import androidx.annotation.Nullable;
-import androidx.camera.core.Camera;
+import androidx.camera.core.Camera
 
 /**
  * 相机定义
@@ -25,29 +24,27 @@ import androidx.camera.core.Camera;
  * <p>
  * <a href="https://github.com/jenly1314">Follow me</a>
  */
-public interface ICamera {
+interface ICamera {
 
     /**
      * 启动相机预览
      */
-    void startCamera();
+    fun startCamera()
 
     /**
      * 停止相机预览
      */
-    void stopCamera();
+    fun stopCamera()
 
     /**
-     * 获取 {@link Camera}
+     * 获取 [Camera]
      *
-     * @return {@link Camera}
+     * @return [Camera]
      */
-    @Nullable
-    Camera getCamera();
+    fun getCamera(): Camera?
 
     /**
      * 释放
      */
-    void release();
-
+    fun release()
 }

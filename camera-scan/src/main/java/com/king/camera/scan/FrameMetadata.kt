@@ -13,9 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.king.camera.scan;
-
-import androidx.annotation.NonNull;
+package com.king.camera.scan
 
 /**
  * 帧元数据
@@ -24,52 +22,21 @@ import androidx.annotation.NonNull;
  * <p>
  * <a href="https://github.com/jenly1314">Follow me</a>
  */
-public class FrameMetadata {
-
-    private final int width;
-    private final int height;
-    private final int rotation;
-
+class FrameMetadata(
     /**
      * 帧元数据的宽
-     *
-     * @return 帧元数据的宽
      */
-    public int getWidth() {
-        return width;
-    }
-
+    val width: Int,
     /**
      * 帧元数据的高
-     *
-     * @return 帧元数据的高
      */
-    public int getHeight() {
-        return height;
-    }
-
+    val height: Int,
     /**
      * 获取旋转角度
-     *
-     * @return 旋转角度
      */
-    public int getRotation() {
-        return rotation;
-    }
-
-    public FrameMetadata(int width, int height, int rotation) {
-        this.width = width;
-        this.height = height;
-        this.rotation = rotation;
-    }
-
-    @NonNull
-    @Override
-    public String toString() {
-        return "FrameMetadata{" +
-                "width=" + width +
-                ", height=" + height +
-                ", rotation=" + rotation +
-                '}';
+    val rotation: Int
+) {
+    override fun toString(): String {
+        return "FrameMetadata{width=$width, height=$height, rotation=$rotation}"
     }
 }

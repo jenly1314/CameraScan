@@ -1,8 +1,7 @@
-package com.king.camera.scan.util;
+package com.king.camera.scan.util
 
-import android.graphics.Point;
-
-import com.king.logx.LogX;
+import android.graphics.Point
+import com.king.logx.LogX
 
 /**
  * 坐标点工具类：主要是将宽高原始坐标点到宽高变化之后目标坐标点之间进行转换
@@ -11,12 +10,8 @@ import com.king.logx.LogX;
  * <p>
  * <a href="https://github.com/jenly1314">Follow me</a>
  */
-@SuppressWarnings("unused")
-public final class PointUtils {
-
-    private PointUtils() {
-        throw new AssertionError();
-    }
+@Suppress("unused")
+object PointUtils {
 
     /**
      * 转换坐标：将原始 point 的坐标点从原始：srcWidth，srcHeight 进行换算后，转换成目标：destWidth，destHeight 后的坐标点
@@ -28,8 +23,9 @@ public final class PointUtils {
      * @param destHeight 目标高度
      * @return 转换之后的坐标点
      */
-    public static Point transform(Point point, int srcWidth, int srcHeight, int destWidth, int destHeight) {
-        return transform(point, srcWidth, srcHeight, destWidth, destHeight, false);
+    @JvmStatic
+    fun transform(point: Point, srcWidth: Int, srcHeight: Int, destWidth: Int, destHeight: Int): Point {
+        return transform(point, srcWidth, srcHeight, destWidth, destHeight, false)
     }
 
     /**
@@ -43,8 +39,9 @@ public final class PointUtils {
      * @param isFit      是否自适应，如果为 true 表示：宽或高自适应铺满，如果为 false 表示：填充铺满（可能会出现裁剪）
      * @return 转换之后的坐标点
      */
-    public static Point transform(Point point, int srcWidth, int srcHeight, int destWidth, int destHeight, boolean isFit) {
-        return transform(point.x, point.y, srcWidth, srcHeight, destWidth, destHeight, isFit);
+    @JvmStatic
+    fun transform(point: Point, srcWidth: Int, srcHeight: Int, destWidth: Int, destHeight: Int, isFit: Boolean): Point {
+        return transform(point.x, point.y, srcWidth, srcHeight, destWidth, destHeight, isFit)
     }
 
     /**
@@ -58,8 +55,9 @@ public final class PointUtils {
      * @param destHeight 目标高度
      * @return 转换之后的坐标点
      */
-    public static Point transform(int x, int y, int srcWidth, int srcHeight, int destWidth, int destHeight) {
-        return transform(x, y, srcWidth, srcHeight, destWidth, destHeight, false);
+    @JvmStatic
+    fun transform(x: Int, y: Int, srcWidth: Int, srcHeight: Int, destWidth: Int, destHeight: Int): Point {
+        return transform(x, y, srcWidth, srcHeight, destWidth, destHeight, false)
     }
 
     /**
@@ -74,27 +72,27 @@ public final class PointUtils {
      * @param isFit      是否自适应，如果为 true 表示：宽或高自适应铺满，如果为 false 表示：填充铺满（可能会出现裁剪）
      * @return 转换之后的坐标点
      */
-    public static Point transform(int x, int y, int srcWidth, int srcHeight, int destWidth, int destHeight, boolean isFit) {
-        LogX.d("transform: %d,%d | %d,%d", srcWidth, srcHeight, destWidth, destHeight);
-        float widthRatio = destWidth * 1.0f / srcWidth;
-        float heightRatio = destHeight * 1.0f / srcHeight;
-        Point point = new Point();
+    @JvmStatic
+    fun transform(x: Int, y: Int, srcWidth: Int, srcHeight: Int, destWidth: Int, destHeight: Int, isFit: Boolean): Point {
+        LogX.d("transform: %d,%d | %d,%d", srcWidth, srcHeight, destWidth, destHeight)
+        val widthRatio = destWidth * 1.0f / srcWidth
+        val heightRatio = destHeight * 1.0f / srcHeight
+        val point = Point()
         if (isFit) {
             // 宽或高自适应铺满
-            float ratio = Math.min(widthRatio, heightRatio);
-            float left = Math.abs(srcWidth * ratio - destWidth) / 2;
-            float top = Math.abs(srcHeight * ratio - destHeight) / 2;
-            point.x = (int) (x * ratio + left);
-            point.y = (int) (y * ratio + top);
+            val ratio = minOf(widthRatio, heightRatio)
+            val left = Math.abs(srcWidth * ratio - destWidth) / 2
+            val top = Math.abs(srcHeight * ratio - destHeight) / 2
+            point.x = (x * ratio + left).toInt()
+            point.y = (y * ratio + top).toInt()
         } else {
             // 填充铺满（可能会出现裁剪）
-            float ratio = Math.max(widthRatio, heightRatio);
-            float left = Math.abs(srcWidth * ratio - destWidth) / 2;
-            float top = Math.abs(srcHeight * ratio - destHeight) / 2;
-            point.x = (int) (x * ratio - left);
-            point.y = (int) (y * ratio - top);
+            val ratio = maxOf(widthRatio, heightRatio)
+            val left = Math.abs(srcWidth * ratio - destWidth) / 2
+            val top = Math.abs(srcHeight * ratio - destHeight) / 2
+            point.x = (x * ratio - left).toInt()
+            point.y = (y * ratio - top).toInt()
         }
-
-        return point;
+        return point
     }
 }
