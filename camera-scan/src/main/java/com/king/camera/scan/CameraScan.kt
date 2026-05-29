@@ -46,20 +46,17 @@ abstract class CameraScan<T> : ICamera, ICameraControl {
         /**
          * 扫描返回结果的key；解析方式可参见：[parseScanResult]
          */
-        @JvmField
-        var SCAN_RESULT: String = "SCAN_RESULT"
+        const val SCAN_RESULT: String = "SCAN_RESULT"
 
         /**
          * A camera on the device facing the same direction as the device's screen.
          */
-        @JvmField
-        var LENS_FACING_FRONT: Int = CameraSelector.LENS_FACING_FRONT
+        const val LENS_FACING_FRONT: Int = CameraSelector.LENS_FACING_FRONT
 
         /**
          * A camera on the device facing the opposite direction as the device's screen.
          */
-        @JvmField
-        var LENS_FACING_BACK: Int = CameraSelector.LENS_FACING_BACK
+        const val LENS_FACING_BACK: Int = CameraSelector.LENS_FACING_BACK
 
         /**
          * 纵横比：4:3
