@@ -118,15 +118,6 @@ class AmbientLightManager(context: Context) : SensorEventListener {
     }
 
     /**
-     * 设置是否启用光照传感器
-     *
-     * @param lightSensorEnabled 是否启用光照传感器
-     */
-    fun setLightSensorEnabled(lightSensorEnabled: Boolean) {
-        isLightSensorEnabled = lightSensorEnabled
-    }
-
-    /**
      * 设置光照传感器监听器，只有在 [isLightSensorEnabled] 为`true` 才有效
      *
      * @param listener 光照传感器监听器
