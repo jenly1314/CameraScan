@@ -43,7 +43,7 @@ class AnalyzeResult<T>(
     /**
      * 分析结果
      */
-    val result: T & Any
+    val result: T
 ) {
     /**
      * 分析的图像
