@@ -29,7 +29,7 @@ import android.hardware.SensorManager
  * <a href="https://github.com/jenly1314">Follow me</a>
  */
 @Suppress("unused")
-class AmbientLightManager(context: Context) : SensorEventListener {
+open class AmbientLightManager(context: Context) : SensorEventListener {
 
     companion object {
         private const val INTERVAL_DURATION = 150
