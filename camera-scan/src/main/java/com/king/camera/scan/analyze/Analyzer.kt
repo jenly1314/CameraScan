@@ -13,36 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.king.camera.scan.analyze;
+package com.king.camera.scan.analyze
 
-import com.king.camera.scan.AnalyzeResult;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.camera.core.ImageProxy;
+import androidx.camera.core.ImageProxy
+import com.king.camera.scan.AnalyzeResult
 
 /**
  * 分析器：主要用于分析相机预览的帧数据
  *
- * @param <T> 泛型T为分析成功后的具体结果
+ * @param T 泛型T为分析成功后的具体结果
  * @author <a href="mailto:jenly1314@gmail.com">Jenly</a>
  * <p>
  * <a href="https://github.com/jenly1314">Follow me</a>
  */
-@SuppressWarnings("unused")
-public interface Analyzer<T> {
+@Suppress("unused")
+interface Analyzer<T> {
     /**
      * 分析图像并将分析的结果通过分析监听器返回
      *
      * @param imageProxy 需要分析的图像
-     * @param listener   分析监听器，参见：{@link OnAnalyzeListener}
+     * @param listener   分析监听器，参见：[OnAnalyzeListener]
      */
-    void analyze(@NonNull ImageProxy imageProxy, @NonNull OnAnalyzeListener<T> listener);
+    fun analyze(imageProxy: ImageProxy, listener: OnAnalyzeListener<T>)
 
     /**
      * Analyze listener
      *
-     * @param <T> 泛型T为分析结果对应的对象
+     * @param T 泛型T为分析结果对应的对象
      */
     interface OnAnalyzeListener<T> {
         /**
@@ -50,13 +47,13 @@ public interface Analyzer<T> {
          *
          * @param result 分析结果
          */
-        void onSuccess(@NonNull AnalyzeResult<T> result);
+        fun onSuccess(result: AnalyzeResult<T>)
 
         /**
          * 失败
          *
          * @param e 异常
          */
-        void onFailure(@Nullable Exception e);
+        fun onFailure(e: Exception?)
     }
 }
