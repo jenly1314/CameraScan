@@ -66,13 +66,12 @@ CameraScan for Android 是一个简化扫描识别流程的通用基础库。
 
 > CameraConfig中提供的可配置项：`CameraSelector.Builder`、`Preview.Builder`、`ImageAnalysis.Builder`；
 
-> 你可以直接库中内置实现的相机配置： **CameraConfig** 和 **AspectRatioCameraConfig**。
+> 你可以直接使用库中内置实现的相机配置：**CameraConfig** 和 **AdaptiveCameraConfig**。
 
 #### 这里简单说下各自的特点：
 
 * **CameraConfig**：CameraX默认的相机配置（基类）。
 * **AdaptiveCameraConfig**：自适应相机配置：主要是根据纵横比和设备屏幕的分辨率找到与相机之间合适的相机配置（v1.1.0新增）
-* ~~**AspectRatioCameraConfig**：根据纵横比配置相机，使输出分析的图像尽可能的接近屏幕的比例~~（已废弃）
 
 > 你也可以自定义或覆写 **CameraConfig** 中的 **options** 方法，根据需要定制配置。
 
