@@ -22,7 +22,7 @@ import androidx.camera.core.Preview
 /**
  * 相机配置：主要用于提供相机预览时可自定义一些配置，便于拓展；
  * <p>
- * 库中内置实现[CameraConfig]的有[AdaptiveCameraConfig]和[AspectRatioCameraConfig]；
+ * 库中内置实现[CameraConfig]的有[AdaptiveCameraConfig]；
  * <p>
  * 这里简单说下各自的特点：
  * <p>
@@ -30,10 +30,7 @@ import androidx.camera.core.Preview
  * <p>
  * [AdaptiveCameraConfig] - 自适应相机配置：主要是根据纵横比和设备屏幕的分辨率找到与相机之间合适的相机配置
  * <p>
- * [AspectRatioCameraConfig] - 根据纵横比配置相机，使输出分析的图像尽可能的接近屏幕的比例
- * <p>
- * 当使用默认的 [CameraConfig]在某些机型上体验欠佳时，你可以尝试使用[AdaptiveCameraConfig]或
- * [AspectRatioCameraConfig]会有意想不到奇效。
+ * 当使用默认的 [CameraConfig]在某些机型上体验欠佳时，你可以尝试使用[AdaptiveCameraConfig]会有意想不到奇效。
  * <p>
  * 你也可以自定义或覆写 [CameraConfig] 中的 [options] 方法，根据需要定制配置。
  *
@@ -44,7 +41,7 @@ import androidx.camera.core.Preview
 open class CameraConfig {
 
     /**
-     * 配置 [CameraSelector.Builder]；可参考：[AspectRatioCameraConfig]
+     * 配置 [CameraSelector.Builder]
      * <p>
      * 如配置前置摄像头：`builder.requireLensFacing(CameraSelector.LENS_FACING_FRONT)`
      * <p>
@@ -58,7 +55,7 @@ open class CameraConfig {
     }
 
     /**
-     * 配置 [Preview.Builder]；可参考：[AspectRatioCameraConfig]
+     * 配置 [Preview.Builder]
      * <p>
      * 如配置目标旋转角度为90度：`builder.setTargetRotation(Surface.ROTATION_90)`
      * <p>
@@ -72,7 +69,7 @@ open class CameraConfig {
     }
 
     /**
-     * 配置 [ImageAnalysis.Builder]；可参考：[AspectRatioCameraConfig]
+     * 配置 [ImageAnalysis.Builder]
      * <p>
      * 如配置目标旋转角度为90度：`builder.setTargetRotation(Surface.ROTATION_90)`
      * <p>
