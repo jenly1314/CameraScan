@@ -66,7 +66,7 @@ import java.util.concurrent.atomic.AtomicInteger
  * <p>
  * <a href="https://github.com/jenly1314">Follow me</a>
  */
-class BaseCameraScan<T> : CameraScan<T> {
+class BaseCameraScan<T: Any> : CameraScan<T> {
 
     companion object {
         /**

@@ -43,7 +43,7 @@ import com.king.logx.LogX
  * <p>
  * <a href="https://github.com/jenly1314">Follow me</a>
  */
-abstract class BaseCameraScanActivity<T> : AppCompatActivity(), CameraScan.OnScanResultCallback<T> {
+abstract class BaseCameraScanActivity<T: Any> : AppCompatActivity(), CameraScan.OnScanResultCallback<T> {
 
     /**
      * 预览视图

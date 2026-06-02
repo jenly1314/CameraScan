@@ -46,7 +46,7 @@ import com.king.logx.LogX
  * <a href="https://github.com/jenly1314">Follow me</a>
  */
 @Suppress("unused")
-abstract class BaseCameraScanFragment<T> : Fragment(), CameraScan.OnScanResultCallback<T> {
+abstract class BaseCameraScanFragment<T: Any> : Fragment(), CameraScan.OnScanResultCallback<T> {
 
     companion object {
         /**
