@@ -27,7 +27,7 @@ import com.king.camera.scan.util.BitmapUtils
  * <a href="https://github.com/jenly1314">Follow me</a>
  */
 @Suppress("unused")
-class AnalyzeResult(
+class AnalyzeResult<T: Any>(
     /**
      * 图像数据
      */
@@ -42,9 +42,8 @@ class AnalyzeResult(
     val frameMetadata: FrameMetadata,
     /**
      * 分析结果
-     * 具体类型由分析器实现决定，使用时需按实际类型进行转换
      */
-    val result: Any?
+    val result: T
 ) {
     /**
      * 分析的图像
