@@ -222,7 +222,7 @@ abstract class CameraScan<T> : ICamera, ICameraControl {
          *
          * @param result 扫描结果
          */
-        fun onScanResultCallback(result: AnalyzeResult<T>)
+        fun onScanResultCallback(result: AnalyzeResult)
 
         /**
          * 扫描结果识别失败时触发此回调方法

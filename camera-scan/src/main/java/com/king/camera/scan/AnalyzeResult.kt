@@ -27,7 +27,7 @@ import com.king.camera.scan.util.BitmapUtils
  * <a href="https://github.com/jenly1314">Follow me</a>
  */
 @Suppress("unused")
-class AnalyzeResult<T>(
+class AnalyzeResult(
     /**
      * 图像数据
      */
@@ -43,7 +43,7 @@ class AnalyzeResult<T>(
     /**
      * 分析结果
      */
-    val result: T
+    val result: Any?
 ) {
     /**
      * 分析的图像

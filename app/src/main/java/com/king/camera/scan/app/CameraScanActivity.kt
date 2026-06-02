@@ -50,7 +50,7 @@ class CameraScanActivity : BaseCameraScanActivity<Unit>() {
         return if (customLayout) R.layout.activity_camera_scan else super.getLayoutId()
     }
 
-    override fun onScanResultCallback(result: AnalyzeResult<Unit>) {
+    override fun onScanResultCallback(result: AnalyzeResult) {
         // TODO 扫描结果回调；分析后得到的结果
     }
 

@@ -47,7 +47,7 @@ interface Analyzer<T> {
          *
          * @param result 分析结果
          */
-        fun onSuccess(result: AnalyzeResult<T>)
+        fun onSuccess(result: AnalyzeResult)
 
         /**
          * 失败
