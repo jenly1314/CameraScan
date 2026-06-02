@@ -42,6 +42,7 @@ class AnalyzeResult(
     val frameMetadata: FrameMetadata,
     /**
      * 分析结果
+     * 具体类型由分析器实现决定，使用时需按实际类型进行转换
      */
     val result: Any?
 ) {
