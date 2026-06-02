@@ -27,7 +27,7 @@ import com.king.camera.scan.AnalyzeResult
  * <a href="https://github.com/jenly1314">Follow me</a>
  */
 @Suppress("unused")
-interface Analyzer<T> {
+interface Analyzer<T: Any> {
     /**
      * 分析图像并将分析的结果通过分析监听器返回
      *
@@ -41,7 +41,7 @@ interface Analyzer<T> {
      *
      * @param T 泛型T为分析结果对应的对象
      */
-    interface OnAnalyzeListener<T> {
+    interface OnAnalyzeListener<T: Any> {
         /**
          * 成功
          *

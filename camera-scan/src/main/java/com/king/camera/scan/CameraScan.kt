@@ -40,7 +40,7 @@ import com.king.camera.scan.config.CameraConfig
  * <a href="https://github.com/jenly1314">Follow me</a>
  */
 @Suppress("unused")
-abstract class CameraScan<T> : ICamera, ICameraControl {
+abstract class CameraScan<T: Any> : ICamera, ICameraControl {
 
     companion object {
         /**
@@ -216,7 +216,7 @@ abstract class CameraScan<T> : ICamera, ICameraControl {
      *
      * @param T 扫描结果数据类型
      */
-    interface OnScanResultCallback<T> {
+    interface OnScanResultCallback<T: Any> {
         /**
          * 扫描结果回调
          *
