@@ -193,7 +193,7 @@ class CameraScanActivity : BaseCameraScanActivity<*>() {
         return super.getLayoutId()
     }
 
-    override fun onScanResultCallback(result: AnalyzeResult<*>) {
+    override fun onScanResultCallback(result: AnalyzeResult) {
         // TODO 扫描结果回调；分析后得到的结果
     }
 
