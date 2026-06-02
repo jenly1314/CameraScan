@@ -155,7 +155,7 @@ class BaseCameraScan<T> : CameraScan<T> {
     /**
      * 分析结果
      */
-    private var mResultLiveData: MutableLiveData<AnalyzeResult?>? = null
+    private var mResultLiveData: MutableLiveData<AnalyzeResult<T>?>? = null
 
     /**
      * 扫描结果回调
@@ -224,7 +224,7 @@ class BaseCameraScan<T> : CameraScan<T> {
         }
 
         mOnAnalyzeListener = object : Analyzer.OnAnalyzeListener<T> {
-            override fun onSuccess(result: AnalyzeResult) {
+            override fun onSuccess(result: AnalyzeResult<T>) {
                 mResultLiveData?.postValue(result)
             }
 
@@ -422,7 +422,7 @@ class BaseCameraScan<T> : CameraScan<T> {
      * @param result 分析结果
      */
     @Synchronized
-    private fun handleAnalyzeResult(result: AnalyzeResult) {
+    private fun handleAnalyzeResult(result: AnalyzeResult<T>) {
         if (isAnalyzeResult || !isAnalyze) {
             return
         }
