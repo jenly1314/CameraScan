@@ -20,7 +20,14 @@ on:
 jobs:
   publish:
     if: ${{ github.event.inputs.publish == 'true' }}
-    uses: ./.github/workflows/publish.yml
+    uses: jenly1314/actions/.github/workflows/reusable-publish.yml@v1
+    with:
+      java-version-file: '.github/workflows/.java-version'
+    secrets:
+      maven-username: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+      maven-password: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+      gpg-secret-key: ${{ secrets.GPG_SECRET_KEY }}
+      gpg-secret-passphrase: ${{ secrets.GPG_SECRET_PASSPHRASE }}
 
   release:
     permissions:
@@ -38,4 +45,6 @@ jobs:
       id-token: write
       pages: write
     needs: [release]
-    uses: ./.github/workflows/docs.yml
+    uses: jenly1314/actions/.github/workflows/reusable-docs.yml@v1
+    with:
+      java-version-file: '.github/workflows/.java-version'
