@@ -3,7 +3,7 @@
 set -ex
 
 # Generate the API docs
-./gradlew dokkaHtml
+./gradlew dokkaGenerate
 
 mkdir -p docs/api
 mv camera-scan/build/dokka/html/* docs/api
