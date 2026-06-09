@@ -35,8 +35,4 @@ data class FrameMetadata(
      * 获取旋转角度
      */
     val rotation: Int
-) {
-    override fun toString(): String {
-        return "FrameMetadata{width=$width, height=$height, rotation=$rotation}"
-    }
-}
+)

@@ -15,4 +15,3 @@ dependencyResolutionManagement {
 rootProject.name = "CameraScan"
 include(":app")
 include(":camera-scan")
-

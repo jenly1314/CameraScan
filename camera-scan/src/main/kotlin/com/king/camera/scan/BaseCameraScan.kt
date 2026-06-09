@@ -48,6 +48,7 @@ import com.king.logx.LogX
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicInteger
+import kotlin.math.sqrt
 
 /**
  * 相机扫描基类；[BaseCameraScan] 为 [CameraScan] 的默认实现
@@ -97,9 +98,9 @@ class BaseCameraScan<T: Any> : CameraScan<T> {
      */
     private val mPreviewView: PreviewView
 
-    private var mExecutorService: ExecutorService? = null
+    private lateinit var mExecutorService: ExecutorService
 
-    private var mZoomGestureDetector: ZoomGestureDetector? = null
+    private lateinit var mZoomGestureDetector: ZoomGestureDetector
 
     private var mCameraProvider: ProcessCameraProvider? = null
 
@@ -155,7 +156,9 @@ class BaseCameraScan<T: Any> : CameraScan<T> {
     /**
      * 分析结果
      */
-    private var mResultLiveData: MutableLiveData<AnalyzeResult<T>?>? = null
+    private val mResultLiveData: MutableLiveData<AnalyzeResult<T>?> by lazy {
+        MutableLiveData()
+    }
 
     /**
      * 扫描结果回调
@@ -165,17 +168,17 @@ class BaseCameraScan<T: Any> : CameraScan<T> {
     /**
      * 分析监听器
      */
-    private var mOnAnalyzeListener: Analyzer.OnAnalyzeListener<T>? = null
+    private lateinit var mOnAnalyzeListener: Analyzer.OnAnalyzeListener<T>
 
     /**
      * 音效管理器：主要用于播放蜂鸣提示音和振动效果
      */
-    private var mBeepManager: BeepManager? = null
+    private lateinit var mBeepManager: BeepManager
 
     /**
      * 环境光照度管理器：主要通过传感器来监听光照强度变化
      */
-    private var mAmbientLightManager: AmbientLightManager? = null
+    private lateinit var mAmbientLightManager: AmbientLightManager
 
     /**
      * 最后点击时间，根据两次点击时间间隔用于区分单机和触摸缩放事件
@@ -214,22 +217,21 @@ class BaseCameraScan<T: Any> : CameraScan<T> {
     @SuppressLint("ClickableViewAccessibility")
     private fun initData() {
         mExecutorService = Executors.newSingleThreadExecutor()
-        mResultLiveData = MutableLiveData()
-        mResultLiveData!!.observe(mLifecycleOwner) { result ->
+        mResultLiveData.observe(mLifecycleOwner) { result ->
             if (result != null) {
                 handleAnalyzeResult(result)
-            } else if (mOnScanResultCallback != null) {
-                mOnScanResultCallback!!.onScanResultFailure()
+            } else {
+                mOnScanResultCallback?.onScanResultFailure()
             }
         }
 
         mOnAnalyzeListener = object : Analyzer.OnAnalyzeListener<T> {
             override fun onSuccess(result: AnalyzeResult<T>) {
-                mResultLiveData?.postValue(result)
+                mResultLiveData.postValue(result)
             }
 
             override fun onFailure(e: Exception?) {
-                mResultLiveData?.postValue(null)
+                mResultLiveData.postValue(null)
             }
         }
 
@@ -248,7 +250,7 @@ class BaseCameraScan<T: Any> : CameraScan<T> {
         mPreviewView.setOnTouchListener { _, event ->
             handlePreviewViewClickTap(event)
             if (isNeedTouchZoom()) {
-                mZoomGestureDetector!!.onTouchEvent(event)
+                mZoomGestureDetector.onTouchEvent(event)
             } else {
                 false
             }
@@ -256,8 +258,8 @@ class BaseCameraScan<T: Any> : CameraScan<T> {
 
         mBeepManager = BeepManager(mContext.applicationContext)
         mAmbientLightManager = AmbientLightManager(mContext.applicationContext)
-        mAmbientLightManager!!.register()
-        mAmbientLightManager!!.setOnLightSensorEventListener(object : AmbientLightManager.OnLightSensorEventListener {
+        mAmbientLightManager.register()
+        mAmbientLightManager.setOnLightSensorEventListener(object : AmbientLightManager.OnLightSensorEventListener {
             override fun onSensorChanged(dark: Boolean, lightLux: Float) {
                 flashlightView?.let { view ->
                     if (dark) {
@@ -311,7 +313,7 @@ class BaseCameraScan<T: Any> : CameraScan<T> {
     private fun distance(aX: Float, aY: Float, bX: Float, bY: Float): Float {
         val xDiff = aX - bX
         val yDiff = aY - bY
-        return Math.sqrt((xDiff * xDiff + yDiff * yDiff).toDouble()).toFloat()
+        return sqrt((xDiff * xDiff + yDiff * yDiff).toDouble()).toFloat()
     }
 
     /**
@@ -357,21 +359,20 @@ class BaseCameraScan<T: Any> : CameraScan<T> {
                 // 预览
                 val preview: Preview = mCameraConfig!!.options(Preview.Builder())
                 // 设置SurfaceProvider
-                preview.setSurfaceProvider(mPreviewView.surfaceProvider)
+                preview.surfaceProvider = mPreviewView.surfaceProvider
                 // 图像分析
                 val imageAnalysis: ImageAnalysis = mCameraConfig!!.options(
                     ImageAnalysis.Builder()
                         .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_YUV_420_888)
                         .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                 )
-                val executorService = mExecutorService
-                if (executorService == null || executorService.isShutdown) {
+                if (mExecutorService.isShutdown) {
                     LogX.w("startCamera canceled: analyzer executor is shutdown")
                     return@addListener
                 }
-                imageAnalysis.setAnalyzer(executorService) { image ->
+                imageAnalysis.setAnalyzer(mExecutorService) { image ->
                     if (isAnalyze && !isAnalyzeResult && mAnalyzer != null) {
-                        mAnalyzer!!.analyze(image, mOnAnalyzeListener!!)
+                        mAnalyzer!!.analyze(image, mOnAnalyzeListener)
                     }
                     image.close()
                 }
@@ -430,14 +431,14 @@ class BaseCameraScan<T: Any> : CameraScan<T> {
         if (isAutoStopAnalyze) {
             isAnalyze = false
         }
-        mBeepManager?.playBeepSoundAndVibrate()
+        mBeepManager.playBeepSoundAndVibrate()
         mOnScanResultCallback?.onScanResultCallback(result)
         isAnalyzeResult = false
     }
 
     override fun stopCamera() {
         mCameraSessionToken.incrementAndGet()
-        mCameraProvider?.let { provider ->
+        mCameraProvider?.also { provider ->
             try {
                 provider.unbindAll()
             } catch (e: Exception) {
@@ -542,12 +543,12 @@ class BaseCameraScan<T: Any> : CameraScan<T> {
     }
 
     override fun setVibrate(vibrate: Boolean): CameraScan<T> {
-        mBeepManager?.setVibrate(vibrate)
+        mBeepManager.setVibrate(vibrate)
         return this
     }
 
     override fun setPlayBeep(playBeep: Boolean): CameraScan<T> {
-        mBeepManager?.setPlayBeep(playBeep)
+        mBeepManager.setPlayBeep(playBeep)
         return this
     }
 
@@ -571,25 +572,25 @@ class BaseCameraScan<T: Any> : CameraScan<T> {
         isReleased = true
         isAnalyze = false
         flashlightView = null
-        mAmbientLightManager?.unregister()
-        mBeepManager?.close()
-        mExecutorService?.shutdown()
+        mAmbientLightManager.unregister()
+        mBeepManager.close()
+        mExecutorService.shutdown()
         stopCamera()
     }
 
     override fun bindFlashlightView(flashlightView: View?): CameraScan<T> {
         this.flashlightView = flashlightView
-        mAmbientLightManager?.isLightSensorEnabled = flashlightView != null
+        mAmbientLightManager.isLightSensorEnabled = flashlightView != null
         return this
     }
 
     override fun setDarkLightLux(lightLux: Float): CameraScan<T> {
-        mAmbientLightManager?.setDarkLightLux(lightLux)
+        mAmbientLightManager.setDarkLightLux(lightLux)
         return this
     }
 
     override fun setBrightLightLux(lightLux: Float): CameraScan<T> {
-        mAmbientLightManager?.setBrightLightLux(lightLux)
+        mAmbientLightManager.setBrightLightLux(lightLux)
         return this
     }
 }

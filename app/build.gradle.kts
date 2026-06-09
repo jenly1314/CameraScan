@@ -11,6 +11,7 @@ android {
         applicationId = "com.king.camera.scan.app"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
+
         versionCode = properties["VERSION_CODE"].toString().toInt()
         versionName = properties["VERSION_NAME"].toString()
 

@@ -1,5 +1,11 @@
 ## 版本日志
 
+#### v1.6.0：2026-06-09
+- 迁移：所有 Java 代码已转为 Kotlin 实现
+- 移除废弃的：`ResolutionCameraConfig`、`AspectRatioCameraConfig`、`LogUtils`等类
+- 更新compileSdk至36
+- 更新CameraX相关依赖至v1.6.1
+
 #### v1.5.0：2026-05-12
 - 更新LogX依赖至v1.3.0
 - 修复`stopCamera()`可能出现ANR的问题（#9）

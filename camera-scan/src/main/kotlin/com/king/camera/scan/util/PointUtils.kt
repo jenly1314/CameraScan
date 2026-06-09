@@ -2,6 +2,7 @@ package com.king.camera.scan.util
 
 import android.graphics.Point
 import com.king.logx.LogX
+import kotlin.math.abs
 
 /**
  * 坐标点工具类：主要是将宽高原始坐标点到宽高变化之后目标坐标点之间进行转换
@@ -52,15 +53,15 @@ object PointUtils {
         if (isFit) {
             // 宽或高自适应铺满
             val ratio = minOf(widthRatio, heightRatio)
-            val left = Math.abs(srcWidth * ratio - destWidth) / 2
-            val top = Math.abs(srcHeight * ratio - destHeight) / 2
+            val left = abs(srcWidth * ratio - destWidth) / 2
+            val top = abs(srcHeight * ratio - destHeight) / 2
             point.x = (x * ratio + left).toInt()
             point.y = (y * ratio + top).toInt()
         } else {
             // 填充铺满（可能会出现裁剪）
             val ratio = maxOf(widthRatio, heightRatio)
-            val left = Math.abs(srcWidth * ratio - destWidth) / 2
-            val top = Math.abs(srcHeight * ratio - destHeight) / 2
+            val left = abs(srcWidth * ratio - destWidth) / 2
+            val top = abs(srcHeight * ratio - destHeight) / 2
             point.x = (x * ratio - left).toInt()
             point.y = (y * ratio - top).toInt()
         }

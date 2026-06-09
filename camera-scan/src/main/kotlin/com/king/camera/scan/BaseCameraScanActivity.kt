@@ -17,19 +17,17 @@ package com.king.camera.scan
 
 import android.Manifest
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.view.PreviewView
-import androidx.fragment.app.Fragment
 import com.king.camera.scan.analyze.Analyzer
 import com.king.camera.scan.util.PermissionUtils
 import com.king.logx.LogX
 
 /**
- * 相机扫描基类；[BaseCameraScanFragment] 内部持有[CameraScan]，便于快速实现扫描识别。
+ * 相机扫描基类；[BaseCameraScanActivity] 内部持有[CameraScan]，便于快速实现扫描识别。
  * <p>
  * 快速实现扫描识别主要有以下几种方式：
  * <p>
@@ -45,20 +43,7 @@ import com.king.logx.LogX
  * <p>
  * <a href="https://github.com/jenly1314">Follow me</a>
  */
-@Suppress("unused")
-abstract class BaseCameraScanFragment<T: Any> : Fragment(), CameraScan.OnScanResultCallback<T> {
-
-    companion object {
-        /**
-         * 相机权限请求代码
-         */
-        private const val CAMERA_PERMISSION_REQUEST_CODE = 0x86
-    }
-
-    /**
-     * 根视图
-     */
-    private var mRootView: View? = null
+abstract class BaseCameraScanActivity<T: Any> : AppCompatActivity(), CameraScan.OnScanResultCallback<T> {
 
     /**
      * 预览视图
@@ -79,21 +64,15 @@ abstract class BaseCameraScanFragment<T: Any> : Fragment(), CameraScan.OnScanRes
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         mRequestPermissionLauncher = registerForActivityResult(
             ActivityResultContracts.RequestPermission(),
             ::requestCameraPermissionResult
         )
-    }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         if (isContentView()) {
-            mRootView = createRootView(inflater, container)
+            setContentView(getLayoutId())
         }
-        return mRootView
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         initUI()
     }
 
@@ -101,10 +80,10 @@ abstract class BaseCameraScanFragment<T: Any> : Fragment(), CameraScan.OnScanRes
      * 初始化
      */
     open fun initUI() {
-        previewView = mRootView!!.findViewById(getPreviewViewId())
+        previewView = findViewById(getPreviewViewId())
         val ivFlashlightId = getFlashlightId()
         if (ivFlashlightId != View.NO_ID && ivFlashlightId != 0) {
-            ivFlashlight = mRootView!!.findViewById(ivFlashlightId)
+            ivFlashlight = findViewById(ivFlashlightId)
             ivFlashlight?.setOnClickListener { onClickFlashlight() }
         }
         mCameraScan = createCameraScan(previewView!!)
@@ -132,9 +111,9 @@ abstract class BaseCameraScanFragment<T: Any> : Fragment(), CameraScan.OnScanRes
      * 切换闪光灯状态（开启/关闭）
      */
     protected open fun toggleTorchState() {
-        getCameraScan()?.let { scanner ->
-            val isTorch = scanner.isTorchEnabled()
-            scanner.enableTorch(!isTorch)
+        getCameraScan()?.let {
+            val isTorch = it.isTorchEnabled()
+            it.enableTorch(!isTorch)
             ivFlashlight?.isSelected = !isTorch
         }
     }
@@ -143,16 +122,11 @@ abstract class BaseCameraScanFragment<T: Any> : Fragment(), CameraScan.OnScanRes
      * 启动相机预览
      */
     open fun startCamera() {
-        val cameraScan = mCameraScan
-        if (cameraScan != null) {
-            if (PermissionUtils.checkPermission(requireContext(), Manifest.permission.CAMERA)) {
-                cameraScan.startCamera()
-            } else {
-                LogX.d("Camera permission not granted, requesting permission.")
-                mRequestPermissionLauncher.launch(Manifest.permission.CAMERA)
-            }
+        if (PermissionUtils.checkPermission(this, Manifest.permission.CAMERA)) {
+            requireCameraScan().startCamera()
         } else {
-            LogX.w("startCamera failed: mCameraScan is null")
+            LogX.d("Camera permission not granted, requesting permission.")
+            mRequestPermissionLauncher.launch(Manifest.permission.CAMERA)
         }
     }
 
@@ -169,35 +143,24 @@ abstract class BaseCameraScanFragment<T: Any> : Fragment(), CameraScan.OnScanRes
     protected open fun requestCameraPermissionResult(granted: Boolean) {
         if (granted) {
             LogX.d("Camera permission granted, starting camera")
-            mCameraScan!!.startCamera()
+            requireCameraScan().startCamera()
         } else {
             LogX.w("Camera permission denied, finishing activity")
-            requireActivity().finish()
+            finish()
         }
     }
 
-    override fun onDestroyView() {
+    override fun onDestroy() {
         releaseCamera()
-        super.onDestroyView()
+        super.onDestroy()
     }
 
     /**
-     * 返回true时会自动初始化[createRootView]，返回为false是需自己去初始化[createRootView]
+     * 返回true时会自动初始化[setContentView]，返回为false是需自己去初始化[setContentView]
      *
      * @return 默认返回true
      */
     open fun isContentView(): Boolean = true
-
-    /**
-     * 创建[mRootView]
-     *
-     * @param inflater  [LayoutInflater]
-     * @param container [ViewGroup]
-     * @return 返回创建的根视图
-     */
-    open fun createRootView(inflater: LayoutInflater, container: ViewGroup?): View {
-        return inflater.inflate(getLayoutId(), container, false)
-    }
 
     /**
      * 布局ID；通过覆写此方法可以自定义布局
@@ -228,11 +191,11 @@ abstract class BaseCameraScanFragment<T: Any> : Fragment(), CameraScan.OnScanRes
     fun getCameraScan(): CameraScan<T>? = mCameraScan
 
     /**
-     * 获取根视图
-     *
-     * @return [mRootView]
+     * 获取CameraScan实例
      */
-    fun getRootView(): View? = mRootView
+    fun requireCameraScan(): CameraScan<T> {
+        return mCameraScan ?: throw IllegalStateException("CameraScan is not initialized")
+    }
 
     /**
      * 创建[CameraScan]

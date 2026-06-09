@@ -10,6 +10,8 @@ import androidx.camera.core.resolutionselector.ResolutionSelector
 import androidx.camera.core.resolutionselector.ResolutionStrategy
 import com.king.camera.scan.CameraScan
 import com.king.logx.LogX
+import kotlin.math.abs
+import kotlin.math.roundToInt
 
 /**
  * 自适应相机配置：主要是根据纵横比和设备屏幕的分辨率找到与相机之间合适的相机配置；
@@ -58,7 +60,7 @@ open class AdaptiveCameraConfig(context: Context) : CameraConfig() {
         val longSide = maxOf(width, height)
         val ratio = longSide / shortSide.toFloat()
 
-        mAspectRatioStrategy = if (Math.abs(ratio - CameraScan.ASPECT_RATIO_4_3) < Math.abs(ratio - CameraScan.ASPECT_RATIO_16_9)) {
+        mAspectRatioStrategy = if (abs(ratio - CameraScan.ASPECT_RATIO_4_3) < abs(ratio - CameraScan.ASPECT_RATIO_16_9)) {
             AspectRatioStrategy.RATIO_4_3_FALLBACK_AUTO_STRATEGY
         } else {
             AspectRatioStrategy.RATIO_16_9_FALLBACK_AUTO_STRATEGY
@@ -70,7 +72,7 @@ open class AdaptiveCameraConfig(context: Context) : CameraConfig() {
             maxOf(shortSide, IMAGE_QUALITY_720P)
         }
 
-        mPreviewTargetSize = Size(Math.round(mPreviewQuality * ratio), mPreviewQuality)
+        mPreviewTargetSize = Size((mPreviewQuality * ratio).roundToInt(), mPreviewQuality)
 
         mAnalysisQuality = when {
             shortSide >= IMAGE_QUALITY_1440P && processors >= 8 -> IMAGE_QUALITY_1080P
@@ -78,7 +80,7 @@ open class AdaptiveCameraConfig(context: Context) : CameraConfig() {
             else -> IMAGE_QUALITY_480P
         }
 
-        mAnalysisTargetSize = Size(Math.round(mAnalysisQuality * ratio), mAnalysisQuality)
+        mAnalysisTargetSize = Size((mAnalysisQuality * ratio).roundToInt(), mAnalysisQuality)
 
         LogX.d("Preview target: %s, Analysis target: %s", mPreviewTargetSize, mAnalysisTargetSize)
     }
@@ -113,12 +115,12 @@ open class AdaptiveCameraConfig(context: Context) : CameraConfig() {
      * 过滤分辨率
      */
     private fun filterResolutions(supportedSizes: List<Size>, targetQuality: Int): List<Size> {
-        val minAcceptable = Math.round(targetQuality * (1 - ALLOWED_DEVIATION_RATIO))
-        val maxAcceptable = Math.round(targetQuality * (1 + ALLOWED_DEVIATION_RATIO))
+        val minAcceptable = (targetQuality * (1 - ALLOWED_DEVIATION_RATIO)).roundToInt()
+        val maxAcceptable = (targetQuality * (1 + ALLOWED_DEVIATION_RATIO)).roundToInt()
 
         val list = supportedSizes.filter { supportedSize ->
             val size = minOf(supportedSize.width, supportedSize.height)
-            size >= minAcceptable && size <= maxAcceptable
+            size in minAcceptable..maxAcceptable
         }
 
         LogX.d("Filtered resolutions for target %d (%d~%d): %s",
