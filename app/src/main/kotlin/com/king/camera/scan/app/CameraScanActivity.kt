@@ -84,7 +84,6 @@ class CameraScanActivity : BaseCameraScanActivity<Unit>() {
             CameraSelector.LENS_FACING_BACK
         }
 
-        val cameraScan = getCameraScan() ?: return
         cameraScan.setCameraConfig(
             CameraConfigFactory.createDefaultCameraConfig(this, lensFacing)
         )

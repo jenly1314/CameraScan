@@ -48,7 +48,7 @@ abstract class BaseCameraScanActivity<T: Any> : AppCompatActivity(), CameraScan.
     /**
      * 预览视图
      */
-    protected var previewView: PreviewView? = null
+    protected lateinit var previewView: PreviewView
 
     /**
      * 手电筒视图
@@ -58,14 +58,15 @@ abstract class BaseCameraScanActivity<T: Any> : AppCompatActivity(), CameraScan.
     /**
      * CameraScan
      */
-    private var mCameraScan: CameraScan<T>? = null
+    protected lateinit var cameraScan: CameraScan<T>
+        private set
 
-    private lateinit var mRequestPermissionLauncher: ActivityResultLauncher<String>
+    private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mRequestPermissionLauncher = registerForActivityResult(
+        requestPermissionLauncher = registerForActivityResult(
             ActivityResultContracts.RequestPermission(),
             ::requestCameraPermissionResult
         )
@@ -86,8 +87,8 @@ abstract class BaseCameraScanActivity<T: Any> : AppCompatActivity(), CameraScan.
             ivFlashlight = findViewById(ivFlashlightId)
             ivFlashlight?.setOnClickListener { onClickFlashlight() }
         }
-        mCameraScan = createCameraScan(previewView!!)
-        initCameraScan(mCameraScan!!)
+        cameraScan = createCameraScan(previewView)
+        initCameraScan(cameraScan)
         startCamera()
     }
 
@@ -111,11 +112,9 @@ abstract class BaseCameraScanActivity<T: Any> : AppCompatActivity(), CameraScan.
      * 切换闪光灯状态（开启/关闭）
      */
     protected open fun toggleTorchState() {
-        getCameraScan()?.let {
-            val isTorch = it.isTorchEnabled()
-            it.enableTorch(!isTorch)
-            ivFlashlight?.isSelected = !isTorch
-        }
+        val isTorch = cameraScan.isTorchEnabled()
+        cameraScan.enableTorch(!isTorch)
+        ivFlashlight?.isSelected = !isTorch
     }
 
     /**
@@ -123,10 +122,10 @@ abstract class BaseCameraScanActivity<T: Any> : AppCompatActivity(), CameraScan.
      */
     open fun startCamera() {
         if (PermissionUtils.checkPermission(this, Manifest.permission.CAMERA)) {
-            requireCameraScan().startCamera()
+            cameraScan.startCamera()
         } else {
             LogX.d("Camera permission not granted, requesting permission.")
-            mRequestPermissionLauncher.launch(Manifest.permission.CAMERA)
+            requestPermissionLauncher.launch(Manifest.permission.CAMERA)
         }
     }
 
@@ -134,7 +133,7 @@ abstract class BaseCameraScanActivity<T: Any> : AppCompatActivity(), CameraScan.
      * 释放相机
      */
     private fun releaseCamera() {
-        mCameraScan?.release()
+        cameraScan.release()
     }
 
     /**
@@ -143,7 +142,7 @@ abstract class BaseCameraScanActivity<T: Any> : AppCompatActivity(), CameraScan.
     protected open fun requestCameraPermissionResult(granted: Boolean) {
         if (granted) {
             LogX.d("Camera permission granted, starting camera")
-            requireCameraScan().startCamera()
+            cameraScan.startCamera()
         } else {
             LogX.w("Camera permission denied, finishing activity")
             finish()
@@ -182,20 +181,6 @@ abstract class BaseCameraScanActivity<T: Any> : AppCompatActivity(), CameraScan.
      * @return 默认返回`R.id.ivFlashlight`, 如果不需要手电筒按钮可以返回[View.NO_ID]
      */
     open fun getFlashlightId(): Int = R.id.ivFlashlight
-
-    /**
-     * 获取[CameraScan]
-     *
-     * @return [mCameraScan]
-     */
-    fun getCameraScan(): CameraScan<T>? = mCameraScan
-
-    /**
-     * 获取CameraScan实例
-     */
-    fun requireCameraScan(): CameraScan<T> {
-        return mCameraScan ?: throw IllegalStateException("CameraScan is not initialized")
-    }
 
     /**
      * 创建[CameraScan]

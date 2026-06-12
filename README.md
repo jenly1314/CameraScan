@@ -207,7 +207,7 @@ class CameraScanActivity : BaseCameraScanActivity<*>() {
 
 ```
 
-> 一般在 [ZXingLite](https://github.com/jenly1314/ZXingLite) 、[MLKit](https://github.com/jenly1314/MLKit) 或 [WeChatQRCode](https://github.com/jenly1314/WeChatQRCode) 对应的库中都有提供 **BaseCameraScanActivity** 的子类，可快速实现具体的分析识别功能。（比如：[MLKit](https://github.com/jenly1314/MLKit)中的条码扫描有：[BarcodeCameraScanActivity](https://github.com/jenly1314/MLKit/blob/master/mlkit-barcode-scanning/src/main/java/com/king/mlkit/vision/barcode/BarcodeCameraScanActivity.java)）
+> 一般在 [ZXingLite](https://github.com/jenly1314/ZXingLite) 、[MLKit](https://github.com/jenly1314/MLKit) 或 [WeChatQRCode](https://github.com/jenly1314/WeChatQRCode) 对应的库中都有提供 **BaseCameraScanActivity** 的子类，可快速实现具体的分析识别功能。（比如：[MLKit](https://github.com/jenly1314/MLKit)中的条码扫描有：[BarcodeCameraScanActivity](https://github.com/jenly1314/MLKit/blob/master/mlkit-barcode-scanning/src/main/kotlin/com/king/mlkit/vision/barcode/BarcodeCameraScanActivity.kt)）
 
 ### 布局示例
 
@@ -275,7 +275,7 @@ BaseCameraScanActivity和BaseCameraScanFragment使用的默认布局：
 
 > 如上面的自定布局，使用了开源库：[**ViewfinderView**](https://github.com/jenly1314/ViewfinderView)；一般在实现扫码相关需求时，会经常用到。
 
-> 页面完整示例：[CameraScanActivity](app/src/main/java/com/king/camera/scan/app/CameraScanActivity.kt)
+> 页面完整示例：[CameraScanActivity](app/src/main/kotlin/com/king/camera/scan/app/CameraScanActivity.kt)
 
 更多使用详情，请查看[app](app)中的源码使用示例或直接查看[API帮助文档](https://jenly1314.github.io/CameraScan/api/)
 
