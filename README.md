@@ -31,7 +31,7 @@ CameraScan for Android 是一个简化扫描识别流程的通用基础库。
 2. 在Module的 **build.gradle** 中添加依赖项
 
     ```gradle
-    implementation 'com.github.jenly1314:camera-scan:1.6.0'
+    implementation 'com.github.jenly1314:camera-scan:1.6.1'
     ```
 
 ### 温馨提示
@@ -90,25 +90,23 @@ CameraScan for Android 是一个简化扫描识别流程的通用基础库。
 如：通过CameraConfig设置前置摄像头
 
 **方式一：** 通过工厂类创建CameraConfig（**推荐**）
-```java
+```kotlin
 // 通过工厂类创建适合当前设备的CameraConfig
-CameraConfig cameraConfig = CameraConfigFactory.createDefaultCameraConfig(this, CameraSelector.LENS_FACING_FRONT);
-getCameraScan().setCameraConfig(cameraConfig);
+val cameraConfig = CameraConfigFactory.createDefaultCameraConfig(this, CameraSelector.LENS_FACING_FRONT)
+cameraScasn.setCameraConfig(cameraConfig)
 ```
 
 **方式二：** 通过对象创建CameraConfig
-```java
+```kotlin
 // 此处的CameraConfig可以是CameraConfig的任意子类（其它CameraConfig相关配置修改方式与设置前置摄像头类似）
-CameraConfig cameraConfig = new CameraConfig() {
-    @NonNull
-    @Override
-    public CameraSelector options(@NonNull CameraSelector.Builder builder) {
-        builder.requireLensFacing(CameraSelector.LENS_FACING_FRONT);
-        return super.options(builder);
+val cameraConfig = object : CameraConfig() {
+    override fun options(builder: CameraSelector.Builder): CameraSelector {
+        builder.requireLensFacing(CameraSelector.LENS_FACING_FRONT)
+        return super.options(builder)
     }
-};
+}
 
-getCameraScan().setCameraConfig(cameraConfig);
+cameraScasn.setCameraConfig(cameraConfig)
 ```
 
 > 需要注意的是：`cameraScan.setCameraConfig(cameraConfig)` 一般是在相机启动预览之前调用的，如果是在相机启动预览之后修改了CameraConfig的配置，则需重新调用`cameraScan.startCamera()`后，CameraConfig相关配置才会生效。
@@ -132,7 +130,7 @@ getCameraScan().setCameraConfig(cameraConfig);
 
 示例：
 
-```java
+```kotlin
 // 根据需要修改CameraScan相关配置
 cameraScan.setPlayBeep(true) // 设置是否播放音效，默认为false
     .setVibrate(true) // 设置是否震动，默认为false
@@ -142,26 +140,26 @@ cameraScan.setPlayBeep(true) // 设置是否播放音效，默认为false
     .setBrightLightLux(100f) // 设置光线足够明亮的阈值（单位：lux），需要通过{@link #bindFlashlightView(View)}绑定手电筒才有效
     .bindFlashlightView(ivFlashlight) // 绑定手电筒，绑定后可根据光线传感器，动态显示或隐藏手电筒按钮；（传空表示不绑定）
     .setOnScanResultCallback(this) // 设置扫描结果回调，需要自己处理或者需要连扫时，可设置回调，自己去处理相关逻辑
-    .setAnalyzeImage(true); // 设置是否分析图片，默认为true。如果设置为false，相当于关闭了扫描识别功能
+    .setAnalyzeImage(true) // 设置是否分析图片，默认为true。如果设置为false，相当于关闭了扫描识别功能
 
 ```
 
 启动相机预览
-```java
+```kotlin
 // 启动预览（如果是通过直接或间接继承BaseCameraScanActivity或BaseCameraScanFragment实现的则无需调用startCamera）
-cameraScan.startCamera();
+cameraScan.startCamera()
 ```
 
 控制闪光灯
-```java
+```kotlin
 // 设置闪光灯（手电筒）是否开启,需在startCamera之后调用才有效
-cameraScan.enableTorch(torch);
+cameraScan.enableTorch(torch)
 ```
 
 设置分析器
-```java
+```kotlin
 // 设置分析器
-cameraScan.setAnalyzer(analyzer);
+cameraScan.setAnalyzer(analyzer)
 ```
 > 如果是通过直接或间接继承 **BaseCameraScanActivity** 来实现的，可直接覆写 `createAnalyzer` 方法返回具体的分析器即可。
 
@@ -296,11 +294,8 @@ BaseCameraScanActivity和BaseCameraScanFragment使用的默认布局：
 
 ## 版本日志
 
-#### v1.6.0：2026-06-09
-- 迁移：所有 Java 代码已转为 Kotlin 实现
-- 移除废弃的：`ResolutionCameraConfig`、`AspectRatioCameraConfig`、`LogUtils`等类
-- 更新compileSdk至36
-- 更新CameraX相关依赖至v1.6.1
+#### v1.6.1：2026-06-14
+- 优化转换为 Kotlin 后的代码细节，尽可能兼容之前 Java/Kotlin 的用法
 
 #### [查看更多版本日志](CHANGELOG.md)
 

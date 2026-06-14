@@ -20,6 +20,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.view.MotionEvent
 import android.view.View
+import androidx.activity.ComponentActivity
 import androidx.annotation.FloatRange
 import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
@@ -32,7 +33,6 @@ import androidx.camera.core.TorchState
 import androidx.camera.core.ZoomState
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
-import androidx.activity.ComponentActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
@@ -91,6 +91,7 @@ class BaseCameraScan<T: Any> : CameraScan<T> {
     }
 
     private val mContext: Context
+
     private val mLifecycleOwner: LifecycleOwner
 
     /**
@@ -98,7 +99,9 @@ class BaseCameraScan<T: Any> : CameraScan<T> {
      */
     private val mPreviewView: PreviewView
 
-    private lateinit var mExecutorService: ExecutorService
+    private val mExecutorService by lazy {
+        Executors.newSingleThreadExecutor()
+    }
 
     private lateinit var mZoomGestureDetector: ZoomGestureDetector
 
@@ -123,7 +126,7 @@ class BaseCameraScan<T: Any> : CameraScan<T> {
     /**
      * 相机配置
      */
-    private var mCameraConfig: CameraConfig? = null
+    private lateinit var mCameraConfig: CameraConfig
 
     /**
      * 分析器
@@ -216,7 +219,7 @@ class BaseCameraScan<T: Any> : CameraScan<T> {
      */
     @SuppressLint("ClickableViewAccessibility")
     private fun initData() {
-        mExecutorService = Executors.newSingleThreadExecutor()
+        mCameraConfig = CameraConfigFactory.createDefaultCameraConfig(mContext, CameraSelector.LENS_FACING_UNKNOWN)
         mResultLiveData.observe(mLifecycleOwner) { result ->
             if (result != null) {
                 handleAnalyzeResult(result)
@@ -343,9 +346,6 @@ class BaseCameraScan<T: Any> : CameraScan<T> {
             LogX.w("startCamera ignored: BaseCameraScan has been released")
             return
         }
-        if (mCameraConfig == null) {
-            mCameraConfig = CameraConfigFactory.createDefaultCameraConfig(mContext, CameraSelector.LENS_FACING_UNKNOWN)
-        }
         stopCamera()
         val sessionToken = mCameraSessionToken.incrementAndGet()
         val cameraProviderFuture: ListenableFuture<ProcessCameraProvider> = ProcessCameraProvider.getInstance(mContext)
@@ -355,13 +355,13 @@ class BaseCameraScan<T: Any> : CameraScan<T> {
                     return@addListener
                 }
                 // 相机选择器
-                val cameraSelector: CameraSelector = mCameraConfig!!.options(CameraSelector.Builder())
+                val cameraSelector: CameraSelector = mCameraConfig.options(CameraSelector.Builder())
                 // 预览
-                val preview: Preview = mCameraConfig!!.options(Preview.Builder())
+                val preview: Preview = mCameraConfig.options(Preview.Builder())
                 // 设置SurfaceProvider
                 preview.surfaceProvider = mPreviewView.surfaceProvider
                 // 图像分析
-                val imageAnalysis: ImageAnalysis = mCameraConfig!!.options(
+                val imageAnalysis: ImageAnalysis = mCameraConfig.options(
                     ImageAnalysis.Builder()
                         .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_YUV_420_888)
                         .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
@@ -388,7 +388,7 @@ class BaseCameraScan<T: Any> : CameraScan<T> {
                     return@addListener
                 }
                 // 绑定到生命周期
-                mCamera = mCameraProvider!!.bindToLifecycle(mLifecycleOwner, cameraSelector, preview, imageAnalysis)
+                mCamera = mCameraProvider?.bindToLifecycle(mLifecycleOwner, cameraSelector, preview, imageAnalysis)
                 val previewResolutionInfo: ResolutionInfo? = preview.resolutionInfo
                 if (previewResolutionInfo != null) {
                     LogX.d("Preview resolution: " + previewResolutionInfo.resolution)

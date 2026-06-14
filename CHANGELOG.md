@@ -1,5 +1,8 @@
 ## 版本日志
 
+#### v1.6.1：2026-06-14
+- 优化转换为 Kotlin 后的代码细节，尽可能兼容之前 Java/Kotlin 的用法
+
 #### v1.6.0：2026-06-09
 - 迁移：所有 Java 代码已转为 Kotlin 实现
 - 移除废弃的：`ResolutionCameraConfig`、`AspectRatioCameraConfig`、`LogUtils`等类
